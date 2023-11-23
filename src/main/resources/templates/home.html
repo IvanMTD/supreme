@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="${title}">title</title>
+        <link href="css/header.css" rel="stylesheet">
+        <link href="css/navbar.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <header class="main-header" th:insert="~{blocks/header}"></header>
+        <nav class="main-navbar" th:insert="~{blocks/navbar}"></nav>
+        <input type="file" accept="*/*">
+    </body>
+</html>
