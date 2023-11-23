@@ -8,6 +8,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebFluxSecurity
@@ -15,7 +16,11 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 public class SecurityConfiguration {
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http){
+        ServerCsrfTokenRequestAttributeHandler requestHandler = new ServerCsrfTokenRequestAttributeHandler();
+        requestHandler.setTokenFromMultipartDataEnabled(true);
+
         return http
+                .csrf((csrf -> csrf.csrfTokenRequestHandler(requestHandler)))
                 .authorizeExchange(auth -> auth.anyExchange().permitAll())
                 .build();
     }

@@ -3,13 +3,18 @@
     <head>
         <meta charset="UTF-8">
         <title th:text="${title}">title</title>
-        <link href="css/header.css" rel="stylesheet">
-        <link href="css/navbar.css" rel="stylesheet">
     </head>
 
     <body>
-        <header class="main-header" th:insert="~{blocks/header}"></header>
-        <nav class="main-navbar" th:insert="~{blocks/navbar}"></nav>
-        <input type="file" accept="*/*">
+        <header th:insert="~{blocks/header}"></header>
+        <nav th:insert="~{blocks/navbar}"></nav>
+
+        <form th:method="POST" th:action="@{/upload}" enctype="multipart/form-data">
+            <input type="file" accept="*/*" id="file" name="file"><br>
+            <progress id="progressBar" hidden></progress>
+            <input type="submit" value="submit" onclick="document.getElementById('progressBar').hidden=false"><br>
+        </form>
+
+        <footer th:insert="~{blocks/footer}"></footer>
     </body>
 </html>
