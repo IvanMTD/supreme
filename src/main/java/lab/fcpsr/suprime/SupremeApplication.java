@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SuprimeApplication {
+public class SupremeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SuprimeApplication.class, args);
+		SpringApplication.run(SupremeApplication.class, args);
 	}
 
 }
