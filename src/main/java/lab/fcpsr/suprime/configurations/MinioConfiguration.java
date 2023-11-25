@@ -22,15 +22,15 @@ public class MinioConfiguration {
     @Bean
     public MinioClient minioClient(){
 
-        OkHttpClient httpClient = new OkHttpClient.Builder()
+        /*OkHttpClient httpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.MINUTES)
                 .writeTimeout(10, TimeUnit.MINUTES)
                 .readTimeout(30, TimeUnit.MINUTES)
-                .build();
+                .build();*/
 
         return MinioClient.builder()
                 .endpoint(url)
-                .httpClient(httpClient)
+                //.httpClient(httpClient)
                 .credentials(username, password)
                 .build();
     }

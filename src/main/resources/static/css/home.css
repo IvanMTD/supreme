@@ -1,21 +1,51 @@
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
+body, html {
+    color: lightskyblue;
+    font-family: 'Exo', sans-serif;
+    overflow-x: hidden;
+}
+
+.container {
+    margin: 2vh;
+}
+
 table {
     border-collapse: collapse;
-    border-bottom: solid black 2px;
-    border-left: solid black 2px;
-    border-right: solid black 2px;
+    border-bottom: solid lightskyblue 2px;
+    border-left: solid lightskyblue 2px;
+    border-right: solid lightskyblue 2px;
 }
 
 table caption {
-    border-top: solid black 2px;
-    border-left: solid black 2px;
-    border-right: solid black 2px;
+    border-top: solid lightskyblue 2px;
+    border-left: solid lightskyblue 2px;
+    border-right: solid lightskyblue 2px;
 }
 
 table tr th {
-    border: solid black 1px;
-    padding: 5px;
+    border: solid lightskyblue 1px;
+    padding: 1vh;
 }
 table tr td {
-    border: dashed black 1px;
-    padding: 5px;
+    font-size: 14px;
+    border: dashed lightskyblue 1px;
+    padding: 1vh;
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#bg canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
