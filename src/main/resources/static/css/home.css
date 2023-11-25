@@ -1,0 +1,21 @@
+table {
+    border-collapse: collapse;
+    border-bottom: solid black 2px;
+    border-left: solid black 2px;
+    border-right: solid black 2px;
+}
+
+table caption {
+    border-top: solid black 2px;
+    border-left: solid black 2px;
+    border-right: solid black 2px;
+}
+
+table tr th {
+    border: solid black 1px;
+    padding: 5px;
+}
+table tr td {
+    border: dashed black 1px;
+    padding: 5px;
+}
