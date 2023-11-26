@@ -4,8 +4,8 @@ RUN git clone https://github.com/IvanMTD/supreme.git
 
 FROM maven:openjdk
 WORKDIR /app
-COPY --from=0 /app/spring-petclinic /app
-RUN mvn install
+COPY --from=0 /app/supreme /app
+RUN mvn clean package -DskipTest
 
 FROM openjdk
 WORKDIR /app
