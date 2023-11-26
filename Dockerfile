@@ -5,7 +5,7 @@ RUN git clone https://github.com/IvanMTD/supreme.git
 FROM maven
 WORKDIR /app
 COPY --from=0 /app/supreme /app
-RUN mvn clean package -DskipTest
+RUN mvn clean package -DskipTests
 
 FROM openjdk
 WORKDIR /app
