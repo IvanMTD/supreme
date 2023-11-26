@@ -2,7 +2,7 @@ FROM alpine/git
 WORKDIR /app
 RUN git clone https://github.com/IvanMTD/supreme.git
 
-FROM maven:openjdk
+FROM maven-jdk-alpine
 WORKDIR /app
 COPY --from=0 /app/supreme /app
 RUN mvn clean package -DskipTest
