@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>lab.fcpsr</groupId>
-	<artifactId>suprime</artifactId>
+	<artifactId>supreme</artifactId>
 	<version>1.0.0</version>
 	<name>supreme</name>
 	<description>supreme</description>
