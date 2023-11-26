@@ -21,9 +21,7 @@ public class SecurityConfiguration {
 
         return http
                 .csrf((csrf -> csrf.csrfTokenRequestHandler(requestHandler)))
-                .authorizeExchange(auth ->
-                        auth.anyExchange().permitAll()
-                )
+                .authorizeExchange(auth -> auth.anyExchange().permitAll())
                 .build();
     }
 
