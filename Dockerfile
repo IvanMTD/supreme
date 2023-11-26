@@ -11,4 +11,4 @@ FROM openjdk
 WORKDIR /app
 EXPOSE 8080 8080
 COPY --from=1 /app/target/suprime-1.0.0.jar suprime-1.0.0.jar
-ENTRYPOINT ["java -jar /suprime-1.0.0.jar"]
+ENTRYPOINT ["java","-jar","/suprime-1.0.0.jar"]
