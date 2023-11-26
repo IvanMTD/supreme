@@ -9,5 +9,6 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk
 WORKDIR /app
+EXPOSE 8080 8080
 COPY --from=1 /app/target/supreme-1.0.0.jar /app
 CMD ["java -jar supreme-1.0.0.jar"]
