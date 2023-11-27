@@ -9,6 +9,6 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk
 WORKDIR /app
-EXPOSE 8080 8080
-COPY --from=1 /app/target/suprime-1.0.0.jar /app
-ENTRYPOINT ["java","-jar","suprime-1.0.0.jar"]
+EXPOSE 8080
+COPY --from=1 /app/target/supreme-1.0.0.jar /app
+ENTRYPOINT ["java","-jar","supreme-1.0.0.jar"]
