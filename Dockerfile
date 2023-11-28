@@ -7,8 +7,8 @@ WORKDIR /app
 COPY --from=0 /app/supreme /app
 RUN mvn clean package -DskipTests
 
-FROM openjdk
+FROM bellsoft/liberica-openjdk-alpine
+EXPOSE 8080 8080
 WORKDIR /app
-EXPOSE 8080
 COPY --from=1 /app/target/supreme-1.0.0.jar /app
-ENTRYPOINT ["java","-jar","supreme-1.0.0.jar"]
+CMD ["java","-Xms64m","-Xmx900m","-jar","supreme-1.0.0.jar"]

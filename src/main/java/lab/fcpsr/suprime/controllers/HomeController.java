@@ -38,10 +38,11 @@ public class HomeController {
     public Mono<Rendering> upload(@RequestPart("file") FilePart file){
         log.info("incoming file " + file.filename());
         return minioService.uploadStream(file)
-                .publishOn(Schedulers.boundedElastic()).map(response -> {
-                    fileService.save(response).doOnNext(mf -> log.info("file saved in data_db witch id " + mf.getId())).subscribe();
-                    return Rendering.redirectTo("/").build();
-                });
+                .publishOn(Schedulers.boundedElastic())
+                .flatMap(response -> fileService.save(response)
+                        .doOnNext(mf -> log.info("file saved in data_db witch id " + mf.getId()))
+                        .map(minioFile -> Rendering.redirectTo("/").build())
+                );
     }
 
     @GetMapping("/download/{id}")

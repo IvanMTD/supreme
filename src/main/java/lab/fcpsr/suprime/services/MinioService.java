@@ -17,7 +17,6 @@ import reactor.core.scheduler.Schedulers;
 
 import java.io.InputStream;
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -58,6 +57,7 @@ public class MinioService {
                                 .stream(inputStreamCollector.getStream(), inputStreamCollector.getStream().available(), -1)
                                 .build();
                         ObjectWriteResponse response = minioClient.putObject(args);
+                        inputStreamCollector.closeStream();
                         MinioResponse minioResponse = new MinioResponse();
                         minioResponse.setResponse(response);
                         minioResponse.setOriginalFileName(file.filename());
@@ -70,7 +70,8 @@ public class MinioService {
                         log.error(e.getMessage());
                         throw new RuntimeException(e);
                     }
-                }).log();
+                })
+                .log();
     }
 
     public Mono<InputStreamResource> download(MinioFile fileInfo){

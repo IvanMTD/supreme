@@ -7,5 +7,5 @@ create table if not exists Minio_File (
     bucket text,
     path text,
     minio_url text,
-    file_size int
+    file_size float
 );

@@ -10,6 +10,6 @@ public class MinioResponse {
     private String originalFileName;
     private String uid;
     private String type;
-    private int fileSize;
+    private float fileSize;
     private ObjectWriteResponse response;
 }

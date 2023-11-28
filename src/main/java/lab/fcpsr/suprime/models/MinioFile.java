@@ -19,7 +19,7 @@ public class MinioFile {
     private @NonNull String bucket;
     private @NonNull String path;
     private @NonNull String minioUrl;
-    private int fileSize;
+    private float fileSize;
 
     public MinioFile(MinioFile minioFile){
         setId(minioFile.getId());
@@ -31,5 +31,9 @@ public class MinioFile {
         setPath(minioFile.getPath());
         setMinioUrl(minioFile.getMinioUrl());
         setFileSize(minioFile.getFileSize());
+    }
+
+    public String fileSizeToString(){
+        return String.format("%.02f", fileSize);
     }
 }

@@ -5,6 +5,7 @@ import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class InputStreamCollector {
@@ -16,5 +17,13 @@ public class InputStreamCollector {
     }
     public InputStream getStream() {
         return new ByteArrayInputStream(targetStream.toByteArray());
+    }
+
+    public void closeStream(){
+        try {
+            targetStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
