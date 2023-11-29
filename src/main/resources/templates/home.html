@@ -2,84 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title th:text="${title}">title</title>
-        <link href="/css/home.css" rel="stylesheet">
-        <link href="/css/separator.css" rel="stylesheet">
+        <link href="/css/grid.css" rel="stylesheet">
+        <link href="/css/color-and-align.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     </head>
 
     <body>
-        <div id="bg">
-            <canvas></canvas>
-            <canvas></canvas>
-            <canvas></canvas>
-        </div>
-        <script src="/js/bg-header.js"></script>
-
         <header th:insert="~{blocks/header}"></header>
         <nav th:insert="~{blocks/navbar}"></nav>
 
-        <div class="container">
-            <form class="upload-form" th:method="POST" th:action="@{/upload}" enctype="multipart/form-data">
-                <input type="file" accept="*/*" id="fileFake" hidden disabled="disabled">
-                <input type="file" accept="*/*" id="file" name="file"><br>
-                <progress id="progressBar" hidden></progress>
-                <input id="inputButtonFake" type="submit" value="submit" hidden disabled="disabled">
-                <input id="inputButton" type="submit" value="submit" onclick="hiddenControl()"><br>
-                <script>
-                    function hiddenControl(){
-                        document.getElementById('progressBar').hidden=false
-                        document.getElementById('inputButton').hidden=true
-                        document.getElementById('inputButtonFake').hidden=false
-                        document.getElementById('fileFake').setAttribute('placeholder','in progress ...')
-                        document.getElementById('fileFake').hidden=false
-                        document.getElementById('file').hidden=true
-                    }
-                </script>
-            </form>
-        </div>
 
-        <div class="container">
-            <table>
-                <caption><h3><b>Загруженные данные</b></h3></caption>
-                <tr>
-                    <th>№</th>
-                    <th>id</th>
-                    <th>uid</th>
-                    <th>name</th>
-                    <th>type</th>
-                    <th>eTag</th>
-                    <th>bucket</th>
-                    <th>path</th>
-                    <th>minioUrl</th>
-                    <th>download button</th>
-                    <th>delete button</th>
-                    <th>file size</th>
-                </tr>
-                <tr th:each="file,itter : ${files}">
-                    <td th:text="${itter.index}">#</td>
-                    <td th:text="${file.getId()}">#</td>
-                    <td th:text="${file.getUid()}"></td>
-                    <td th:text="${file.getName()}"></td>
-                    <td th:text="${file.getType()}">#</td>
-                    <td th:text="${file.getETag()}">#</td>
-                    <td th:text="${file.getBucket()}">#</td>
-                    <td th:text="${file.getPath()}">#</td>
-                    <td th:text="${file.getMinioUrl()}">#</td>
-                    <td style="text-align: center">
-                        <form th:method="GET" th:action="@{/download/{id}(id=${file.getId()})}">
-                            <input type="submit" value="download">
-                        </form>
-                    </td>
-                    <td style="text-align: center">
-                        <form th:method="GET" th:action="@{/delete/{id}(id=${file.getId()})}">
-                            <input type="submit" value="delete">
-                        </form>
-                    </td>
-                    <td th:text="${file.getFileSize()} + ' MB'"></td>
-                </tr>
-            </table>
-        </div>
 
         <footer th:insert="~{blocks/footer}"></footer>
     </body>

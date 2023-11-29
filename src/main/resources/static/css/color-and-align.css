@@ -1,0 +1,41 @@
+body {
+    background: #111;
+    color: whitesmoke;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.border {
+    border: solid #111 1px;
+}
+
+.blacked {
+    background: #111;
+    /*background: linear-gradient(-90deg, black, dimgray);*/
+    color: whitesmoke;
+}
+
+.whited {
+    background: whitesmoke;
+    color: #111;
+}
+
+.active {
+    background-color: gray;
+    color: white;
+}
+
+.navbar li a:hover:not(.active) {
+    background-color: cadetblue;
+    color: whitesmoke;
+}

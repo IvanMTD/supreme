@@ -12,6 +12,9 @@ import org.springframework.data.annotation.Id;
 public class MinioFile {
     @Id
     private int id;
+
+    private int postId;
+
     private @NonNull String uid;
     private @NonNull String name;
     private @NonNull String type;
@@ -23,6 +26,7 @@ public class MinioFile {
 
     public MinioFile(MinioFile minioFile){
         setId(minioFile.getId());
+        setPostId(minioFile.getPostId());
         setUid(minioFile.getUid());
         setName(minioFile.getName());
         setType(minioFile.getType());
@@ -31,5 +35,9 @@ public class MinioFile {
         setPath(minioFile.getPath());
         setMinioUrl(minioFile.getMinioUrl());
         setFileSize(minioFile.getFileSize());
+    }
+
+    public void addPost(Post post){
+        postId = post.getId();
     }
 }
