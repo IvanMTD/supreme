@@ -4,7 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title th:text="${title}">title</title>
-        <link href="/css/main.css" rel="stylesheet">
+        <link href="/css/grid.css" rel="stylesheet">
+        <link href="/css/color-and-align.css" rel="stylesheet">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     </head>
 
@@ -12,7 +13,8 @@
         <header th:insert="~{blocks/header}"></header>
         <nav th:insert="~{blocks/navbar}"></nav>
 
-
+        <div th:insert="~{content/login-page}" th:if="${index} == 'login-page'"></div>
+        <div th:insert="~{content/reg-page}" th:if="${index} == 'reg-page'"></div>
 
         <footer th:insert="~{blocks/footer}"></footer>
     </body>

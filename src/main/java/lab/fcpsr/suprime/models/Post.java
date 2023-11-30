@@ -6,23 +6,24 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Post {
     @Id
     private int id;
+
+    private Set<Integer> fileIds = new HashSet<>();
+    private int categoryId;
+
     private @NonNull String name;
     private @NonNull String annotation;
     private @NonNull String content;
-    private int categoryId;
-    private int fileId;
 
-    public void setCategory(Category category){
-        categoryId = category.getId();
-    }
-
-    public void setFile(MinioFile file){
-        fileId = file.getId();
+    public void addFile(MinioFile file){
+        fileIds.add(file.getId());
     }
 }

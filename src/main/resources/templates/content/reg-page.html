@@ -1,0 +1,30 @@
+<div class="row-100 whited">
+    <div class="col-20"></div>
+    <div class="col-60">
+        <hr>
+        <div style="display: inline-flex; width: 100%; height: 70vh">
+            <form th:method="POST" th:action="@{/auth/reg}" th:object="${user}" style="margin: auto; padding: 2vh">
+                <h4>Registration form</h4>
+                <p>your e-mail</p>
+                <input type="email" th:field="*{eMail}"><br>
+                <p>password</p>
+                <input type="password" th:field="*{password}"><br>
+                <p>confirm your password</p>
+                <input type="password" th:field="*{confirmPassword}"><br>
+                <p>first name</p>
+                <input type="text" th:field="*{firstName}"><br>
+                <p>middle name</p>
+                <input type="text" th:field="*{middleName}"><br>
+                <p>lastname</p>
+                <input type="text" th:field="*{lastName}"><br>
+                <p>birthday</p>
+                <input type="date" th:field="*{birthday}"><br>
+                <p>phone number</p>
+                <input type="text" th:field="*{phone}"><br>
+                <input type="submit" value="Submit"><br>
+            </form>
+        </div>
+        <hr>
+    </div>
+    <div class="col-20"></div>
+</div>

@@ -1,0 +1,42 @@
+body {
+    background: mediumpurple;
+    color: whitesmoke;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.border {
+    border: solid mediumpurple 1px;
+    border-radius: 20px;
+}
+
+.blacked {
+    background: mediumpurple;
+    /*background: linear-gradient(-90deg, black, dimgray);*/
+    color: black;
+}
+
+.whited {
+    background: whitesmoke;
+    color: black;
+}
+
+.active {
+    background-color: deeppink;
+    color: whitesmoke;
+}
+
+.navbar li a:hover:not(.active) {
+    background-color: rebeccapurple;
+    color: whitesmoke;
+}

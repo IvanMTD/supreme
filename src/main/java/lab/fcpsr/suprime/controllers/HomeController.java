@@ -27,9 +27,8 @@ public class HomeController {
 
     @GetMapping("/")
     public Mono<Rendering> homePage(){
-        return Mono.just(Rendering.view("home")
-                .modelAttribute("title","Home")
-                .modelAttribute("files",fileService.findAll())
+        return Mono.just(Rendering.view("template")
+                .modelAttribute("title","Home Page")
                 .build());
     }
 
@@ -37,11 +36,10 @@ public class HomeController {
     @PostMapping("/upload")
     public Mono<Rendering> upload(@RequestPart("file") FilePart file){
         log.info("incoming file " + file.filename());
-        return minioService.uploadStream(file)
-                .publishOn(Schedulers.boundedElastic())
-                .flatMap(response -> fileService.save(response)
+        return minioService
+                .uploadStream(file).flatMap(response -> fileService.save(response)
                         .doOnNext(mf -> log.info("file saved in data_db witch id " + mf.getId()))
-                        .map(minioFile -> Rendering.redirectTo("/").build())
+                        .map(mf -> Rendering.redirectTo("/").build())
                 );
     }
 
