@@ -1,16 +1,16 @@
 <div class="row-100">
     <ul class="navbar blacked">
-        <li class="float-left"><a id="home" class="active" href="#" onclick="setActive(this.id)">Home</a></li>
+        <li class="float-left"><a id="home" class="active" th:href="@{/}" onclick="setActive(this.id)">Home</a></li>
         <li class="float-left"><a id="materials" class="whited" href="#" onclick="setActive(this.id)">Materials</a></li>
         <li class="float-left"><a id="contact" class="whited" href="#" onclick="setActive(this.id)">Contact</a></li>
-        <li class="float-right"><a id="login" class="whited" href="#" onclick="setActive(this.id)">Login</a></li>
+        <li class="float-right"><a id="login" class="whited" th:href="@{/auth/login}" onclick="setActive(this.id)">Login</a></li>
         <script>
             function setActive(id){
-                document.getElementById('home').className='whited'
+                /*document.getElementById('home').className='whited'
                 document.getElementById('materials').className='whited'
                 document.getElementById('contact').className='whited'
                 document.getElementById('login').className='whited'
-                document.getElementById(id).className='active'
+                document.getElementById(id).className='active'*/
             }
         </script>
     </ul>

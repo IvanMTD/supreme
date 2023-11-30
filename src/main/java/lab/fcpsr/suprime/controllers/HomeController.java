@@ -27,9 +27,8 @@ public class HomeController {
 
     @GetMapping("/")
     public Mono<Rendering> homePage(){
-        return Mono.just(Rendering.view("home")
-                .modelAttribute("title","Home")
-                .modelAttribute("files",fileService.findAll())
+        return Mono.just(Rendering.view("template")
+                .modelAttribute("title","Home Page")
                 .build());
     }
 

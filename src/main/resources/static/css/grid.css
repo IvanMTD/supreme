@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
 * {
+    font-family: 'Exo', sans-serif;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -15,7 +18,7 @@
 }
 
 [class*="col-"]{
-    display: inline-flex;
+    display: inline-block;
     float: left;
     padding: 1vh;
 }
@@ -43,11 +46,11 @@
 
 .navbar li a {
     display: block;
-    width: 10vh;
+    width: 100px;
     text-decoration: none;
     text-align: center;
-    font-size: 2vh;
-    padding: 1vh 0;
+    font-size: 18px;
+    padding: 10px 0;
 }
 
 .float-left {
@@ -68,5 +71,5 @@
     text-decoration: none;
     color: whitesmoke;
     padding: 1vh;
-    font-size: 2vh;
+    font-size: 18px;
 }

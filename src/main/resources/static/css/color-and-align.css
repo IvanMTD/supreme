@@ -1,5 +1,5 @@
 body {
-    background: #111;
+    background: mediumpurple;
     color: whitesmoke;
 }
 
@@ -16,26 +16,27 @@ body {
 }
 
 .border {
-    border: solid #111 1px;
+    border: solid mediumpurple 1px;
+    border-radius: 20px;
 }
 
 .blacked {
-    background: #111;
+    background: mediumpurple;
     /*background: linear-gradient(-90deg, black, dimgray);*/
-    color: whitesmoke;
+    color: black;
 }
 
 .whited {
     background: whitesmoke;
-    color: #111;
+    color: black;
 }
 
 .active {
-    background-color: gray;
-    color: white;
+    background-color: deeppink;
+    color: whitesmoke;
 }
 
 .navbar li a:hover:not(.active) {
-    background-color: cadetblue;
+    background-color: rebeccapurple;
     color: whitesmoke;
 }
