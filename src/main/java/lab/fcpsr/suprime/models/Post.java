@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,15 +16,25 @@ import java.util.Set;
 public class Post {
     @Id
     private int id;
-
+    private int userId;
+    private Set<Integer> sportTagIds = new HashSet<>();
     private Set<Integer> fileIds = new HashSet<>();
-    private int categoryId;
 
+    private @NonNull String imagePath;
     private @NonNull String name;
     private @NonNull String annotation;
     private @NonNull String content;
+    private @NonNull Date placedAt;
+
+    public void setUser(AppUser user){
+        this.userId = user.getId();
+    }
+
+    public void addSportTag(SportTag sportTag){
+        this.sportTagIds.add(sportTag.getId());
+    }
 
     public void addFile(MinioFile file){
-        fileIds.add(file.getId());
+        this.fileIds.add(file.getId());
     }
 }

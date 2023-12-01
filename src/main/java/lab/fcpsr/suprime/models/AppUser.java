@@ -1,5 +1,6 @@
 package lab.fcpsr.suprime.models;
 
+import javafx.geometry.Pos;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -8,10 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -20,8 +18,9 @@ public class AppUser implements UserDetails {
     @Id
     private int id;
 
-    private Set<Integer> categoryRoleIds = new HashSet<>();
-    private Set<Integer> postRoleIds = new HashSet<>();
+    private Set<Integer> sportTagIds = new HashSet<>();
+    private Set<Integer> postIds = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
     private @NonNull String eMail;
     private @NonNull String password;
@@ -32,12 +31,16 @@ public class AppUser implements UserDetails {
     private @NonNull Date placedAt;
     private @NonNull String phone;
 
-    public void addCategoryRole(CategoryRole categoryRole){
-        categoryRoleIds.add(categoryRole.getId());
+    public void addSportTag(SportTag sportTag){
+        this.sportTagIds.add(sportTag.getId());
     }
 
-    public void addPostRole(PostRole postRole){
-        postRoleIds.add(postRole.getId());
+    public void addPost(Post post){
+        this.postIds.add(post.getId());
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 
     @Override

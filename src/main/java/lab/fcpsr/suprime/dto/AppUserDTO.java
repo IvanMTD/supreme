@@ -18,7 +18,6 @@ public class AppUserDTO {
     private @NonNull String firstName;
     private @NonNull String middleName;
     private @NonNull String lastName;
-    @DateTimeFormat(pattern = "MM-dd-yyyy")
-    private @NonNull Date birthday;
+    private @DateTimeFormat(pattern = "dd-MM-yyyy") @NonNull Date birthday;
     private @NonNull String phone;
 }
