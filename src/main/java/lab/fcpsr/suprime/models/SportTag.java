@@ -12,17 +12,21 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Category {
+public class SportTag {
     @Id
     private int id;
-
+    private Set<Integer> userIds = new HashSet<>();
     private Set<Integer> postIds = new HashSet<>();
 
+    private @NonNull String imagePath;
     private @NonNull String name;
     private @NonNull String description;
-    private @NonNull String content;
+
+    public void addUser(AppUser user){
+        this.userIds.add(user.getId());
+    }
 
     public void addPost(Post post){
-        postIds.add(post.getId());
+        this.postIds.add(post.getId());
     }
 }

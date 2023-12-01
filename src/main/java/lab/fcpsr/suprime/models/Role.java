@@ -1,11 +1,14 @@
 package lab.fcpsr.suprime.models;
 
-import java.util.Set;
+public enum Role {
+    ADMIN("Администратор"),
+    MODERATOR("Модератор"),
+    PUBLISHER("Публицист"),
+    READER("Читатель");
 
-public interface Role {
-    boolean includes (Role role);
+    private String displayName;
 
-    static Set<Role> roots() {
-        return Set.of(CategoryRoleType.ADMIN);
+    Role(String displayName){
+        this.displayName = displayName;
     }
 }

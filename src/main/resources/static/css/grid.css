@@ -8,7 +8,7 @@
 }
 
 [class*="row-"]{
-    display: inline-flex;
+    display: flex;
     float: left;
     padding: 0.1vh;
 }
@@ -29,6 +29,16 @@
 
 .col-60 {
     width: 60%;
+}
+
+.col-60-inline-flex {
+    display: inline-flex;
+    width: 60%;
+}
+
+.col-50-inline-flex {
+    display: inline-flex;
+    width: 50%;
 }
 
 .flex-center {
