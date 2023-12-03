@@ -1,25 +1,37 @@
 package lab.fcpsr.suprime.controllers;
 
+import jakarta.validation.Valid;
+import lab.fcpsr.suprime.controllers.base.SuperController;
 import lab.fcpsr.suprime.dto.AppUserDTO;
+import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.Role;
+import lab.fcpsr.suprime.services.AppReactiveUserDetailService;
+import lab.fcpsr.suprime.services.MinioFileService;
+import lab.fcpsr.suprime.services.MinioService;
 import lab.fcpsr.suprime.services.SportTagService;
-import lombok.RequiredArgsConstructor;
+import lab.fcpsr.suprime.validations.AppUserValidation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController extends SuperController {
 
-    private final SportTagService sportTagService;
+    public AuthController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, AppUserValidation userValidation) {
+        super(userService, minioService, fileService, sportTagService, userValidation);
+    }
+
     @GetMapping("/login")
     public Mono<Rendering> loginPage(){
         return Mono.just(Rendering
@@ -29,21 +41,49 @@ public class AuthController {
     }
 
     @GetMapping("/reg")
-    public Mono<Rendering> registrationPage(){
+    @PreAuthorize("@RoleService.isAdmin(#user)")
+    public Mono<Rendering> registrationPage(@AuthenticationPrincipal AppUser user){
         return Mono.just(Rendering
                 .view("template")
-                .modelAttribute("index","reg-page").modelAttribute("user", new AppUserDTO())
-                .modelAttribute("role_admin", Role.ADMIN)
-                .modelAttribute("role_moderator", Role.MODERATOR)
-                .modelAttribute("role_publisher", Role.PUBLISHER)
-                .modelAttribute("sport_tags", sportTagService.findAll())
+                .modelAttribute("index","reg-page")
+                .modelAttribute("sportTags", sportTagService.findAllToDTO())
+                .modelAttribute("user", new AppUserDTO())
                 .build()
         );
     }
 
     @PostMapping("/reg")
-    public Mono<Rendering> registered(@ModelAttribute(name = "user") AppUserDTO userDTO){
-        log.info(userDTO.toString());
-        return Mono.just(Rendering.redirectTo("/").build());
+    @PreAuthorize("@RoleService.isAdmin(#user)")
+    public Mono<Rendering> registered(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "user") @Valid AppUserDTO userDTO, Errors userErrors, ServerWebExchange exchange){
+        return exchange.getFormData()
+                .flatMap(form -> {
+                    List<String> ids = form.get("sportTag");
+                    if(ids == null){
+                        ids = new ArrayList<>();
+                    }
+                    return Mono.just(ids);
+                })
+                .flatMap(ids -> userValidation.checkUsername(userDTO,userErrors)
+                        .flatMap(userError -> {
+                            List<Integer> tagIds = null;
+                            if(ids.size() != 0){
+                                tagIds = new ArrayList<>();
+                                for(String id : ids){
+                                    tagIds.add(Integer.valueOf(id));
+                                }
+                            }
+                            userDTO.setModerTagIds(tagIds);
+                            userValidation.validate(userDTO,userError);
+                            if(userError.hasErrors()){
+                                return Mono.just(Rendering
+                                        .view("template")
+                                        .modelAttribute("index","reg-page")
+                                        .modelAttribute("sportTags", sportTagService.findAllToDTO())
+                                        .modelAttribute("user", userDTO)
+                                        .build());
+                            }
+                            return userService.save(userDTO).map(u -> Rendering.redirectTo("/").build());
+                        })
+                );
     }
 }

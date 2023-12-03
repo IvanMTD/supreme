@@ -10,6 +10,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.logout.RedirectServerLogoutSuccessHandler;
+import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestAttributeHandler;
 
 import java.net.URI;
@@ -31,7 +32,7 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeExchange(auth -> auth.anyExchange().permitAll())
                 .formLogin(loginSpec -> loginSpec.loginPage("/auth/login"))
-                .logout(logoutSpec -> logoutSpec.logoutUrl("/auth/logout").logoutSuccessHandler(handler))
+                .logout(logoutSpec -> logoutSpec.logoutSuccessHandler(handler))
                 .build();
     }
 

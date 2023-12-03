@@ -40,3 +40,25 @@ body {
     background-color: rebeccapurple;
     color: whitesmoke;
 }
+
+.link-button {
+    text-decoration: none;
+    font-size: 13px;
+    background: mediumpurple;
+    color: whitesmoke;
+    padding: 5px 10px;
+    border: solid black 2px;
+}
+
+.input-button {
+    min-width: 50px;
+    width: 100%;
+    max-width: 100px;
+    height: 30px;
+    background: mediumpurple;
+    color: whitesmoke;
+}
+
+.input-button:hover {
+    background: purple;
+}

@@ -1,0 +1,41 @@
+<div class="row-100 whited">
+  <div class="col-20"></div>
+  <div class="col-60" style="min-height: 700px">
+    <hr>
+    <div style="display: inline-flex; width: 100%; height: 70vh">
+      <table style="margin: auto; padding: 2vh" class="border">
+        <thead>
+          <tr>
+            <th colspan="2">
+              <p>Admin function</p>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <p>Registration new user</p>
+            </td>
+            <td style="padding: 1vh">
+              <form th:method="GET" th:action="@{/auth/reg}">
+                <input type="submit" value="registered" class="input-button">
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p>Registration new sport tag</p>
+            </td>
+            <td style="padding: 1vh">
+              <form th:method="GET" th:action="@{/admin/tag}">
+                <input type="submit" value="registered" class="input-button">
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr>
+  </div>
+  <div class="col-20"></div>
+</div>

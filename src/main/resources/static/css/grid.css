@@ -17,6 +17,11 @@
     width: 100%;
 }
 
+.row-100-block{
+    display: block;
+    width: 100%;
+}
+
 [class*="col-"]{
     display: inline-block;
     float: left;
@@ -31,6 +36,11 @@
     width: 60%;
 }
 
+.col-70-inline-flex {
+    display: inline-flex;
+    width: 70%;
+}
+
 .col-60-inline-flex {
     display: inline-flex;
     width: 60%;
@@ -39,6 +49,11 @@
 .col-50-inline-flex {
     display: inline-flex;
     width: 50%;
+}
+
+.col-30-inline-flex {
+    display: inline-flex;
+    width: 30%;
 }
 
 .flex-center {

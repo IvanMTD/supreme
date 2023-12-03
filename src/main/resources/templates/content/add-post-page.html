@@ -1,0 +1,54 @@
+<div class="row-100 whited">
+    <div class="col-20"></div>
+    <div class="col-60">
+        <hr>
+        <div style="display: inline-flex; width: 100%">
+            <form th:method="POST" th:action="@{/material/post}" th:object="${post}" class="flex-center" style="padding: 2vh; width: 100%" enctype="multipart/form-data">
+                <h4 style="padding: 1vh" class="text-center">add new post</h4>
+                <p style="padding: 0 2vh">name</p>
+                <input type="text" placeholder="post name" style="width: 100%; margin: 1vh; padding: 1vh" th:field="*{name}">
+                <p style="padding: 0 2vh">annotation</p>
+                <textarea type="text" placeholder="post annotation" rows="3" style="width: 100%; margin: 1vh; padding: 1vh; resize: none" th:field="*{annotation}"></textarea>
+                <p style="padding: 0 2vh">content</p>
+                <textarea type="text" placeholder="post content" rows="20" style="width: 100%; margin: 1vh; padding: 1vh; resize: none" th:field="*{content}"></textarea>
+                <div class="border" style="margin: 1vh; padding: 1vh">
+                    <div style="display: inline-block" th:each="st : ${sportTags}" class="border">
+                        <img th:src="${st.getImagePath()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
+                        <input type="checkbox" th:name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
+                    </div>
+                </div>
+                <div style="margin: 1vh">
+                    <p>add post image: </p>
+                    <input type="file" accept="image/*" id="imageFake" hidden disabled="disabled">
+                    <input type="file" accept="image/*" id="image" th:field="*{image}"><br>
+                    <progress id="imageProgressBar" hidden></progress>
+
+                    <p>add file materials: </p>
+                    <input type="file" accept="*/*" id="fileFake" hidden disabled="disabled">
+                    <input type="file" accept="*/*" id="file" th:field="*{file}"><br>
+                    <progress id="progressBar" hidden></progress>
+                    <br>
+                    <input class="input-button" id="inputButtonFake" type="submit" value="submit" hidden disabled="disabled">
+                    <input class="input-button" id="inputButton" type="submit" value="submit" onclick="hiddenControl()">
+                    <script>
+                        function hiddenControl(){
+                            document.getElementById('progressBar').hidden=false
+                            document.getElementById('imageProgressBar').hidden=false
+                            document.getElementById('inputButton').hidden=true
+                            document.getElementById('inputButtonFake').hidden=false
+                            document.getElementById('fileFake').setAttribute('placeholder','in progress ...')
+                            document.getElementById('imageFake').setAttribute('placeholder','in progress ...')
+                            document.getElementById('fileFake').hidden=false
+                            document.getElementById('imageFake').hidden=false
+                            document.getElementById('file').hidden=true
+                            document.getElementById('image').hidden=true
+                        }
+                    </script>
+                    <div class="text-right" th:text="${user.getFullName()}"></div>
+                </div>
+            </form>
+        </div>
+        <hr>
+    </div>
+    <div class="col-20"></div>
+</div>

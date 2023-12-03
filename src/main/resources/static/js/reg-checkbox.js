@@ -1,10 +1,14 @@
 function setAdmin(){
     let check = document.getElementById('admin').checked;
     if(check){
-        document.getElementById('moderator').disabled = true;
+        if(document.getElementById('moderator') != null){
+            document.getElementById('moderator').disabled = true;
+        }
         document.getElementById('publisher').disabled = true;
     }else{
-        document.getElementById('moderator').disabled = false;
+        if(document.getElementById('moderator') != null) {
+            document.getElementById('moderator').disabled = false;
+        }
         document.getElementById('publisher').disabled = false;
     }
 }
@@ -25,7 +29,11 @@ function setPublisher(){
     if(check){
         document.getElementById('admin').disabled = true;
     }else{
-        if(!document.getElementById('moderator').checked){
+        if(document.getElementById('moderator') != null) {
+            if (!document.getElementById('moderator').checked) {
+                document.getElementById('admin').disabled = false;
+            }
+        }else{
             document.getElementById('admin').disabled = false;
         }
     }

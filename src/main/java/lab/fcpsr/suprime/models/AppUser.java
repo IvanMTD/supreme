@@ -1,6 +1,7 @@
 package lab.fcpsr.suprime.models;
 
 import javafx.geometry.Pos;
+import lab.fcpsr.suprime.dto.AppUserDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Data
@@ -22,14 +24,41 @@ public class AppUser implements UserDetails {
     private Set<Integer> postIds = new HashSet<>();
     private Set<Role> roles = new HashSet<>();
 
-    private @NonNull String eMail;
+    private @NonNull String mail;
     private @NonNull String password;
     private @NonNull String firstName;
     private @NonNull String middleName;
     private @NonNull String lastName;
-    private @NonNull Date birthday;
-    private @NonNull Date placedAt;
+    private @NonNull LocalDate birthday;
+    private @NonNull LocalDate placedAt;
     private @NonNull String phone;
+
+    public AppUser(AppUserDTO verifiedUser){
+        setMail(verifiedUser.getMail());
+        setPassword(verifiedUser.getPassword());
+        setFirstName(verifiedUser.getFirstName());
+        setMiddleName(verifiedUser.getMiddleName());
+        setLastName(verifiedUser.getLastName());
+        setBirthday(verifiedUser.getBirthday());
+        setPlacedAt(LocalDate.now());
+        setPhone(verifiedUser.getPhone());
+
+        if(verifiedUser.isAdmin()){
+            roles.add(Role.ADMIN);
+        }else{
+            if(verifiedUser.isPublisher()){
+                roles.add(Role.PUBLISHER);
+            }
+            if(verifiedUser.isModerator()){
+                roles.add(Role.MODERATOR);
+                sportTagIds.addAll(verifiedUser.getModerTagIds());
+            }
+        }
+    }
+
+    public String getFullName(){
+        return firstName + " " + middleName + " " + lastName;
+    }
 
     public void addSportTag(SportTag sportTag){
         this.sportTagIds.add(sportTag.getId());
@@ -50,7 +79,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getEMail();
+        return getMail();
     }
 
     @Override

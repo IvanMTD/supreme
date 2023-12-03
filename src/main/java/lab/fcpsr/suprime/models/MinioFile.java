@@ -12,7 +12,6 @@ import org.springframework.data.annotation.Id;
 public class MinioFile {
     @Id
     private int id;
-
     private int postId;
 
     private @NonNull String uid;
@@ -22,7 +21,7 @@ public class MinioFile {
     private @NonNull String bucket;
     private @NonNull String path;
     private @NonNull String minioUrl;
-    private int fileSize;
+    private float fileSize;
 
     public MinioFile(MinioFile minioFile){
         setId(minioFile.getId());

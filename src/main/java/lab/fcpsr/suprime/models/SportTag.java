@@ -1,5 +1,6 @@
 package lab.fcpsr.suprime.models;
 
+import lab.fcpsr.suprime.dto.SportTagDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -28,5 +29,11 @@ public class SportTag {
 
     public void addPost(Post post){
         this.postIds.add(post.getId());
+    }
+
+    public SportTag(SportTagDTO verifiedSportTag){
+        setName(verifiedSportTag.getName());
+        setDescription(verifiedSportTag.getDescription());
+        setImagePath(verifiedSportTag.getImagePath());
     }
 }

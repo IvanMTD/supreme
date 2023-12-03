@@ -1,8 +1,11 @@
 package lab.fcpsr.suprime.controllers;
 
+import lab.fcpsr.suprime.controllers.base.SuperController;
+import lab.fcpsr.suprime.services.AppReactiveUserDetailService;
 import lab.fcpsr.suprime.services.MinioFileService;
 import lab.fcpsr.suprime.services.MinioService;
-import lombok.RequiredArgsConstructor;
+import lab.fcpsr.suprime.services.SportTagService;
+import lab.fcpsr.suprime.validations.AppUserValidation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -19,16 +22,17 @@ import reactor.core.scheduler.Schedulers;
 
 @Slf4j
 @Controller
-@RequiredArgsConstructor
-public class HomeController {
+public class HomeController extends SuperController {
 
-    private final MinioService minioService;
-    private final MinioFileService fileService;
+    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, AppUserValidation userValidation) {
+        super(userService, minioService, fileService, sportTagService, userValidation);
+    }
 
     @GetMapping("/")
     public Mono<Rendering> homePage(){
-        return Mono.just(Rendering.view("template")
-                .modelAttribute("title","Home Page")
+        return Mono.just(Rendering
+                .view("template")
+                .modelAttribute("index","home-page")
                 .build());
     }
 

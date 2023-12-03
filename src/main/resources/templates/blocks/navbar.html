@@ -1,9 +1,12 @@
 <div class="row-100">
+    <form id="logoutForm" method="post" th:action="@{/logout}"></form>
     <ul class="navbar blacked">
         <li class="float-left"><a id="home" class="active" th:href="@{/}" onclick="setActive(this.id)">Home</a></li>
-        <li class="float-left"><a id="materials" class="whited" href="#" onclick="setActive(this.id)">Materials</a></li>
-        <li class="float-left"><a id="contact" class="whited" href="#" onclick="setActive(this.id)">Contact</a></li>
-        <li class="float-right"><a id="login" class="whited" th:href="@{/auth/login}" onclick="setActive(this.id)">Login</a></li>
+        <li class="float-left"><a id="materials" class="whited" th:href="@{/material}" onclick="setActive(this.id)">Materials</a></li>
+        <li class="float-left"><a id="contact" class="whited" th:href="@{/contact}" onclick="setActive(this.id)">Contact</a></li>
+        <li th:if="${!baseAuth}" class="float-right"><a id="login" class="whited" th:href="@{/auth/login}" onclick="setActive(this.id)">Login</a></li>
+        <li th:if="${baseAuth}" class="float-right"><a id="logout" class="whited" href="#" onclick="document.getElementById('logoutForm').submit()">Logout</a></li>
+        <li th:if="${baseAuth} and ${roleAdmin}" class="float-right"><a class="whited" th:href="@{/admin}">Admin</a></li>
         <script>
             function setActive(id){
                 /*document.getElementById('home').className='whited'
