@@ -4,8 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.codec.multipart.FilePart;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +19,8 @@ public class PostDTO {
     private String name;
     private String annotation;
     private String content;
+
+    public void addSportTagId(int id){
+        sportTagIds.add(id);
+    }
 }

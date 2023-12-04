@@ -1,5 +1,6 @@
 package lab.fcpsr.suprime.controllers;
 
+import jakarta.validation.Valid;
 import lab.fcpsr.suprime.controllers.base.SuperController;
 import lab.fcpsr.suprime.dto.PostDTO;
 import lab.fcpsr.suprime.models.AppUser;
@@ -9,15 +10,19 @@ import lab.fcpsr.suprime.services.MinioService;
 import lab.fcpsr.suprime.services.SportTagService;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.codec.multipart.Part;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -55,9 +60,15 @@ public class MaterialController extends SuperController {
 
     @PostMapping("/post")
     @PreAuthorize("@RoleService.isPublisher(#user)")
-    public Mono<Rendering> createPost(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "post") PostDTO postDTO){
-        log.info(postDTO.toString());
-        return Mono.just(Rendering.redirectTo("/").build());
+    public Mono<Rendering> createPost(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors, @RequestPart(name = "sportTag") Flux<String> sportTags){
+        postDTO.setUserId(user.getId());
+        return sportTags.collectList().map(sportTagList -> {
+            for(String sportTag : sportTagList){
+                postDTO.addSportTagId(Integer.parseInt(sportTag));
+            }
+            log.info(postDTO.toString());
+            return (Rendering.redirectTo("/").build());
+        });
     }
 
     @ResponseBody

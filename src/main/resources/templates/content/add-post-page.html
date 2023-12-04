@@ -14,7 +14,7 @@
                 <div class="border" style="margin: 1vh; padding: 1vh">
                     <div style="display: inline-block" th:each="st : ${sportTags}" class="border">
                         <img th:src="${st.getImagePath()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
-                        <input type="checkbox" th:name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
+                        <input type="checkbox" name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
                     </div>
                 </div>
                 <div style="margin: 1vh">
