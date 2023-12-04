@@ -60,7 +60,7 @@
     margin: auto;
 }
 
-.navbar {
+.my-navbar {
     display: inline-block;
     list-style-type: none;
     width: 100%;
@@ -69,8 +69,8 @@
     overflow: hidden;
 }
 
-.navbar li a {
-    display: block;
+.my-navbar li a {
+    display: inline-block;
     width: 100px;
     text-decoration: none;
     text-align: center;

@@ -1,6 +1,5 @@
 package lab.fcpsr.suprime.models;
 
-import javafx.geometry.Pos;
 import lab.fcpsr.suprime.dto.AppUserDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;

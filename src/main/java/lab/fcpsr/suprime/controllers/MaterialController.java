@@ -60,9 +60,21 @@ public class MaterialController extends SuperController {
 
     @PostMapping("/post")
     @PreAuthorize("@RoleService.isPublisher(#user)")
-    public Mono<Rendering> createPost(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors, @RequestPart(name = "sportTag") Flux<String> sportTags){
+    public Mono<Rendering> createPost(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors, @RequestPart(name = "sportTag",required = false) Flux<String> sportTags){
         postDTO.setUserId(user.getId());
         return sportTags.collectList().map(sportTagList -> {
+            if(sportTagList.size() == 0){
+                errors.rejectValue("sportTagIds","","Укажите хотя бы один вид спорта");
+            }
+            if(errors.hasErrors()){
+                return Rendering
+                        .view("template")
+                        .modelAttribute("index","add-post-page")
+                        .modelAttribute("post", postDTO)
+                        .modelAttribute("sportTags", sportTagService.findAllToDTO())
+                        .modelAttribute("user",user)
+                        .build();
+            }
             for(String sportTag : sportTagList){
                 postDTO.addSportTagId(Integer.parseInt(sportTag));
             }

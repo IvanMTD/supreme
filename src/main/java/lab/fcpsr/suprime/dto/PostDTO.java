@@ -1,5 +1,6 @@
 package lab.fcpsr.suprime.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.codec.multipart.FilePart;
@@ -16,8 +17,11 @@ public class PostDTO {
 
     private FilePart image;
     private FilePart file;
+    @NotBlank(message = "Введите название")
     private String name;
+    @NotBlank(message = "Добавьте аннотацию")
     private String annotation;
+    @NotBlank(message = "Заполните статью")
     private String content;
 
     public void addSportTagId(int id){

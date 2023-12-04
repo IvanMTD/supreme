@@ -5,26 +5,43 @@
         <div style="display: inline-flex; width: 100%">
             <form th:method="POST" th:action="@{/material/post}" th:object="${post}" class="flex-center" style="padding: 2vh; width: 100%" enctype="multipart/form-data">
                 <h4 style="padding: 1vh" class="text-center">add new post</h4>
-                <p style="padding: 0 2vh">name</p>
+                <span style="padding: 0 2vh">name</span>
                 <input type="text" placeholder="post name" style="width: 100%; margin: 1vh; padding: 1vh" th:field="*{name}">
+                <div th:if="${#fields.hasErrors('name')}" style="border: solid 1px red; background: pink; margin-left: 1vh">
+                    <p th:errors="*{name}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                </div>
                 <p style="padding: 0 2vh">annotation</p>
                 <textarea type="text" placeholder="post annotation" rows="3" style="width: 100%; margin: 1vh; padding: 1vh; resize: none" th:field="*{annotation}"></textarea>
+                <div th:if="${#fields.hasErrors('annotation')}" style="border: solid 1px red; background: pink; margin-left: 1vh">
+                    <p th:errors="*{annotation}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                </div>
                 <p style="padding: 0 2vh">content</p>
-                <textarea type="text" placeholder="post content" rows="20" style="width: 100%; margin: 1vh; padding: 1vh; resize: none" th:field="*{content}"></textarea>
-                <div class="border" style="margin: 1vh; padding: 1vh">
+                <div style="padding: 1vh">
+                    <textarea placeholder="post content" id="summernote" th:field="*{content}"></textarea>
+                </div>
+                <div th:if="${#fields.hasErrors('content')}" style="border: solid 1px red; background: pink; margin-left: 1vh">
+                    <p th:errors="*{content}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                </div>
+
+                <div style="margin: 1vh">
                     <div style="display: inline-block" th:each="st : ${sportTags}" class="border">
-                        <img th:src="${st.getImagePath()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
-                        <input type="checkbox" name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
+                        <div style="padding: 1vh">
+                            <img th:src="${st.getImagePath()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
+                            <input type="checkbox" name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
+                        </div>
                     </div>
+                </div>
+                <div th:if="${#fields.hasErrors('sportTagIds')}" style="border: solid 1px red; background: pink; margin-left: 1vh">
+                    <p th:errors="*{sportTagIds}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                 </div>
                 <div style="margin: 1vh">
                     <p>add post image: </p>
-                    <input type="file" accept="image/*" id="imageFake" hidden disabled="disabled">
+                    <input type="hidden" accept="image/*" id="imageFake" disabled="disabled">
                     <input type="file" accept="image/*" id="image" th:field="*{image}"><br>
                     <progress id="imageProgressBar" hidden></progress>
 
                     <p>add file materials: </p>
-                    <input type="file" accept="*/*" id="fileFake" hidden disabled="disabled">
+                    <input type="hidden" accept="*/*" id="fileFake" disabled="disabled">
                     <input type="file" accept="*/*" id="file" th:field="*{file}"><br>
                     <progress id="progressBar" hidden></progress>
                     <br>
@@ -34,14 +51,17 @@
                         function hiddenControl(){
                             document.getElementById('progressBar').hidden=false
                             document.getElementById('imageProgressBar').hidden=false
+
                             document.getElementById('inputButton').hidden=true
                             document.getElementById('inputButtonFake').hidden=false
+
                             document.getElementById('fileFake').setAttribute('placeholder','in progress ...')
                             document.getElementById('imageFake').setAttribute('placeholder','in progress ...')
-                            document.getElementById('fileFake').hidden=false
-                            document.getElementById('imageFake').hidden=false
-                            document.getElementById('file').hidden=true
-                            document.getElementById('image').hidden=true
+                            document.getElementById('fileFake').type='file'
+                            document.getElementById('imageFake').type='file'
+
+                            document.getElementById('file').setAttribute('style','display:none')
+                            document.getElementById('image').setAttribute('style','display:none')
                         }
                     </script>
                     <div class="text-right" th:text="${user.getFullName()}"></div>

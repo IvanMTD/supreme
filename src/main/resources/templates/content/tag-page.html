@@ -19,7 +19,7 @@
                 </div>
 
                 <br>
-                <input type="file" accept="image/*" id="fileFake" hidden disabled="disabled">
+                <input type="file" accept="image/*" id="fileFake" disabled="disabled" style="display: none">
                 <input type="file" accept="image/*" id="file" name="file"><br>
                 <progress id="progressBar" hidden></progress>
                 <br>
@@ -31,8 +31,8 @@
                         document.getElementById('inputButton').hidden=true
                         document.getElementById('inputButtonFake').hidden=false
                         document.getElementById('fileFake').setAttribute('placeholder','in progress ...')
-                        document.getElementById('fileFake').hidden=false
-                        document.getElementById('file').hidden=true
+                        document.getElementById('fileFake').removeAttribute("style")
+                        document.getElementById('file').setAttribute('style','display:none')
                     }
                 </script>
             </form>

@@ -1,6 +1,6 @@
-<div class="row-100">
+<div class="row-100-block" style="height: 47.5px">
     <form id="logoutForm" method="post" th:action="@{/logout}"></form>
-    <ul class="navbar blacked">
+    <ul class="my-navbar blacked">
         <li class="float-left"><a id="home" class="active" th:href="@{/}" onclick="setActive(this.id)">Home</a></li>
         <li class="float-left"><a id="materials" class="whited" th:href="@{/material}" onclick="setActive(this.id)">Materials</a></li>
         <li class="float-left"><a id="contact" class="whited" th:href="@{/contact}" onclick="setActive(this.id)">Contact</a></li>
@@ -9,11 +9,11 @@
         <li th:if="${baseAuth} and ${roleAdmin}" class="float-right"><a class="whited" th:href="@{/admin}">Admin</a></li>
         <script>
             function setActive(id){
-                /*document.getElementById('home').className='whited'
+                document.getElementById('home').className='whited'
                 document.getElementById('materials').className='whited'
                 document.getElementById('contact').className='whited'
                 document.getElementById('login').className='whited'
-                document.getElementById(id).className='active'*/
+                document.getElementById(id).className='active'
             }
         </script>
     </ul>
