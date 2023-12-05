@@ -2,6 +2,7 @@ package lab.fcpsr.suprime.services;
 
 import lab.fcpsr.suprime.dto.AppUserDTO;
 import lab.fcpsr.suprime.models.AppUser;
+import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.repositories.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
@@ -28,5 +29,13 @@ public class AppReactiveUserDetailService implements ReactiveUserDetailsService 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         return userRepository.findByMail(username).map(appUser -> appUser);
+    }
+
+    public Mono<AppUser> setupPost(Post post) {
+        return userRepository.findById(post.getUserId())
+                .flatMap(user -> {
+                    user.addPost(post);
+                    return userRepository.save(user);
+                });
     }
 }

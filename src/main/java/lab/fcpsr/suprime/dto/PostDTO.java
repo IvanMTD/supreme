@@ -15,6 +15,7 @@ public class PostDTO {
     private Set<Integer> sportTagIds = new HashSet<>();
     private Set<Integer> fileIds = new HashSet<>();
 
+    private String imagePath;
     private FilePart image;
     private FilePart file;
     @NotBlank(message = "Введите название")

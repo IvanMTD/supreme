@@ -1,6 +1,7 @@
 package lab.fcpsr.suprime.services;
 
 import lab.fcpsr.suprime.models.MinioFile;
+import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.repositories.MinioFileRepository;
 import lab.fcpsr.suprime.templates.MinioResponse;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,14 @@ public class MinioFileService {
                     MinioFile file = new MinioFile(minioFile);
                     fileRepository.deleteById(id).subscribe();
                     return file;
+                });
+    }
+
+    public Flux<MinioFile> setupPost(Post post) {
+        return fileRepository.findAllByIdIn(post.getFileIds())
+                .flatMap(file -> {
+                    file.addPost(post);
+                    return fileRepository.save(file);
                 });
     }
 }

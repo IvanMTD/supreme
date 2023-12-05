@@ -28,11 +28,14 @@ public class Post {
     private @NonNull Date placedAt;
 
     public Post(PostDTO postDTO){
+        setImagePath(postDTO.getImagePath());
+        setName(postDTO.getName());
+        setAnnotation(postDTO.getAnnotation());
+        setContent(postDTO.getContent());
 
-    }
-
-    public void setUser(AppUser user){
-        this.userId = user.getId();
+        setUserId(postDTO.getUserId());
+        setSportTagIds(postDTO.getSportTagIds());
+        setFileIds(postDTO.getFileIds());
     }
 
     public void addSportTag(SportTag sportTag){

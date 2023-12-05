@@ -5,6 +5,7 @@ import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -15,5 +16,9 @@ public class PostService {
     public Mono<Post> save(PostDTO postDTO){
         Post post = new Post(postDTO);
         return postRepository.save(post);
+    }
+
+    public Flux<Post> findAll() {
+        return postRepository.findAll();
     }
 }
