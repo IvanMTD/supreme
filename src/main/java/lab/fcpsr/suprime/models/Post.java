@@ -1,5 +1,6 @@
 package lab.fcpsr.suprime.models;
 
+import lab.fcpsr.suprime.dto.PostDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -25,6 +26,10 @@ public class Post {
     private @NonNull String annotation;
     private @NonNull String content;
     private @NonNull Date placedAt;
+
+    public Post(PostDTO postDTO){
+
+    }
 
     public void setUser(AppUser user){
         this.userId = user.getId();

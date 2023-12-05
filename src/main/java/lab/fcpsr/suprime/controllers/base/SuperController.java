@@ -2,11 +2,9 @@ package lab.fcpsr.suprime.controllers.base;
 
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.Role;
-import lab.fcpsr.suprime.services.AppReactiveUserDetailService;
-import lab.fcpsr.suprime.services.MinioFileService;
-import lab.fcpsr.suprime.services.MinioService;
-import lab.fcpsr.suprime.services.SportTagService;
+import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
+import lab.fcpsr.suprime.validations.PostValidation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +29,9 @@ public class SuperController {
     protected final MinioService minioService;
     protected final MinioFileService fileService;
     protected final SportTagService sportTagService;
+    protected final PostService postService;
     protected final AppUserValidation userValidation;
+    protected final PostValidation postValidation;
 
     @ModelAttribute(name = "baseAuth")
     public boolean baseAuth(@AuthenticationPrincipal AppUser user){

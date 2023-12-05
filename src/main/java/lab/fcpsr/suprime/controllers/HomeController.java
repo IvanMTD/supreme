@@ -1,11 +1,9 @@
 package lab.fcpsr.suprime.controllers;
 
 import lab.fcpsr.suprime.controllers.base.SuperController;
-import lab.fcpsr.suprime.services.AppReactiveUserDetailService;
-import lab.fcpsr.suprime.services.MinioFileService;
-import lab.fcpsr.suprime.services.MinioService;
-import lab.fcpsr.suprime.services.SportTagService;
+import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
+import lab.fcpsr.suprime.validations.PostValidation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -24,8 +22,8 @@ import reactor.core.scheduler.Schedulers;
 @Controller
 public class HomeController extends SuperController {
 
-    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, AppUserValidation userValidation) {
-        super(userService, minioService, fileService, sportTagService, userValidation);
+    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation);
     }
 
     @GetMapping("/")

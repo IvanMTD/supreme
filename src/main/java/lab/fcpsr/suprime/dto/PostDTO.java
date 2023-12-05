@@ -27,4 +27,7 @@ public class PostDTO {
     public void addSportTagId(int id){
         sportTagIds.add(id);
     }
+    public void addFileId(int id){
+        fileIds.add(id);
+    }
 }

@@ -39,11 +39,17 @@
                     <input type="hidden" accept="image/*" id="imageFake" disabled="disabled">
                     <input type="file" accept="image/*" id="image" th:field="*{image}"><br>
                     <progress id="imageProgressBar" hidden></progress>
-
+                    <div th:if="${#fields.hasErrors('image')}" style="border: solid 1px red; background: pink">
+                        <p th:errors="*{image}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    </div>
+                    <br>
                     <p>add file materials: </p>
                     <input type="hidden" accept="*/*" id="fileFake" disabled="disabled">
                     <input type="file" accept="*/*" id="file" th:field="*{file}"><br>
                     <progress id="progressBar" hidden></progress>
+                    <div th:if="${#fields.hasErrors('file')}" style="border: solid 1px red; background: pink;">
+                        <p th:errors="*{file}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    </div>
                     <br>
                     <input class="input-button" id="inputButtonFake" type="submit" value="submit" hidden disabled="disabled">
                     <input class="input-button" id="inputButton" type="submit" value="submit" onclick="hiddenControl()">
