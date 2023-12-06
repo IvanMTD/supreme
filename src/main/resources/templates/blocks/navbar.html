@@ -4,7 +4,7 @@
         <li class="float-left">
             <a id="home" th:href="@{/}">Главная</a>
         </li>
-        <li class="float-left">
+        <li th:if="${roleAdmin} or ${roleModerator} or ${rolePublisher}" class="float-left">
             <a id="materials" th:href="@{/material}">Редакция</a>
         </li>
         <li class="float-left">

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -18,7 +20,15 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Mono<Post> findById(int id){
+        return postRepository.findById(id);
+    }
+
     public Flux<Post> findAll() {
         return postRepository.findAll();
+    }
+
+    public Flux<Post> findAllByIds(Set<Integer> ids){
+        return postRepository.findAllByIdIn(ids);
     }
 }

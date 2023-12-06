@@ -33,6 +33,8 @@ public class SuperController {
     protected final AppUserValidation userValidation;
     protected final PostValidation postValidation;
 
+    protected final RoleService roleService;
+
     @ModelAttribute(name = "baseAuth")
     public boolean baseAuth(@AuthenticationPrincipal AppUser user){
         return user != null;
@@ -40,26 +42,17 @@ public class SuperController {
 
     @ModelAttribute(name = "roleAdmin")
     public boolean roleAdmin(@AuthenticationPrincipal AppUser user){
-        if(user != null) {
-            for (Role role : user.getRoles()) {
-                if(role.equals(Role.ADMIN)){
-                    return true;
-                }
-            }
-        }
-        return false;
+        return roleService.isAdmin(user);
+    }
+
+    @ModelAttribute(name = "roleModerator")
+    public boolean roleModerator(@AuthenticationPrincipal AppUser user){
+        return roleService.isModerator(user);
     }
 
     @ModelAttribute(name = "rolePublisher")
     public boolean rolePublisher(@AuthenticationPrincipal AppUser user){
-        if(user != null) {
-            for (Role role : user.getRoles()) {
-                if(role.equals(Role.PUBLISHER)){
-                    return true;
-                }
-            }
-        }
-        return false;
+        return roleService.isPublisher(user);
     }
 
     @ModelAttribute(name = "title")

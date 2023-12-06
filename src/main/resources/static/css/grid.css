@@ -40,6 +40,11 @@
     width: 60%;
 }
 
+.col-100-inline-flex {
+    display: inline-flex;
+    width: 100%;
+}
+
 .col-70-inline-flex {
     display: inline-flex;
     width: 70%;

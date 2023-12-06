@@ -28,19 +28,14 @@ import java.nio.file.Path;
 @RequestMapping("/material")
 public class MaterialController extends SuperController {
 
-
-    public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation);
+    public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService);
     }
 
     @GetMapping
-    public Mono<Rendering> materialPage(){
-        return Mono.just(Rendering
-                .view("template")
-                .modelAttribute("index","material-page")
-                .modelAttribute("posts", postService.findAll())
-                .build()
-        );
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
+    public Mono<Rendering> materialPage(@AuthenticationPrincipal AppUser user){
+        return roleService.getMaterialsByRole(user);
     }
 
     @GetMapping("/post")

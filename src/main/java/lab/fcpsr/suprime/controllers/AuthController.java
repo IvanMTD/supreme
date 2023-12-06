@@ -26,8 +26,8 @@ import java.util.List;
 @RequestMapping("/auth")
 public class AuthController extends SuperController {
 
-    public AuthController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation);
+    public AuthController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService);
     }
 
     @GetMapping("/login")

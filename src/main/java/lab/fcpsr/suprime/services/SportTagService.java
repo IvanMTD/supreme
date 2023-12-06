@@ -12,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.file.Path;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -26,6 +27,14 @@ public class SportTagService {
         SportTag sportTag = new SportTag(verifiedSportTag);
         log.info(sportTag.toString());
         return sportTagRepository.save(sportTag);
+    }
+
+    public Mono<SportTag> findById(int id){
+        return sportTagRepository.findById(id);
+    }
+
+    public Flux<SportTag> findAllByIds(Set<Integer> ids){
+        return sportTagRepository.findAllByIdIn(ids);
     }
 
     public Flux<SportTag> findAll(){

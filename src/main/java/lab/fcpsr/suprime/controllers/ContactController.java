@@ -16,8 +16,8 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/contact")
 public class ContactController extends SuperController {
 
-    public ContactController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation);
+    public ContactController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService);
     }
 
     @GetMapping
