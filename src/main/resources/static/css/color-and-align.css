@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Play&display=swap');
 
 * {
-    font-family: 'Exo', sans-serif;
+    font-family: 'Play', sans-serif;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
 body {
-    background: mediumpurple;
+    background: royalblue;
     color: whitesmoke;
 }
 
@@ -25,38 +25,24 @@ body {
 }
 
 .border {
-    border: solid mediumpurple 1px;
+    border: solid mediumblue 1px;
     border-radius: 20px;
 }
 
 .blacked {
-    background: mediumpurple;
+    background: royalblue;
     /*background: linear-gradient(-90deg, black, dimgray);*/
-    color: black;
+    color: whitesmoke;
 }
 
 .whited {
     background: whitesmoke;
-    color: black;
+    color: #111;
 }
 
 .active {
-    background-color: deeppink;
+    background-color: darkblue;
     color: whitesmoke;
-}
-
-.my-navbar li a:hover:not(.active) {
-    background-color: rebeccapurple;
-    color: whitesmoke;
-}
-
-.link-button {
-    text-decoration: none;
-    font-size: 13px;
-    background: mediumpurple;
-    color: whitesmoke;
-    padding: 5px 10px;
-    border: solid black 2px;
 }
 
 .input-button {
@@ -64,15 +50,25 @@ body {
     width: 100%;
     max-width: 100px;
     height: 30px;
-    background: mediumpurple;
-    color: whitesmoke;
+    background: lightgray;
+    color: black;
+    border: solid darkgray 1px;
+    border-radius: 10px;
 }
 
 .input-button:hover {
-    background: purple;
+    background: royalblue;
+    color: whitesmoke;
+}
+
+.link-decoration {
+    text-decoration: none;
+}
+
+.link-decoration:hover {
+    text-decoration: none;
 }
 
 .shadow {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    text-align: center;
 }

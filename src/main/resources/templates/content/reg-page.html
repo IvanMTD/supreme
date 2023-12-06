@@ -1,13 +1,12 @@
 <div class="row-100 whited">
     <div class="col-20"></div>
     <div class="col-60-inline-flex" style="min-height: 700px">
-        <form th:method="POST" th:action="@{/auth/reg}" th:object="${user}" class="flex-center" style="width: 100%">
-            <hr>
+        <form th:method="POST" th:action="@{/auth/reg}" th:object="${user}" class="flex-center shadow" style="width: 100%">
             <div class="row-100" style="display: inline-flex; padding: 1vh">
-                <h4 style="margin: auto">Registration form</h4>
+                <h2 style="margin: auto">Registration form</h2>
             </div>
             <div class="col-50-inline-flex" style="width: 50%; min-height: 500px">
-                <div class="flex-center">
+                <div class="flex-center shadow" style="padding: 2vh">
                     <p>your e-mail</p>
                     <input type="email" th:field="*{mail}"><br>
                     <div th:if="${#fields.hasErrors('mail')}" style="border: solid 1px red; background: pink">
@@ -57,8 +56,8 @@
                     <input type="checkbox" name="moderator" id="moderator" th:field="*{moderator}" th:if="${sportTags.size()} != 0" onclick="setModerator()">
                     <label for="moderator" th:if="${sportTags.size()} != 0">moderator</label>
                     <br th:if="${sportTags.size()} != 0">
-                    <div id="hidden-block" hidden>
-                        <div style="display:block; width: 300px; padding: 1vh" class="border">
+                    <div id="hidden-block" hidden class="shadow">
+                        <div style="display:block; width: 300px; padding: 1vh">
                             <div style="display: inline-block" th:each="st : ${sportTags}">
                                 <input type="checkbox" th:name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
                             </div>
@@ -74,7 +73,6 @@
             <div class="row-100" style="display: inline-flex; padding: 1vh">
                 <input type="submit" value="Submit" class="input-button" style="margin: auto"><br>
             </div>
-            <hr>
         </form>
     </div>
     <div class="col-20"></div>

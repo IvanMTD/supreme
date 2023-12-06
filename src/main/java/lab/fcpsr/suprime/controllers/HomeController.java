@@ -18,6 +18,10 @@ import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 @Slf4j
 @Controller
 public class HomeController extends SuperController {
@@ -62,5 +66,16 @@ public class HomeController extends SuperController {
                     minioService.delete(fileInfo).subscribe();
                     return Rendering.redirectTo("/").build();
                 });
+    }
+
+    @ResponseBody
+    @GetMapping("/src/main/resources/static/img/{fileName}")
+    public byte[] getFile(@PathVariable String fileName){
+        Path path = Path.of("src/main/resources/static/img/" + fileName);
+        try {
+            return Files.readAllBytes(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

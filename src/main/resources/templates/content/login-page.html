@@ -1,21 +1,20 @@
 <div class="row-100 whited">
     <div class="col-20"></div>
     <div class="col-60">
-        <hr>
         <div style="display: inline-flex; width: 100%; height: 70vh">
-            <form th:method="POST" th:action="@{/auth/login}" style="margin: auto; padding: 2vh">
-                <h4>Sign in</h4>
-                <p>e-mail</p>
+            <form th:method="POST" th:action="@{/auth/login}" style="margin: auto; padding: 2vh" class="shadow">
+                <h4>Авторизация</h4>
+                <p>электронная почта</p>
                 <input placeholder="somebody@example.ru" type="email" name="username" id="username">
                 <br>
-                <p>password</p>
-                <input placeholder="password" type="password" name="password" id="password">
+                <p>пароль</p>
+                <input placeholder="пароль" type="password" name="password" id="password">
                 <br>
                 <p style="color: red" th:if="${!param.error.isEmpty()}">Incorrect login or password</p>
-                <input type="submit" value="submit">
+                <br>
+                <input class="input-button" type="submit" value="вход">
             </form>
         </div>
-        <hr>
     </div>
     <div class="col-20"></div>
 </div>

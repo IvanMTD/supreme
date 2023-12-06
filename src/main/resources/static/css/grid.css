@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Play&display=swap');
 
 * {
-    font-family: 'Exo', sans-serif;
+    font-family: 'Play', sans-serif;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -30,6 +30,10 @@
 
 .col-20 {
     width: 20%;
+}
+
+.col-40 {
+    width: 40%;
 }
 
 .col-60 {
@@ -61,22 +65,47 @@
 }
 
 .my-navbar {
-    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: darkblue;
+}
+
+.my-navbar li {
+
+}
+
+.my-navbar li a {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    font-size: 18px;
+    background: darkblue;
+    color: whitesmoke;
+    padding: 1vh 2vh;
+}
+
+.my-navbar li a:hover {
+    background-color: royalblue;
+    color: whitesmoke;
+}
+
+/*display: inline-block;
     list-style-type: none;
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-}
+    overflow: hidden;*/
 
-.my-navbar li a {
+/*.my-navbar li a {
     display: inline-block;
     width: 100px;
     text-decoration: none;
     text-align: center;
     font-size: 18px;
     padding: 10px 0;
-}
+}*/
 
 .float-left {
     float: left;
@@ -97,4 +126,29 @@
     color: whitesmoke;
     padding: 1vh;
     font-size: 18px;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+}
+
+@media only screen and (max-width: 1536px) {
+    /* For mobile phones: */
+    [class*="media-type"] {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    [class*="col-20"] {
+        display: none;
+    }
+    [class*="col-20"] {
+        width: 0;
+    }
+    [class*="col-60"] {
+        width: 100%;
+    }
 }
