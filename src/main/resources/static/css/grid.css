@@ -40,6 +40,14 @@
     width: 60%;
 }
 
+.col-80 {
+    width: 80%;
+}
+
+.col-100 {
+    width: 100%;
+}
+
 .col-100-inline-flex {
     display: inline-flex;
     width: 100%;
@@ -96,22 +104,6 @@
     color: whitesmoke;
 }
 
-/*display: inline-block;
-    list-style-type: none;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;*/
-
-/*.my-navbar li a {
-    display: inline-block;
-    width: 100px;
-    text-decoration: none;
-    text-align: center;
-    font-size: 18px;
-    padding: 10px 0;
-}*/
-
 .float-left {
     float: left;
 }
@@ -138,6 +130,14 @@
     height: auto;
 }
 
+.margin-bottom-2 {
+    margin-bottom: 2vh
+}
+
+.media-type {
+
+}
+
 @media only screen and (max-width: 1536px) {
     /* For mobile phones: */
     [class*="media-type"] {
@@ -149,11 +149,12 @@
     /* For mobile phones: */
     [class*="col-20"] {
         display: none;
-    }
-    [class*="col-20"] {
         width: 0;
     }
     [class*="col-60"] {
         width: 100%;
     }
+    /*[class*="col-40"] {
+        width: 100%;
+    }*/
 }

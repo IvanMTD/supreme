@@ -55,7 +55,7 @@ public class RoleService {
 
     public Mono<Rendering> getMaterialsByRole(AppUser user){
         if(user != null){
-            Flux<CategoryDTO> categoryFlux = null;
+            Flux<CategoryDTO> categoryFlux = Flux.empty();
 
             for(Role role : user.getRoles()){
                 if(role.equals(Role.ADMIN)){
@@ -71,7 +71,7 @@ public class RoleService {
                                         });
                             });
                 }else if(role.equals(Role.MODERATOR)){
-                    Flux<CategoryDTO> moderatorFlux = sportTagService.findAllByIds(user.getSportTagIds())
+                    categoryFlux = sportTagService.findAllByIds(user.getSportTagIds())
                             .flatMap(sportTag -> {
                                 CategoryDTO category = new CategoryDTO();
                                 category.setSportTag(sportTag);
@@ -82,13 +82,8 @@ public class RoleService {
                                             return category;
                                         });
                             });
-                    if(categoryFlux == null){
-                        categoryFlux = moderatorFlux;
-                    }else{
-                        categoryFlux = merge(categoryFlux,moderatorFlux);
-                    }
                 }else if(role.equals(Role.PUBLISHER)){
-                    Flux<CategoryDTO> postFlux = sportTagService.findAllByIds(user.getSportTagIds())
+                    categoryFlux = sportTagService.findAllByIds(user.getSportTagIds())
                             .flatMap(sportTag -> {
                                 CategoryDTO category = new CategoryDTO();
                                 category.setSportTag(sportTag);
@@ -105,19 +100,13 @@ public class RoleService {
                                             return category;
                                         });
                             });
-
-                    if(categoryFlux == null){
-                        categoryFlux = postFlux;
-                    }else {
-                        categoryFlux = merge(categoryFlux,postFlux);
-                    }
                 }
             }
 
             return Mono.just(Rendering
                     .view("template")
                     .modelAttribute("index","material-page")
-                    .modelAttribute("categories", categoryFlux == null ? Flux.empty() : categoryFlux)
+                    .modelAttribute("categories", categoryFlux)
                     .build());
         }
 
@@ -126,51 +115,5 @@ public class RoleService {
                 .modelAttribute("index","material-page")
                 .modelAttribute("categories", Flux.empty())
                 .build());
-    }
-
-    private Flux<CategoryDTO> merge(Flux<CategoryDTO> flux1, Flux<CategoryDTO> flux2){
-        return flux1
-                .collectList()
-                .flatMap(c -> {
-                    return flux2
-                            .collectList()
-                            .map(pc -> {
-                                int cSize = c.size();
-
-                                for(int i=0; i<pc.size(); i++){
-                                    boolean iCheck = false;
-                                    int currentJ = 0;
-                                    for(int j=0; j<cSize; j++){
-                                        if(pc.get(i).getSportTag().getId() == c.get(j).getSportTag().getId()){
-                                            iCheck = true;
-                                            currentJ = j;
-                                            break;
-                                        }
-                                    }
-                                    if(iCheck){
-                                        int pSize = c.get(currentJ).getPosts().size();
-                                        for(int n=0; n<pc.get(i).getPosts().size(); n++){
-                                            boolean nCheck = false;
-                                            int currentK = 0;
-                                            for(int k=0; k<pSize; k++){
-                                                if(pc.get(i).getPosts().get(n).getId() == c.get(currentJ).getPosts().get(k).getId()){
-                                                    nCheck = true;
-                                                    currentK = k;
-                                                    break;
-                                                }
-                                            }
-                                            if(!nCheck){
-                                                c.get(currentJ).getPosts().add(pc.get(n).getPosts().get(currentK));
-                                            }
-                                        }
-                                    }else{
-                                        c.add(pc.get(i));
-                                    }
-                                }
-
-                                return c;
-                            });
-                })
-                .flatMapMany(Flux::fromIterable);
     }
 }

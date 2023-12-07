@@ -7,7 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,13 +25,16 @@ public class Post {
     private @NonNull String name;
     private @NonNull String annotation;
     private @NonNull String content;
-    private @NonNull Date placedAt;
+    private @NonNull LocalDate placedAt;
+
+    private boolean verified;
 
     public Post(PostDTO postDTO){
         setImagePath(postDTO.getImagePath());
         setName(postDTO.getName());
         setAnnotation(postDTO.getAnnotation());
         setContent(postDTO.getContent());
+        setPlacedAt(LocalDate.now());
 
         setUserId(postDTO.getUserId());
         setSportTagIds(postDTO.getSportTagIds());

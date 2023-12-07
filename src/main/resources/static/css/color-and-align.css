@@ -63,10 +63,12 @@ body {
 
 .link-decoration {
     text-decoration: none;
+    color: #111111;
 }
 
 .link-decoration:hover {
     text-decoration: none;
+    color: #111111;
 }
 
 .shadow {

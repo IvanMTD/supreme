@@ -29,7 +29,8 @@ create table if not exists Post (
     name text,
     annotation text,
     content text,
-    placed_at date
+    placed_at date,
+    verified bool
 );
 
 create table if not exists App_User (

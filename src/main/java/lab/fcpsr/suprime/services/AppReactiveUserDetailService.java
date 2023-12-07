@@ -3,6 +3,7 @@ package lab.fcpsr.suprime.services;
 import lab.fcpsr.suprime.dto.AppUserDTO;
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.Post;
+import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.repositories.AppUserRepository;
 import lab.fcpsr.suprime.repositories.SportTagRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,11 +40,13 @@ public class AppReactiveUserDetailService implements ReactiveUserDetailsService 
                 .flatMap(user -> {
                     user.addPost(post);
                     return sportTagRepository.findAllById(post.getSportTagIds())
-                            .map(sportTag -> {
-                                user.addSportTag(sportTag);
+                            .collectList()
+                            .map(sportTags -> {
+                                for(SportTag sportTag : sportTags){
+                                    user.addSportTag(sportTag);
+                                }
                                 return user;
                             })
-                            .last()
                             .flatMap(userRepository::save);
                 });
     }
