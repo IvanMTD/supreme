@@ -24,6 +24,14 @@ public class PostService {
         return postRepository.findById(id);
     }
 
+    public Mono<PostDTO> findByIdDTO(int id){
+        return postRepository.findById(id)
+                .map(post -> {
+                    PostDTO postDTO = new PostDTO(post);
+                    return postDTO;
+                });
+    }
+
     public Flux<Post> findAll() {
         return postRepository.findAll();
     }

@@ -12,7 +12,7 @@
         <div class="col-30-inline-flex">
             <div class="flex-center" style="width: 100%" th:if="${rolePublisher}">
                 <form th:method="GET" th:action="@{/material/post}" class="text-center">
-                    <input type="submit" value="add post" class="input-button">
+                    <input type="submit" value="добавить пост" class="input-button">
                 </form>
             </div>
         </div>
@@ -41,12 +41,17 @@
                 </div>
                 <div class="col-100" th:id="'cp-' + ${stat.index}" style="display: none">
                     <div th:each="post, pStat : ${category.getPosts()}" class="col-100 margin-bottom-2 shadow">
-                        <div class="col-60 media-type">
-                            <h2 th:text="${post.getName()}"></h2>
-                            <p th:text="${post.getAnnotation()}"></p>
+                        <div class="row-100-block">
+                            <div class="col-60 media-type">
+                                <h2 th:text="${post.getName()}"></h2>
+                                <p th:text="${post.getAnnotation()}"></p>
+                            </div>
+                            <div class="col-40 media-type">
+                                <img class="image" th:src="${post.getImagePath()}">
+                            </div>
                         </div>
-                        <div class="col-40 media-type">
-                            <img class="image" th:src="${post.getImagePath()}">
+                        <div class="row-100-block">
+                            <a class="link-button" th:href="@{/material/post/{id}(id=${post.getId()})}">редактировать</a>
                         </div>
                     </div>
                 </div>
@@ -65,13 +70,3 @@
     </div>
     <div class="col-20"></div>
 </div>
-
-<!--<div class="row-100-block shadow" th:each="post : ${posts}">
-            <dib class="col-60 media-type">
-                <h2 th:text="${post.getName()}"></h2>
-                <p th:text="${post.getAnnotation()}"></p>
-            </dib>
-            <dib class="col-40 media-type">
-                <img class="image" th:src="${post.getImagePath()}">
-            </dib>
-        </div>-->
