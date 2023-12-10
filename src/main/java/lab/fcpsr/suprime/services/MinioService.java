@@ -27,9 +27,8 @@ public class MinioService {
 
     @SneakyThrows
     public MinioService(MinioClient minioClient, @Value("${minio.bucket}") String bucket) {
-        this.bucket = bucket;
-        log.info("bucket name is " + bucket);
         this.minioClient = minioClient;
+        this.bucket = bucket;
         if(!this.minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build())){
             this.minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
         }

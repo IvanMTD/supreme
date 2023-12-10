@@ -4,18 +4,15 @@ import lab.fcpsr.suprime.dto.CategoryDTO;
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.Role;
-import lab.fcpsr.suprime.models.SportTag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service("RoleService")
@@ -128,26 +125,23 @@ public class RoleService {
                             .log();
                 }else if(role.equals(Role.PUBLISHER)){
                     categories = userService.findByEmail(user.getMail())
-                            .flatMapMany(u -> {
-                                log.info("USER: " + u.toString());
-                                return sportTagService.findAllByIds(u.getSportTagIds())
-                                        .flatMap(sportTag -> {
-                                            CategoryDTO category = new CategoryDTO();
-                                            category.setSportTag(sportTag);
-                                            return postService.findAllByIds(sportTag.getPostIds())
-                                                    .collectList()
-                                                    .flatMap(posts -> {
-                                                        List<Post> postList = new ArrayList<>();
-                                                        for(Post post : posts){
-                                                            if(u.getPostIds().stream().anyMatch(id -> post.getId() == id)){
-                                                                postList.add(post);
-                                                            }
+                            .flatMapMany(u -> sportTagService.findAll()
+                                    .flatMap(sportTag -> {
+                                        CategoryDTO category = new CategoryDTO();
+                                        category.setSportTag(sportTag);
+                                        return postService.findAllByIds(sportTag.getPostIds())
+                                                .collectList()
+                                                .flatMap(posts -> {
+                                                    List<Post> postList = new ArrayList<>();
+                                                    for(Post post : posts){
+                                                        if(u.getPostIds().stream().anyMatch(id -> post.getId() == id)){
+                                                            postList.add(post);
                                                         }
-                                                        category.setPosts(postList);
-                                                        return Mono.just(category);
-                                                    });
-                                        });
-                            })
+                                                    }
+                                                    category.setPosts(postList);
+                                                    return Mono.just(category);
+                                                });
+                                    }))
                             .log();
                 }
             }

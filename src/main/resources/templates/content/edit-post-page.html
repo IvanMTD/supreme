@@ -2,7 +2,7 @@
     <div class="col-20"></div>
     <div class="col-60">
         <div style="display: inline-flex; width: 100%">
-            <form th:method="POST" th:action="@{/#}" th:object="${post}" class="flex-center shadow" style="padding: 2vh; width: 100%" enctype="multipart/form-data">
+            <form th:method="POST" th:action="@{/material/edit/post/{id}(id = ${post.getId()})}" th:object="${post}" class="flex-center shadow" style="padding: 2vh; width: 100%" enctype="multipart/form-data">
                 <h2 style="padding: 1vh" class="text-center">Добавить методический материал</h2>
                 <span style="padding: 0 2vh">Название</span>
                 <input type="text" placeholder="название" style="width: 100%; margin: 1vh; padding: 1vh" th:field="*{name}">
@@ -23,35 +23,49 @@
                 </div>
 
                 <div style="margin: 1vh" class="shadow">
+                    <p style="color: red; padding: 1vh">Замена вида спорта только через удаление поста</p>
                     <div style="display: inline-block" th:each="st : ${sportTags}">
                         <div style="padding: 1vh">
-                            <img th:src="${st.getImagePath()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
-                            <input type="checkbox" name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
+                            <img th:src="'/' + ${st.getImagePath()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
+                            <span th:text="${st.getName()}"></span>
                         </div>
                     </div>
                 </div>
-                <div th:if="${#fields.hasErrors('sportTagIds')}" style="border: solid 1px red; background: pink; margin-left: 1vh">
-                    <p th:errors="*{sportTagIds}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
-                </div>
                 <div style="margin: 1vh">
-                    <p>Изображение на карточку материала: </p>
-                    <input type="hidden" accept="image/*" id="imageFake" disabled="disabled">
-                    <input type="file" accept="image/*" id="image" th:field="*{image}"><br>
-                    <progress id="imageProgressBar" hidden></progress>
-                    <div th:if="${#fields.hasErrors('image')}" style="border: solid 1px red; background: pink">
-                        <p th:errors="*{image}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    <p>Изображение на карточке материала: </p>
+                    <div class="shadow" style="padding: 1vh">
+                        <p style="color: green">Если желаете заменить, выберите другое изображение</p>
+                        <input type="text" th:field="*{imagePath}" style="width: 100%" hidden><br>
+                        <img th:src="'/' + ${post.getImagePath()}" width="200px"><br><br>
+                       <!-- <a class="link-button-simple" th:href="@{/material/post/post/{id}/image/delete(id = ${post.getId()})}">Удалить</a>-->
+                        <input type="hidden" accept="image/*" id="imageFake" disabled="disabled">
+                        <input type="file" accept="image/*" id="image" th:field="*{image}"><br>
+                        <progress id="imageProgressBar" hidden></progress>
+                        <div th:if="${#fields.hasErrors('image')}" style="border: solid 1px red; background: pink">
+                            <p th:errors="*{image}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                        </div>
                     </div>
                     <br>
                     <p>Файл с методическими материалами: </p>
-                    <input type="hidden" accept="*/*" id="fileFake" disabled="disabled">
-                    <input type="file" accept="*/*" id="file" th:field="*{file}"><br>
-                    <progress id="progressBar" hidden></progress>
-                    <div th:if="${#fields.hasErrors('file')}" style="border: solid 1px red; background: pink;">
-                        <p th:errors="*{file}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    <div class="row-100-block shadow" style="padding: 1vh">
+                        <p style="color: green">Если желаете заменить, выберите другой файл</p>
+                        <span th:text="'Текущий файл: ' + ${file.getName()}"></span>
+                        <a th:href="@{/download/{id}(id = ${file.getId()})}" class="link-button-simple float-right">Скачать</a>
+                        <div class="row-100">
+                            <input type="hidden" accept="*/*" id="fileFake" disabled="disabled">
+                            <input type="file" accept="*/*" id="file" th:field="*{file}"><br>
+                            <progress id="progressBar" hidden></progress>
+                            <div th:if="${#fields.hasErrors('file')}" style="border: solid 1px red; background: pink;">
+                                <p th:errors="*{file}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                            </div>
+                        </div>
                     </div>
-                    <br>
-                    <input class="input-button" id="inputButtonFake" type="submit" value="Отправить" hidden disabled="disabled">
-                    <input class="input-button" id="inputButton" type="submit" value="Отправить" onclick="hiddenControl()">
+                    <div class="row-100-block" style="padding-top: 2vh">
+                        <a th:href="@{/material}" class="link-button-simple">Назад</a>
+                        <input class="input-button" id="inputButtonFake" type="submit" value="Обновить" hidden disabled="disabled">
+                        <input class="input-button" id="inputButton" type="submit" value="Обновить" onclick="hiddenControl()">
+                        <a th:href="@{/material/post/delete/{id}(id=${post.getId()})}" class="link-button-simple float-right">Удалить</a>
+                    </div>
                     <script>
                         function hiddenControl(){
                             document.getElementById('progressBar').hidden=false

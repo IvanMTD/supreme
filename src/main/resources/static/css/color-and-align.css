@@ -63,7 +63,7 @@ body {
     text-decoration: none;
 }
 
-.link-button {
+.link-button-max {
     display: block;
     text-decoration: none;
     text-align: center;
@@ -71,11 +71,29 @@ body {
     background: lightgray;
     color: black;
     padding: 1vh 2vh;
-    border: solid gray 1px;
+    border: solid darkgray 1px;
     border-radius: 10px;
 }
 
-.link-button:hover {
+.link-button-max:hover {
+    text-decoration: none;
+    background-color: royalblue;
+    border: solid darkblue 1px;
+    color: whitesmoke;
+}
+
+.link-button-simple {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    background: lightgray;
+    color: black;
+    padding: 4px 25px;
+    border: solid darkgray 1px;
+    border-radius: 10px;
+}
+
+.link-button-simple:hover {
     text-decoration: none;
     background-color: royalblue;
     border: solid darkblue 1px;

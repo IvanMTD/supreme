@@ -17,8 +17,9 @@ import java.util.Set;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SportTagService {
+public class SportTagService{
     private final SportTagRepository sportTagRepository;
+    private final PostService postService;
 
     public Mono<SportTag> save(SportTagDTO verifiedSportTag){
         Path filePath = CustomFileUtil.prepareFilePath(verifiedSportTag.getFile().filename());
@@ -54,6 +55,32 @@ public class SportTagService {
                 .flatMap(sportTag -> {
                     sportTag.addPost(post);
                     return sportTagRepository.save(sportTag);
+                });
+    }
+
+    public Flux<SportTagDTO> findAllByPostId(int postId){
+        return postService.findById(postId)
+                .flatMapMany(post -> sportTagRepository.findAllByIdIn(post.getSportTagIds())
+                        .flatMap(sportTag -> {
+                            SportTagDTO sportTagDTO = new SportTagDTO(sportTag);
+                            return Mono.just(sportTagDTO);
+                        }));
+    }
+
+    public Mono<Post> deletePostFromSportTags(Post post) {
+        return sportTagRepository.findAllByIdIn(post.getSportTagIds())
+                .flatMap(sportTag -> {
+                    for(int id : sportTag.getPostIds()){
+                        if(id == post.getId()){
+                            sportTag.getPostIds().remove(post.getId());
+                        }
+                    }
+                    return sportTagRepository.save(sportTag);
+                })
+                .collectList()
+                .flatMap(sportTags -> {
+                    log.info("Sport Tags in case: " + sportTags.size());
+                    return Mono.just(post);
                 });
     }
 }

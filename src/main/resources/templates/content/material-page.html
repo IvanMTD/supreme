@@ -23,7 +23,7 @@
     <div class="col-20"></div>
     <div class="col-60-inline-flex">
         <div class="row-100-block">
-            <div class="row-100-block shadow" th:each="category, stat : ${categories}" style="margin: 1vh">
+            <div class="row-100-block shadow" th:each="category, stat : ${categories}" style="margin: 1vh" th:if="${category.getPosts().size()} != 0">
                 <div id="st">
                     <div class="col-80">
                         <div th:id="${stat.index}" onclick="openPosts(this.id)" style="cursor: pointer">
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <div class="col-20">
-                        <img class="image" th:src="${category.getSportTag().getImagePath()}">
+                        <img class="image" th:src="'/' + ${category.getSportTag().getImagePath()}">
                     </div>
                 </div>
                 <div class="col-100" th:id="'cp-' + ${stat.index}" style="display: none">
@@ -47,11 +47,11 @@
                                 <p th:text="${post.getAnnotation()}"></p>
                             </div>
                             <div class="col-40 media-type">
-                                <img class="image" th:src="${post.getImagePath()}">
+                                <img class="image" th:src="'/' + ${post.getImagePath()}">
                             </div>
                         </div>
                         <div class="row-100-block">
-                            <a class="link-button" th:href="@{/material/post/{id}(id=${post.getId()})}">редактировать</a>
+                            <a class="link-button-max" th:href="@{/material/edit/post/{id}(id=${post.getId()})}">редактировать</a>
                         </div>
                     </div>
                 </div>

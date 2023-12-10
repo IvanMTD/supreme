@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -109,38 +110,65 @@ public class MaterialController extends SuperController {
                 });
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/edit/post/{id}")
     @PreAuthorize("@RoleService.getAccess(#user,#id)")
     public Mono<Rendering> postEditPage(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
         return Mono.just(Rendering
                 .view("template")
                 .modelAttribute("index","edit-post-page")
                 .modelAttribute("post",postService.findByIdDTO(id))
-                .modelAttribute("sportTags", sportTagService.findAllToDTO())
+                .modelAttribute("sportTags", sportTagService.findAllByPostId(id))
+                .modelAttribute("file", fileService.findByPostId(id))
                 .modelAttribute("user",user)
                 .build()
         );
     }
 
-    @ResponseBody
-    @GetMapping("/src/main/resources/static/img/{fileName}")
-    public byte[] getFile(@PathVariable String fileName){
-        Path path = Path.of("src/main/resources/static/img/" + fileName);
-        try {
-            return Files.readAllBytes(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    @PostMapping("/edit/post/{id}")
+    @PreAuthorize("@RoleService.getAccess(#user,#id)")
+    public Mono<Rendering> updatePost(
+            @AuthenticationPrincipal AppUser user,
+            @PathVariable(name = "id") int id,
+            @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors
+    ){
+        log.info(postDTO.toString());
+        if(errors.hasErrors()){
+            return Mono.just(Rendering
+                    .view("template")
+                    .modelAttribute("index","edit-post-page")
+                    .modelAttribute("post", postDTO)
+                    .modelAttribute("sportTags", sportTagService.findAllByPostId(id))
+                    .modelAttribute("file", fileService.findByPostId(id))
+                    .modelAttribute("user",user)
+                    .build());
         }
+        return postService.updatePost(postDTO, id)
+                .flatMap(post -> {
+                    log.info("updated: " + post.toString());
+                    return Mono.just(Rendering.redirectTo("/material").build());
+                });
     }
 
-    @ResponseBody
-    @GetMapping("/post/src/main/resources/static/img/{fileName}")
-    public byte[] getFile2(@PathVariable String fileName){
-        Path path = Path.of("src/main/resources/static/img/" + fileName);
-        try {
-            return Files.readAllBytes(path);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @GetMapping("/post/delete/{id}")
+    @PreAuthorize("@RoleService.getAccess(#user,#id)")
+    public Mono<Rendering> deletePost(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
+        return postService.deletePost(id)
+                .flatMap(userService::deletePostFromUser)
+                .flatMap(sportTagService::deletePostFromSportTags)
+                .publishOn(Schedulers.boundedElastic())
+                .flatMap(post -> {
+                    log.info(post.toString());
+                    try {
+                        Files.delete(Path.of(post.getImagePath()));
+                    } catch (IOException e) {
+                        return Mono.error(new RuntimeException(e));
+                    }
+                    return fileService.deleteFileByPost(post);
+                })
+                .flatMap(minioFile -> {
+                    log.info("In delete method: " + minioFile);
+                    return minioService.delete(minioFile)
+                        .then(Mono.just(Rendering.redirectTo("/material").build()));
+                });
     }
 }
