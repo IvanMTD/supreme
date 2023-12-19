@@ -12,7 +12,7 @@ import org.springframework.http.codec.multipart.FilePart;
 public class SportTagDTO {
     private int id;
     private FilePart file;
-    private String imagePath;
+    private int imageId;
     @NotBlank(message = "Название вида спорта не может быть пустым")
     private String name;
     @NotBlank(message = "Описание вида спорта не может быть пустым")
@@ -20,7 +20,7 @@ public class SportTagDTO {
 
     public SportTagDTO(SportTag sportTag){
         setId(sportTag.getId());
-        setImagePath(sportTag.getImagePath());
+        setImageId(sportTag.getImageId());
         setName(sportTag.getName());
         setDescription(sportTag.getDescription());
     }

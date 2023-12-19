@@ -40,11 +40,13 @@ public class AppReactiveUserDetailService implements ReactiveUserDetailsService 
     }
 
     public Mono<Post> deletePostFromUser(Post post) {
-        return userRepository.findById(post.getUserId())
-                .flatMap(user -> {
-                    user.getPostIds().remove(post.getId());
-                    return userRepository.save(user)
-                            .flatMap(user1 -> Mono.just(post));
-                });
+        return userRepository.findById(post.getUserId()).flatMap(user -> {
+            user.getPostIds().remove(post.getId());
+            return userRepository.save(user).flatMap(u -> Mono.just(post));
+        });
+    }
+
+    public Mono<AppUser> findById(int id) {
+        return userRepository.findById(id);
     }
 }

@@ -15,9 +15,9 @@ public class PostDTO {
     private int id;
     private int userId;
     private Set<Integer> sportTagIds = new HashSet<>();
-    private Set<Integer> fileIds = new HashSet<>();
+    private int fileId;
+    private int imageId;
 
-    private String imagePath;
     private FilePart image;
     private FilePart file;
     @NotBlank(message = "Введите название")
@@ -32,8 +32,8 @@ public class PostDTO {
         setId(post.getId());
         setUserId(post.getUserId());
         setSportTagIds(post.getSportTagIds());
-        setFileIds(post.getFileIds());
-        setImagePath(post.getImagePath());
+        setFileId(post.getFileId());
+        setImageId(post.getImageId());
         setName(post.getName());
         setAnnotation(post.getAnnotation());
         setContent(post.getContent());
@@ -42,8 +42,5 @@ public class PostDTO {
 
     public void addSportTagId(int id){
         sportTagIds.add(id);
-    }
-    public void addFileId(int id){
-        fileIds.add(id);
     }
 }

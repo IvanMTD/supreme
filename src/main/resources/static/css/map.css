@@ -1,0 +1,9 @@
+#map {
+    margin-top: 1vh;
+    overflow: hidden;
+    /* height: calc(100% - 40px); */
+    width: 100%;
+    height: 60vh;
+
+    border: 2px solid #ccc;
+}

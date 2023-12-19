@@ -1,22 +1,20 @@
 package lab.fcpsr.suprime.services;
 
 import lab.fcpsr.suprime.dto.PostDTO;
+import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.MinioFile;
 import lab.fcpsr.suprime.models.Post;
-import lab.fcpsr.suprime.repositories.MinioFileRepository;
+import lab.fcpsr.suprime.models.Role;
 import lab.fcpsr.suprime.repositories.PostRepository;
-import lab.fcpsr.suprime.utils.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -24,11 +22,13 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final MinioFileService fileService;
-    private final MinioService minioService;
 
     public Mono<Post> save(PostDTO postDTO){
         Post post = new Post(postDTO);
+        return postRepository.save(post);
+    }
+
+    public Mono<Post> save(Post post){
         return postRepository.save(post);
     }
 
@@ -52,60 +52,125 @@ public class PostService {
         return postRepository.findAllByIdIn(ids);
     }
 
-    public Mono<Post> updatePost(PostDTO postDTO, int id) {
-        return postRepository.findById(id)
-                .flatMap(post -> {
-                    log.info("Before: " + post.toString());
-                    post.setName(postDTO.getName());
-                    post.setAnnotation(postDTO.getAnnotation());
-                    post.setContent(postDTO.getContent());
-                    log.info("After: " + post);
+    public Mono<Post> updatePost(int id, PostDTO postDTO, Mono<MinioFile> image, Mono<MinioFile> file){
+        return postRepository.findById(id).flatMap(post -> {
+            if(image != null){
+                return image.flatMap(i -> {
+                    post.setImageId(i.getId());
                     return Mono.just(post);
-                })
-                .publishOn(Schedulers.boundedElastic())
-                .flatMap(post -> {
-                    if(postDTO.getImage() != null){
-                        try {
-                            Files.delete(Path.of(postDTO.getImagePath()));
-                            Path path = CustomFileUtil.prepareFilePath(postDTO.getImage().filename());
-                            post.setImagePath(path.toString());
-                            postDTO.getImage().transferTo(path).log().subscribe();
-                        } catch (IOException e) {
-                            return Mono.error(new RuntimeException(e));
-                        }
-                    }
-                    return Mono.just(post);
-                })
-                .flatMap(post -> {
-                    if(postDTO.getFile() != null){
-                        int fileId = 0;
-                        for(int fId : post.getFileIds()){
-                            fileId = fId;
-                            break;
-                        }
-                        return fileService.deleteById(fileId)
-                                .publishOn(Schedulers.boundedElastic())
-                                .flatMap(fileInfo -> {
-                                    minioService.delete(fileInfo).subscribe();
-                                    return minioService
-                                            .uploadStream(postDTO.getFile())
-                                            .flatMap(response -> fileService.save(response)
-                                                    .doOnNext(mf -> log.info("file saved in data_db witch id " + mf.getId()))
-                                                    .flatMap(mf -> {
-                                                        post.setFileIds(new HashSet<>(Set.of(mf.getId())));
-                                                        return postRepository.save(post);
-                                                    })
-                                            )
-                                            .log();
-                                });
-                    }
-                    return postRepository.save(post);
                 });
+            }
+            return Mono.just(post);
+        }).flatMap(post -> {
+            if(file != null){
+                return file.flatMap(f -> {
+                    post.setFileId(f.getId());
+                    return Mono.just(post);
+                });
+            }
+            return Mono.just(post);
+        }).flatMap(post -> {
+            post.setName(postDTO.getName());
+            post.setAnnotation(postDTO.getAnnotation());
+            post.setContent(postDTO.getContent());
+            return postRepository.save(post);
+        });
     }
 
     public Mono<Post> deletePost(int id) {
         return postRepository.findById(id)
-                .flatMap(post -> postRepository.deleteById(id)
-                        .then(Mono.just(post)));
+                .flatMap(post -> postRepository.deleteById(id).then(Mono.just(post)));
+    }
+
+    public Flux<Post> findPostsByUserRole(AppUser user, Pageable pageable) {
+        for(Role role : user.getRoles()){
+            if(role.equals(Role.ADMIN)){
+                return postRepository.findAllByVerifiedIsFalse(pageable);
+            }else if(role.equals(Role.MODERATOR)){
+                List<Integer> sportTagIds = new ArrayList<>(user.getSportTagIds());
+                Integer[] ids = new Integer[sportTagIds.size()];
+                for(int i=0; i< sportTagIds.size(); i++){
+                    ids[i] = sportTagIds.get(i);
+                }
+                return postRepository.findAllBySportTagIdsAny(ids)
+                        .collectList()
+                        .flatMapMany(list -> {
+                            int start = pageable.getPageNumber() * pageable.getPageSize();
+                            int end = start + pageable.getPageSize();
+                            List<Post> posts = new ArrayList<>();
+                            for(int i=start; i<end; i++){
+                                if(i < list.size()) {
+                                    posts.add(list.get(i));
+                                }
+                            }
+                            return Flux.fromIterable(posts);
+                        });
+            }else if(role.equals(Role.PUBLISHER)){
+                return postRepository.findAllByUserIdAndVerifiedFalse(user.getId(), pageable);
+            }else{
+                return Flux.empty();
+            }
+        }
+        return Flux.empty();
+    }
+
+    public Mono<Integer> findPostsByUserRoleGetLastPage(AppUser user, int itemOnPage) {
+        for(Role role : user.getRoles()){
+            if(role.equals(Role.ADMIN)){
+                return postRepository.findAllByVerifiedIsFalse()
+                        .collectList()
+                        .flatMap(list -> Mono.just(getLastPage(list.size(),itemOnPage)));
+            }else if(role.equals(Role.MODERATOR)){
+                List<Integer> sportTagIds = new ArrayList<>(user.getSportTagIds());
+                Integer[] ids = new Integer[sportTagIds.size()];
+                for(int i=0; i< sportTagIds.size(); i++){
+                    ids[i] = sportTagIds.get(i);
+                }
+                return postRepository.findAllBySportTagIdsAny(ids)
+                        .collectList()
+                        .flatMap(list -> Mono.just(getLastPage(list.size(),itemOnPage)));
+            }else if(role.equals(Role.PUBLISHER)){
+                return postRepository.findAllByUserIdAndVerifiedFalse(user.getId())
+                        .collectList()
+                        .flatMap(list -> Mono.just(getLastPage(list.size(),itemOnPage)));
+            }
+        }
+        return Mono.just(0);
+    }
+
+    public Flux<Post> findAllVerified(Pageable pageable) {
+        return postRepository.findAllByVerifiedTrueOrderByIdDesc(pageable);
+    }
+
+    public Mono<Integer> findAllVerifiedLastPage(int itemOnPage) {
+        return postRepository.findAllByVerifiedTrueOrderByIdDesc()
+                .collectList()
+                .flatMap(list -> Mono.just(getLastPage(list.size(), itemOnPage)));
+    }
+
+    public Flux<Post> findSearch(String search){
+        return postRepository.findAllByContentContainsIgnoreCaseAndVerifiedIsTrue(search);
+    }
+
+    private int getLastPage(int size, int itemOnPage){
+        int remains = size % itemOnPage;
+        int last;
+        if(remains != 0){
+            last = size / itemOnPage;
+        }else{
+            last = (size / itemOnPage) - 1;
+        }
+        if(last < 0){
+            last = 0;
+        }
+        return last;
+    }
+
+    public Mono<Post> verifyOff(int id) {
+        return postRepository.findById(id)
+                .flatMap(post -> {
+                    post.setVerified(false);
+                    return postRepository.save(post);
+                });
     }
 }

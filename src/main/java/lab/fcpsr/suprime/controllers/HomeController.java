@@ -1,12 +1,14 @@
 package lab.fcpsr.suprime.controllers;
 
 import lab.fcpsr.suprime.controllers.base.SuperController;
+import lab.fcpsr.suprime.dto.SearchDTO;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,16 +28,54 @@ import java.nio.file.Path;
 @Controller
 public class HomeController extends SuperController {
 
+    private final int itemOnPage = 4;
+
     public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService) {
         super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService);
     }
 
     @GetMapping("/")
     public Mono<Rendering> homePage(){
+        return Mono.just(Rendering.redirectTo("/page/0").build());
+    }
+
+    @GetMapping("/page/{num}")
+    public Mono<Rendering> pages(@PathVariable int num){
         return Mono.just(Rendering
                 .view("template")
+                .modelAttribute("posts",postService.findAllVerified(PageRequest.of(num,itemOnPage)))
                 .modelAttribute("index","home-page")
+                .modelAttribute("page",num)
+                .modelAttribute("lastPage", postService.findAllVerifiedLastPage(itemOnPage))
+                .modelAttribute("search", new SearchDTO())
                 .build());
+    }
+
+    @PostMapping("/search")
+    public Mono<Rendering> searchResult(@ModelAttribute(name = "search") SearchDTO search){
+        return Mono.just(Rendering
+                .view("template")
+                .modelAttribute("posts",postService.findSearch(search.getSearchMessage()))
+                .modelAttribute("index","home-page")
+                .modelAttribute("page",0)
+                .modelAttribute("lastPage", 0)
+                .modelAttribute("search", new SearchDTO())
+                .build());
+    }
+
+    @GetMapping("/read/post/{id}")
+    public Mono<Rendering> readPost(@PathVariable(name = "id") int id){
+        return postService.findById(id)
+                .flatMap(post -> Mono.just(Rendering
+                        .view("template")
+                        .modelAttribute("index","post-page")
+                        .modelAttribute("post",post)
+                        .modelAttribute("user",userService.findById(post.getUserId()))
+                        .modelAttribute("sportTags",sportTagService.findAllByIds(post.getSportTagIds()))
+                        .modelAttribute("file", fileService.findByPostId(post.getId()))
+                        .build()
+                ))
+                .defaultIfEmpty(Rendering.redirectTo("/").build());
     }
 
     @SneakyThrows
@@ -49,6 +89,7 @@ public class HomeController extends SuperController {
                 );
     }
 
+    @ResponseBody
     @GetMapping("/download/{id}")
     public Mono<ResponseEntity<Mono<InputStreamResource>>> download(@PathVariable(name = "id") int id){
         return fileService.findById(id).map(fileInfo -> ResponseEntity.ok()

@@ -19,7 +19,7 @@ public class SportTag {
     private Set<Integer> userIds = new HashSet<>();
     private Set<Integer> postIds = new HashSet<>();
 
-    private @NonNull String imagePath;
+    private int imageId;
     private @NonNull String name;
     private @NonNull String description;
 
@@ -34,6 +34,6 @@ public class SportTag {
     public SportTag(SportTagDTO verifiedSportTag){
         setName(verifiedSportTag.getName());
         setDescription(verifiedSportTag.getDescription());
-        setImagePath(verifiedSportTag.getImagePath());
+        setImageId(verifiedSportTag.getImageId());
     }
 }

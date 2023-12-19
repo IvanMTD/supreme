@@ -5,12 +5,14 @@ import lab.fcpsr.suprime.controllers.base.SuperController;
 import lab.fcpsr.suprime.dto.PostDTO;
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.MinioFile;
+import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.utils.CustomFileUtil;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -30,14 +32,30 @@ import java.nio.file.Path;
 @RequestMapping("/material")
 public class MaterialController extends SuperController {
 
+    private final int itemOnPage = 9;
+
     public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService) {
         super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService);
     }
 
     @GetMapping
     @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
-    public Mono<Rendering> materialPage(@AuthenticationPrincipal AppUser user){
-        return roleService.getMaterialsByRole(user);
+    public Mono<Rendering> materialPageMain(@AuthenticationPrincipal AppUser user){
+        return Mono.just(Rendering.redirectTo("/material/page/0").build());
+    }
+
+    @GetMapping("/page/{num}")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
+    public Mono<Rendering> materialPage(@AuthenticationPrincipal AppUser user, @PathVariable int num){
+        Flux<Post> postFlux = userService.findById(user.getId()).flatMapMany(u -> postService.findPostsByUserRole(u, PageRequest.of(num,itemOnPage)));
+        Mono<Integer> lastPage = userService.findById(user.getId()).flatMap(u -> postService.findPostsByUserRoleGetLastPage(u,itemOnPage));
+        return Mono.just(Rendering
+                .view("template")
+                .modelAttribute("index","material-page")
+                .modelAttribute("posts", postFlux)
+                .modelAttribute("page",num)
+                .modelAttribute("lastPage",lastPage)
+                .build());
     }
 
     @GetMapping("/post")
@@ -53,9 +71,15 @@ public class MaterialController extends SuperController {
         );
     }
 
+    @GetMapping("/off/verified/{id}")
+    @PreAuthorize("@RoleService.isAdmin(#user)")
+    public Mono<Rendering> verifyOff(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
+        return postService.verifyOff(id).flatMap(post -> Mono.just(Rendering.redirectTo("/").build()));
+    }
+
     @PostMapping("/post")
     @PreAuthorize("@RoleService.isPublisher(#user)")
-    public Mono<Rendering> createPost(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors, @RequestPart(name = "sportTag",required = false) Flux<String> sportTags){
+    public Mono<Rendering> addPost(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors, @RequestPart(name = "sportTag",required = false) Flux<String> sportTags){
         postDTO.setUserId(user.getId());
 
         return sportTags.collectList()
@@ -75,38 +99,21 @@ public class MaterialController extends SuperController {
                         postDTO.addSportTagId(Integer.parseInt(sportTag));
                     }
 
-                    Path filePath = CustomFileUtil.prepareFilePath(postDTO.getImage().filename());
-                    postDTO.setImagePath(filePath.toString());
-                    postDTO.getFile().transferTo(filePath).subscribe();
-
                     return minioService.uploadStream(postDTO.getFile())
-                            .flatMap(response -> fileService.save(response)
-                                    .doOnNext(mf -> log.info("file saved in data_db witch id " + mf.getId()))
-                                    .flatMap(mf -> {
-                                        postDTO.addFileId(mf.getId());
-                                        return postService.save(postDTO)
-                                                .flatMap(post -> userService.setupPost(post)
-                                                        .doOnNext(u -> log.info("post added: " + u.toString()))
-                                                        .flatMap(u -> {
-                                                            return sportTagService.setupPost(post).collectList();
-                                                        })
-                                                        .doOnNext(l -> {
-                                                            for(SportTag s : l){
-                                                                log.info("sport tag saved " + s.toString());
-                                                            }
-                                                        })
-                                                        .flatMap(l -> {
-                                                            return fileService.setupPost(post).collectList();
-                                                        })
-                                                        .doOnNext(f -> {
-                                                            for(MinioFile file : f){
-                                                                log.info("file saved in db " + file.toString());
-                                                            }
-                                                        })
-                                                        .flatMap(f -> Mono.just(Rendering.redirectTo("/material").build()))
-                                                );
-                                    })
-                            );
+                            .flatMap(fileService::save)
+                            .flatMap(file -> {
+                                postDTO.setFileId(file.getId());
+                                return minioService.uploadStream(postDTO.getImage());
+                            })
+                            .flatMap(fileService::save)
+                            .flatMap(file -> {
+                                postDTO.setImageId(file.getId());
+                                return postService.save(postDTO);
+                            })
+                            .flatMap(post -> userService.setupPost(post)
+                                    .flatMap(u -> fileService.setupPost(post)
+                                    .flatMap(f -> sportTagService.setupPost(post).collectList())
+                                    .flatMap(sl -> Mono.just(Rendering.redirectTo("/material").build()))));
                 });
     }
 
@@ -119,7 +126,7 @@ public class MaterialController extends SuperController {
                 .modelAttribute("post",postService.findByIdDTO(id))
                 .modelAttribute("sportTags", sportTagService.findAllByPostId(id))
                 .modelAttribute("file", fileService.findByPostId(id))
-                .modelAttribute("user",user)
+                .modelAttribute("user",postService.findById(id).flatMap(post -> userService.findById(post.getUserId())))
                 .build()
         );
     }
@@ -131,7 +138,6 @@ public class MaterialController extends SuperController {
             @PathVariable(name = "id") int id,
             @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors
     ){
-        log.info(postDTO.toString());
         if(errors.hasErrors()){
             return Mono.just(Rendering
                     .view("template")
@@ -142,11 +148,37 @@ public class MaterialController extends SuperController {
                     .modelAttribute("user",user)
                     .build());
         }
-        return postService.updatePost(postDTO, id)
+
+        Mono<MinioFile> imageMono = null;
+        if(!postDTO.getImage().filename().equals("")){
+            imageMono = postService.findById(id)
+                    .flatMap(post -> fileService.findById(post.getImageId())
+                            .flatMap(file -> minioService.delete(file).then(Mono.just(file)))
+                            .flatMap(file -> fileService.deleteById(file.getId()))
+                            .flatMap(file -> minioService.uploadStream(postDTO.getImage()).flatMap(fileService::save)));
+        }
+        Mono<MinioFile> fileMono = null;
+        if(!postDTO.getFile().filename().equals("")){
+            fileMono = postService.findById(id)
+                    .flatMap(post -> fileService.findById(post.getFileId())
+                            .flatMap(file -> minioService.delete(file).then(Mono.just(file)))
+                            .flatMap(file -> fileService.deleteById(file.getId()))
+                            .flatMap(file -> minioService.uploadStream(postDTO.getFile()).flatMap(fileService::save)));
+        }
+
+        return postService.updatePost(id, postDTO, imageMono, fileMono)
+                .flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
+    }
+
+    @GetMapping("/post/verify/{id}")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user)")
+    public Mono<Rendering> verifyPost(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
+        return postService.findById(id)
                 .flatMap(post -> {
-                    log.info("updated: " + post.toString());
-                    return Mono.just(Rendering.redirectTo("/material").build());
-                });
+                    post.setVerified(true);
+                    return postService.save(post);
+                })
+                .flatMap(post -> Mono.just(Rendering.redirectTo("/").build()));
     }
 
     @GetMapping("/post/delete/{id}")
@@ -155,20 +187,8 @@ public class MaterialController extends SuperController {
         return postService.deletePost(id)
                 .flatMap(userService::deletePostFromUser)
                 .flatMap(sportTagService::deletePostFromSportTags)
-                .publishOn(Schedulers.boundedElastic())
-                .flatMap(post -> {
-                    log.info(post.toString());
-                    try {
-                        Files.delete(Path.of(post.getImagePath()));
-                    } catch (IOException e) {
-                        return Mono.error(new RuntimeException(e));
-                    }
-                    return fileService.deleteFileByPost(post);
-                })
-                .flatMap(minioFile -> {
-                    log.info("In delete method: " + minioFile);
-                    return minioService.delete(minioFile)
-                        .then(Mono.just(Rendering.redirectTo("/material").build()));
-                });
+                .flatMap(post -> fileService.deletePostData(post.getImageId()).flatMap(file -> minioService.delete(file).then(Mono.just(post))))
+                .flatMap(post -> fileService.deletePostData(post.getFileId()).flatMap(file -> minioService.delete(file).then(Mono.just(post))))
+                .flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
     }
 }

@@ -1,23 +1,27 @@
 <div class="row-100-block">
-    <form id="logoutForm" method="post" th:action="@{/logout}"></form>
-    <ul class="my-navbar">
-        <li class="float-left">
-            <a id="home" th:href="@{/}">Главная</a>
-        </li>
-        <li th:if="${roleAdmin} or ${roleModerator} or ${rolePublisher}" class="float-left">
-            <a id="materials" th:href="@{/material}">Редакция</a>
-        </li>
-        <li class="float-left">
-            <a id="contact" th:href="@{/contact}">Контакты</a>
-        </li>
-        <li th:if="${!baseAuth}" class="float-right">
-            <a id="login" th:href="@{/auth/login}">Вход</a>
-        </li>
-        <li th:if="${baseAuth}" class="float-right">
-            <a id="logout" href="#" onclick="document.getElementById('logoutForm').submit()">Выход</a>
-        </li>
-        <li th:if="${baseAuth} and ${roleAdmin}" class="float-right">
-            <a class="whited" th:href="@{/admin}">Админ</a>
-        </li>
-    </ul>
+    <div class="col-20"></div>
+    <div class="col-60">
+        <form id="logoutForm" method="post" th:action="@{/logout}"></form>
+        <ul class="my-navbar">
+            <li class="float-left">
+                <a id="home" th:href="@{/page/0}">Главная</a>
+            </li>
+            <li th:if="${roleAdmin} or ${roleModerator} or ${rolePublisher}" class="float-left">
+                <a id="materials" th:href="@{/material/page/0}">Редакция</a>
+            </li>
+            <li class="float-left">
+                <a id="contact" th:href="@{/contact}">Контакты</a>
+            </li>
+            <li th:if="${!baseAuth}" class="float-right">
+                <a id="login" th:href="@{/auth/login}">Вход</a>
+            </li>
+            <li th:if="${baseAuth}" class="float-right">
+                <a id="logout" href="#" onclick="document.getElementById('logoutForm').submit()">Выход</a>
+            </li>
+            <li th:if="${baseAuth} and ${roleAdmin}" class="float-right">
+                <a class="whited" th:href="@{/admin}">Админ</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-20"></div>
 </div>

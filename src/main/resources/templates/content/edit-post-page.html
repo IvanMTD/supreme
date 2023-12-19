@@ -1,8 +1,8 @@
-<div class="row-100 whited">
+<div class="row-100">
     <div class="col-20"></div>
     <div class="col-60">
         <div style="display: inline-flex; width: 100%">
-            <form th:method="POST" th:action="@{/material/edit/post/{id}(id = ${post.getId()})}" th:object="${post}" class="flex-center shadow" style="padding: 2vh; width: 100%" enctype="multipart/form-data">
+            <form th:method="POST" th:action="@{/material/edit/post/{id}(id = ${post.getId()})}" th:object="${post}" class="flex-center" style="padding: 2vh; width: 100%" enctype="multipart/form-data">
                 <h2 style="padding: 1vh" class="text-center">Добавить методический материал</h2>
                 <span style="padding: 0 2vh">Название</span>
                 <input type="text" placeholder="название" style="width: 100%; margin: 1vh; padding: 1vh" th:field="*{name}">
@@ -22,21 +22,20 @@
                     <p th:errors="*{content}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                 </div>
 
-                <div style="margin: 1vh" class="shadow">
+                <div style="margin: 1vh" class="shadow border">
                     <p style="color: red; padding: 1vh">Замена вида спорта только через удаление поста</p>
                     <div style="display: inline-block" th:each="st : ${sportTags}">
                         <div style="padding: 1vh">
-                            <img th:src="'/' + ${st.getImagePath()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
+                            <img th:src="'/download/' + ${st.getImageId()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
                             <span th:text="${st.getName()}"></span>
                         </div>
                     </div>
                 </div>
                 <div style="margin: 1vh">
                     <p>Изображение на карточке материала: </p>
-                    <div class="shadow" style="padding: 1vh">
+                    <div class="shadow border" style="padding: 1vh">
                         <p style="color: green">Если желаете заменить, выберите другое изображение</p>
-                        <input type="text" th:field="*{imagePath}" style="width: 100%" hidden><br>
-                        <img th:src="'/' + ${post.getImagePath()}" width="200px"><br><br>
+                        <img th:src="'/download/' + ${post.getImageId()}" width="200px"><br><br>
                        <!-- <a class="link-button-simple" th:href="@{/material/post/post/{id}/image/delete(id = ${post.getId()})}">Удалить</a>-->
                         <input type="hidden" accept="image/*" id="imageFake" disabled="disabled">
                         <input type="file" accept="image/*" id="image" th:field="*{image}"><br>
@@ -47,7 +46,7 @@
                     </div>
                     <br>
                     <p>Файл с методическими материалами: </p>
-                    <div class="row-100-block shadow" style="padding: 1vh">
+                    <div class="row-100-block shadow border" style="padding: 1vh">
                         <p style="color: green">Если желаете заменить, выберите другой файл</p>
                         <span th:text="'Текущий файл: ' + ${file.getName()}"></span>
                         <a th:href="@{/download/{id}(id = ${file.getId()})}" class="link-button-simple float-right">Скачать</a>
@@ -64,6 +63,7 @@
                         <a th:href="@{/material}" class="link-button-simple">Назад</a>
                         <input class="input-button" id="inputButtonFake" type="submit" value="Обновить" hidden disabled="disabled">
                         <input class="input-button" id="inputButton" type="submit" value="Обновить" onclick="hiddenControl()">
+                        <a th:href="@{/material/post/verify/{id}(id=${post.getId()})}" class="link-button-simple" th:if="${roleAdmin} or ${roleModerator}">Опубликовать</a>
                         <a th:href="@{/material/post/delete/{id}(id=${post.getId()})}" class="link-button-simple float-right">Удалить</a>
                     </div>
                     <script>
@@ -83,7 +83,9 @@
                             document.getElementById('image').setAttribute('style','display:none')
                         }
                     </script>
-                    <div class="text-right" th:text="${user.getFullName()}"></div>
+                    <div class="row-100-block text-right">
+                        <p th:text="${user.getFullName()}" style="margin: 1vh">author name</p>
+                    </div>
                 </div>
             </form>
         </div>

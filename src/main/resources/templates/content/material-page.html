@@ -1,9 +1,9 @@
-<div class="row-100-block whited">
+<div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
         <div class="col-70-inline-flex">
             <div class="flex-center" style="width: 100%">
-                <form th:method="POST" th:action="@{/matrial/search}">
+                <form th:method="POST" th:action="@{/matrial/search}" style="padding: 1vh">
                     <input type="text" placeholder="поиск материалов" style="width: 70%; height: 30px">
                     <input type="submit" value="поиск" class="input-button" style="width: 20%">
                 </form>
@@ -19,53 +19,39 @@
     </div>
     <div class="col-20"></div>
 </div>
-<div class="row-100-block whited">
+<div class="row-100-block">
     <div class="col-20"></div>
-    <div class="col-60-inline-flex">
-        <div class="row-100-block">
-            <div class="row-100-block shadow" th:each="category, stat : ${categories}" style="margin: 1vh" th:if="${category.getPosts().size()} != 0">
-                <div id="st">
-                    <div class="col-80">
-                        <div th:id="${stat.index}" onclick="openPosts(this.id)" style="cursor: pointer">
-                            <div class="row-100-block text-center">
-                                <h2 th:text="${category.getSportTag().getName()}"></h2>
-                            </div>
-                            <div class="row-100-block">
-                                <p th:text="${category.getSportTag().getDescription()}"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-20">
-                        <img class="image" th:src="'/' + ${category.getSportTag().getImagePath()}">
-                    </div>
+    <div class="col-60">
+        <div class="flex-container">
+            <div class="flex-element shadow border" th:each="post,stat:${posts}">
+                <div class="row-100-block text-center">
+                    <h4 th:text="${post.getName()}">name</h4>
                 </div>
-                <div class="col-100" th:id="'cp-' + ${stat.index}" style="display: none">
-                    <div th:each="post, pStat : ${category.getPosts()}" class="col-100 margin-bottom-2 shadow">
-                        <div class="row-100-block">
-                            <div class="col-60 media-type">
-                                <h2 th:text="${post.getName()}"></h2>
-                                <p th:text="${post.getAnnotation()}"></p>
-                            </div>
-                            <div class="col-40 media-type">
-                                <img class="image" th:src="'/' + ${post.getImagePath()}">
-                            </div>
-                        </div>
-                        <div class="row-100-block">
-                            <a class="link-button-max" th:href="@{/material/edit/post/{id}(id=${post.getId()})}">редактировать</a>
-                        </div>
-                    </div>
+                <div class="row-100-block">
+                    <img class="image" th:src="'/download/' + ${post.getImageId()}">
                 </div>
-                <script>
-                    function openPosts(index){
-                        let check = document.getElementById('cp-' + index);
-                        if(check.style.display === 'none'){
-                            document.getElementById('cp-' + index).style.display='block';
-                        }else{
-                            document.getElementById('cp-' + index).style.display='none';
-                        }
-                    }
-                </script>
+                <div class="row-100-block flex-grow">
+                    <p th:text="${post.getAnnotation()}"></p>
+                </div>
+                <div class="row-100">
+                    <a class="link-button-simple" th:href="@{/material/edit/post/{id}(id = ${post.getId()})}">Редактировать</a>
+                </div>
             </div>
+        </div>
+    </div>
+    <div class="col-20"></div>
+</div>
+<div class="row-100-block">
+    <div class="col-20"></div>
+    <div class="col-60" style="display: flex">
+        <div style="display: block; margin: auto">
+            <a style="border-radius: 5px" class="link-button-simple" th:href="@{/material/page/0}" th:if="${page > 0}">первая</a>
+            <a class="link-button-simple-2" th:text="${page - 1}" th:href="@{/material/page/{num}(num=${page - 2})}" th:if="${page > 1}">-2</a>
+            <a class="link-button-simple-2" th:text="${page}" th:href="@{/material/page/{num}(num=${page - 1})}" th:if="${page > 0}">-1</a>
+            <a class="link-button-simple-2" th:text="${page + 1}" th:href="@{/material/page/{num}(num=${page})}" style="background: royalblue; color: whitesmoke">текущая</a>
+            <a class="link-button-simple-2" th:text="${page + 2}" th:href="@{/material/page/{num}(num=${page + 1})}" th:if="${page + 1} <= ${lastPage}">+1</a>
+            <a class="link-button-simple-2" th:text="${page + 3}" th:href="@{/material/page/{num}(num=${page + 2})}" th:if="${page + 2} <= ${lastPage}">+2</a>
+            <a style="border-radius: 5px" class="link-button-simple" th:href="@{/material/page/{num}(num=${lastPage})}" th:if="${page} != ${lastPage}">последняя</a>
         </div>
     </div>
     <div class="col-20"></div>

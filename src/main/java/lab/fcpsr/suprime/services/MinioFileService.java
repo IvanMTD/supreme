@@ -41,18 +41,11 @@ public class MinioFileService {
     }
 
     public Mono<MinioFile> deleteById(int id){
-        return fileRepository.findById(id)
-                .publishOn(Schedulers.boundedElastic())
-                .map(minioFile -> {
-                    MinioFile file = new MinioFile(minioFile);
-                    fileRepository.deleteById(id).subscribe();
-                    return file;
-                });
+        return fileRepository.findById(id).flatMap(minioFile -> fileRepository.deleteById(id).then(Mono.just(minioFile)));
     }
 
-    public Flux<MinioFile> setupPost(Post post) {
-        return fileRepository.findAllByIdIn(post.getFileIds())
-                .flatMap(file -> {
+    public Mono<MinioFile> setupPost(Post post) {
+        return fileRepository.findById(post.getFileId()).flatMap(file -> {
                     file.addPost(post);
                     return fileRepository.save(file);
                 });
@@ -60,29 +53,10 @@ public class MinioFileService {
 
     public Mono<MinioFile> findByPostId(int id) {
         return postRepository.findById(id)
-                .flatMap(post -> {
-                    int fId = 0;
-                    for(int fileId : post.getFileIds()){
-                        fId = fileId;
-                        break;
-                    }
-                    return fileRepository.findById(fId);
-                });
+                .flatMap(post -> fileRepository.findById(post.getFileId()));
     }
 
-    public Mono<MinioFile> deleteFileByPost(Post post) {
-        return fileRepository.findAllByIdIn(post.getFileIds())
-                .collectList()
-                .flatMap(minioFiles -> {
-                    MinioFile minioFile = new MinioFile();
-                    for(MinioFile file : minioFiles){
-                        log.info("Before: " + file.toString());
-                        minioFile = file;
-                        break;
-                    }
-                    log.info("After: " + minioFile);
-                    return fileRepository.deleteById(minioFile.getId())
-                            .then(Mono.just(minioFile));
-                });
+    public Mono<MinioFile> deletePostData(int dataId) {
+        return deleteById(dataId);
     }
 }

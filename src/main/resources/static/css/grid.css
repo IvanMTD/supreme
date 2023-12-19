@@ -10,7 +10,6 @@
 [class*="row-"]{
     display: flex;
     float: left;
-    padding: 0.1vh;
 }
 
 .row-100 {
@@ -22,14 +21,24 @@
     width: 100%;
 }
 
+.row-100-flex-bottom {
+    position: absolute;
+    display: flex;
+    bottom: 0;
+}
+
 [class*="col-"]{
     display: inline-block;
     float: left;
-    padding: 1vh;
 }
 
 .col-20 {
     width: 20%;
+    padding: 1vh;
+}
+
+.col-33 {
+    width: 33.33%;
 }
 
 .col-40 {
@@ -45,6 +54,12 @@
 }
 
 .col-100 {
+    width: 100%;
+}
+
+.col-100-flex {
+    display: flex;
+    flex-direction: row;
     width: 100%;
 }
 
@@ -93,7 +108,6 @@
     display: block;
     text-decoration: none;
     text-align: center;
-    font-size: 18px;
     background: darkblue;
     color: whitesmoke;
     padding: 1vh 2vh;
@@ -120,9 +134,7 @@
 
 .footer-navbar li a {
     text-decoration: none;
-    color: whitesmoke;
-    padding: 1vh;
-    font-size: 18px;
+    color: black;
 }
 
 .image {
@@ -134,14 +146,66 @@
     margin-bottom: 2vh
 }
 
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.flex-element {
+    display: flex;
+    flex-direction: column;
+    /*word-break: break-all;*/
+    width: 350px;
+    height: auto; /* 100% как вариант*/
+    margin: 1vh;
+    padding: 1vh;
+}
+
+.word-break {
+    word-break: break-all;
+}
+
+.flex-grow {
+    flex-grow: 4;
+}
+
+.target {
+    width: 99%;
+}
+
+.target:hover {
+    width: 100%;
+}
+
 .media-type {
 
+}
+
+.bottom-container {
+    position: relative;
+    border: solid black 1px;
+    border-radius: 5px;
+}
+
+.bottom-element {
+    position: absolute;
+    bottom: 1vh;
 }
 
 @media only screen and (max-width: 1536px) {
     /* For mobile phones: */
     [class*="media-type"] {
         width: 100%;
+    }
+    [class*="col-40"] {
+        width: 100%;
+    }
+    [class*="col-60"] {
+        width: 100%;
+    }
+    [class*="flex-element"]{
+        margin: auto auto 1vh;
     }
 }
 
@@ -151,8 +215,14 @@
         display: none;
         width: 0;
     }
+    [class*="col-40"] {
+        width: 100%;
+    }
     [class*="col-60"] {
         width: 100%;
+    }
+    [class*="flex-element"]{
+        margin: auto auto 1vh;
     }
     /*[class*="col-40"] {
         width: 100%;

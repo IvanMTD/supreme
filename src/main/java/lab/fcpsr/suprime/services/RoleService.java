@@ -1,18 +1,11 @@
 package lab.fcpsr.suprime.services;
 
-import lab.fcpsr.suprime.dto.CategoryDTO;
 import lab.fcpsr.suprime.models.AppUser;
-import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.result.view.Rendering;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service("RoleService")
@@ -87,76 +80,5 @@ public class RoleService {
                     });
         }
         return Mono.just(false);
-    }
-
-    public Mono<Rendering> getMaterialsByRole(AppUser user){
-        Flux<CategoryDTO> categories = Flux.empty();
-        if(user != null){
-            for(Role role : user.getRoles()){
-                if(role.equals(Role.ADMIN)){
-                    categories = sportTagService
-                            .findAll()
-                            .flatMap(sportTag -> {
-                                CategoryDTO category = new CategoryDTO();
-                                category.setSportTag(sportTag);
-                                return postService
-                                        .findAllByIds(sportTag.getPostIds())
-                                        .collectList()
-                                        .map(posts -> {
-                                            category.setPosts(posts);
-                                            return category;
-                                        });
-                            })
-                            .log();
-                }else if(role.equals(Role.MODERATOR)){
-                    categories = userService.findByEmail(user.getMail())
-                            .flatMapMany(u -> sportTagService.findAllByIds(u.getSportTagIds())
-                                    .flatMap(sportTag -> {
-                                        CategoryDTO category = new CategoryDTO();
-                                        category.setSportTag(sportTag);
-                                        return postService.findAllByIds(sportTag.getPostIds())
-                                                .collectList()
-                                                .map(posts -> {
-                                                    category.setPosts(posts);
-                                                    return category;
-                                                });
-                                    })
-                            )
-                            .log();
-                }else if(role.equals(Role.PUBLISHER)){
-                    categories = userService.findByEmail(user.getMail())
-                            .flatMapMany(u -> sportTagService.findAll()
-                                    .flatMap(sportTag -> {
-                                        CategoryDTO category = new CategoryDTO();
-                                        category.setSportTag(sportTag);
-                                        return postService.findAllByIds(sportTag.getPostIds())
-                                                .collectList()
-                                                .flatMap(posts -> {
-                                                    List<Post> postList = new ArrayList<>();
-                                                    for(Post post : posts){
-                                                        if(u.getPostIds().stream().anyMatch(id -> post.getId() == id)){
-                                                            postList.add(post);
-                                                        }
-                                                    }
-                                                    category.setPosts(postList);
-                                                    return Mono.just(category);
-                                                });
-                                    }))
-                            .log();
-                }
-            }
-
-            return Mono.just(Rendering
-                    .view("template")
-                    .modelAttribute("index","material-page")
-                    .modelAttribute("categories",categories)
-                    .build());
-        }
-
-        return Mono.just(Rendering
-                .view("template")
-                .modelAttribute("index","material-page")
-                .modelAttribute("categories", Flux.empty())
-                .build());
     }
 }

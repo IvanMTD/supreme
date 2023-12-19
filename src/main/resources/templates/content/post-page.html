@@ -1,0 +1,42 @@
+<div class="col-20"></div>
+<div class="col-60">
+    <div class="flex-container">
+        <div class="row-100">
+            <div th:each="st : ${sportTags}" style="padding: 1vh">
+                <img th:src="'/download/' + ${st.getImageId()}" width="64" height="64">
+            </div>
+        </div>
+        <div class="row-100">
+            <h2 th:text="${post.getName()}">name</h2>
+        </div>
+        <div class="row-100">
+            <img class="image" th:src="'/download/' + ${post.getImageId()}">
+        </div>
+        <div class="row-100">
+            <div th:utext="${post.getContent()}"></div>
+        </div>
+        <div class="row-100 shadow border" style="padding: 1vh" th:if="${!roleAdmin}">
+            <div class="col-50-inline-flex">
+                <a th:href="@{/download/{id}(id=${file.getId()})}" class="link-button-simple flex-center">Скачать материалы</a>
+            </div>
+            <div class="col-50-inline-flex">
+                <p class="flex-center" th:text="${file.getName()}"></p>
+            </div>
+        </div>
+        <div class="row-100 shadow border" style="padding: 1vh" th:if="${roleAdmin}">
+            <div class="col-33" style="display: inline-flex">
+                <a th:href="@{/download/{id}(id=${file.getId()})}" class="link-button-simple flex-center">Скачать материалы</a>
+            </div>
+            <div class="col-33" style="display: inline-flex">
+                <p class="flex-center" th:text="${file.getName()}"></p>
+            </div>
+            <div class="col-33" style="display: inline-flex">
+                <a th:href="@{/material/off/verified/{id}(id=${post.getId()})}" class="link-button-simple flex-center">Снять с публикации</a>
+            </div>
+        </div>
+        <div class="row-100-block text-center" style="padding: 2vh">
+            <span th:text="${user.getFullName()}">fullName</span>
+        </div>
+    </div>
+</div>
+<div class="col-20"></div>

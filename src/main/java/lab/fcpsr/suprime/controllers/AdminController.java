@@ -65,7 +65,19 @@ public class AdminController extends SuperController {
             );
         }
 
-        sportTagService.save(sportTag).subscribe(st -> log.info(st.toString()));
-        return Mono.just(Rendering.redirectTo("/admin").build());
+        return minioService.uploadStream(sportTag.getFile())
+                .flatMap(response -> {
+                    log.info(response.toString());
+                    return fileService.save(response);
+                })
+                .flatMap(file -> {
+                    log.info(file.toString());
+                    sportTag.setImageId(file.getId());
+                    return sportTagService.save(sportTag);
+                })
+                .flatMap(st -> {
+                    log.info(st.toString());
+                    return Mono.just(Rendering.redirectTo("/admin").build());
+                });
     }
 }

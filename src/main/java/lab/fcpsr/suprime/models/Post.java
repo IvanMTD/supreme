@@ -19,9 +19,9 @@ public class Post {
     private int id;
     private int userId;
     private Set<Integer> sportTagIds = new HashSet<>();
-    private Set<Integer> fileIds = new HashSet<>();
+    private int fileId;
+    private int imageId;
 
-    private @NonNull String imagePath;
     private @NonNull String name;
     private @NonNull String annotation;
     private @NonNull String content;
@@ -30,7 +30,7 @@ public class Post {
     private boolean verified;
 
     public Post(PostDTO postDTO){
-        setImagePath(postDTO.getImagePath());
+        setImageId(postDTO.getImageId());
         setName(postDTO.getName());
         setAnnotation(postDTO.getAnnotation());
         setContent(postDTO.getContent());
@@ -38,14 +38,10 @@ public class Post {
 
         setUserId(postDTO.getUserId());
         setSportTagIds(postDTO.getSportTagIds());
-        setFileIds(postDTO.getFileIds());
+        setFileId(postDTO.getFileId());
     }
 
     public void addSportTag(SportTag sportTag){
         this.sportTagIds.add(sportTag.getId());
-    }
-
-    public void addFile(MinioFile file){
-        this.fileIds.add(file.getId());
     }
 }

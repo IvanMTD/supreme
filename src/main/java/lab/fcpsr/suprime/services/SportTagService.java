@@ -4,14 +4,12 @@ import lab.fcpsr.suprime.dto.SportTagDTO;
 import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.repositories.SportTagRepository;
-import lab.fcpsr.suprime.utils.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.file.Path;
 import java.util.Set;
 
 @Slf4j
@@ -22,11 +20,7 @@ public class SportTagService{
     private final PostService postService;
 
     public Mono<SportTag> save(SportTagDTO verifiedSportTag){
-        Path filePath = CustomFileUtil.prepareFilePath(verifiedSportTag.getFile().filename());
-        verifiedSportTag.setImagePath(filePath.toString());
-        verifiedSportTag.getFile().transferTo(filePath).subscribe();
         SportTag sportTag = new SportTag(verifiedSportTag);
-        log.info(sportTag.toString());
         return sportTagRepository.save(sportTag);
     }
 
@@ -78,9 +72,6 @@ public class SportTagService{
                     return sportTagRepository.save(sportTag);
                 })
                 .collectList()
-                .flatMap(sportTags -> {
-                    log.info("Sport Tags in case: " + sportTags.size());
-                    return Mono.just(post);
-                });
+                .flatMap(sportTags -> Mono.just(post));
     }
 }
