@@ -103,6 +103,11 @@
 			<artifactId>minio</artifactId>
 			<version>8.5.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.manticoresearch</groupId>
+			<artifactId>manticoresearch</artifactId>
+			<version>5.0.0</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

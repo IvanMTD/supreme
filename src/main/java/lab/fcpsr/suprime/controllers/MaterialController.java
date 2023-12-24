@@ -6,9 +6,7 @@ import lab.fcpsr.suprime.dto.PostDTO;
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.MinioFile;
 import lab.fcpsr.suprime.models.Post;
-import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.services.*;
-import lab.fcpsr.suprime.utils.CustomFileUtil;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 @Slf4j
 @Controller

@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Data
@@ -53,6 +54,14 @@ public class AppUser implements UserDetails {
                 sportTagIds.addAll(verifiedUser.getModerTagIds());
             }
         }
+    }
+
+    public String getPlacedAtAsString(){
+        return placedAt.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    }
+
+    public String getBirthdayAsString(){
+        return birthday.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     public String getFullName(){

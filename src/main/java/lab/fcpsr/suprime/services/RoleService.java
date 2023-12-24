@@ -16,6 +16,10 @@ public class RoleService {
     private final PostService postService;
     private final AppReactiveUserDetailService userService;
 
+    public boolean isAuthorize(AppUser user){
+        return user != null;
+    }
+
     public boolean isAdmin(AppUser user){
         if(user != null) {
             for (Role role : user.getRoles()) {

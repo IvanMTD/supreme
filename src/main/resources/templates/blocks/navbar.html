@@ -18,7 +18,10 @@
             <li th:if="${baseAuth}" class="float-right">
                 <a id="logout" href="#" onclick="document.getElementById('logoutForm').submit()">Выход</a>
             </li>
-            <li th:if="${baseAuth} and ${roleAdmin}" class="float-right">
+            <li th:if="${baseAuth}" class="float-right">
+                <a class="whited" th:href="@{/auth/profile}">Профиль</a>
+            </li>
+            <li th:if="${roleAdmin}" class="float-right">
                 <a class="whited" th:href="@{/admin}">Админ</a>
             </li>
         </ul>
