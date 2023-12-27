@@ -27,8 +27,8 @@ public class MaterialController extends SuperController {
 
     private final int itemOnPage = 9;
 
-    public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService);
+    public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
     }
 
     @GetMapping
@@ -106,7 +106,7 @@ public class MaterialController extends SuperController {
                             .flatMap(post -> userService.setupPost(post)
                                     .flatMap(u -> fileService.setupPost(post)
                                     .flatMap(f -> sportTagService.setupPost(post).collectList())
-                                    .flatMap(sl -> Mono.just(Rendering.redirectTo("/material").build()))));
+                                    .flatMap(sl -> searchService.insertPost(post).then(Mono.just(Rendering.redirectTo("/material").build())))));
                 });
     }
 

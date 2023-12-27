@@ -11,7 +11,7 @@
 <div class="row-100">
     <div class="col-20"></div>
     <div class="col-60" style="padding: 1vh">
-        <div class="flex-container shadow border target" th:each="post,stat:${posts}" style="padding: 1vh; margin-bottom: 1vh">
+        <div class="flex-container border shadow target" th:each="post,stat:${posts}" style="padding: 1vh; margin-bottom: 1vh">
             <a th:href="@{/read/post/{id}(id=${post.getId()})}" style="color: black">
                 <div class="col-60">
                     <div class="row-100">

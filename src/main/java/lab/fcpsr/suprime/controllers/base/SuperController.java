@@ -35,6 +35,8 @@ public class SuperController {
 
     protected final RoleService roleService;
 
+    protected final SearchService searchService;
+
     @ModelAttribute(name = "baseAuth")
     public boolean baseAuth(@AuthenticationPrincipal AppUser user){
         return user != null;

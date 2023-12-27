@@ -31,8 +31,8 @@ public class HomeController extends SuperController {
 
     private final int itemOnPage = 4;
 
-    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService);
+    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
     }
 
     @GetMapping("/")
