@@ -17,7 +17,6 @@ import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -56,7 +55,7 @@ public class HomeController extends SuperController {
     public Mono<Rendering> searchResult(@ModelAttribute(name = "search") SearchDTO search){
         return Mono.just(Rendering
                 .view("template")
-                .modelAttribute("posts",postService.findSearch(search.getSearchMessage()))
+                .modelAttribute("posts",searchService.searchPosts(search.getSearchMessage()).flatMap(postService::findByIdAndVerifiedTrue))
                 .modelAttribute("index","home-page")
                 .modelAttribute("page",0)
                 .modelAttribute("lastPage", 0)

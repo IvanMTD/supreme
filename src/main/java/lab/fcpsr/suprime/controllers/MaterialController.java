@@ -3,6 +3,7 @@ package lab.fcpsr.suprime.controllers;
 import jakarta.validation.Valid;
 import lab.fcpsr.suprime.controllers.base.SuperController;
 import lab.fcpsr.suprime.dto.PostDTO;
+import lab.fcpsr.suprime.dto.SearchDTO;
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.MinioFile;
 import lab.fcpsr.suprime.models.Post;
@@ -48,6 +49,20 @@ public class MaterialController extends SuperController {
                 .modelAttribute("posts", postFlux)
                 .modelAttribute("page",num)
                 .modelAttribute("lastPage",lastPage)
+                .modelAttribute("search", new SearchDTO())
+                .build());
+    }
+
+    @PostMapping("/search")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
+    public Mono<Rendering> searchResult(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "search") SearchDTO search){
+        return Mono.just(Rendering
+                .view("template")
+                .modelAttribute("posts",searchService.searchPosts(search.getSearchMessage()).flatMap(postService::findByIdAndVerifiedFalse))
+                .modelAttribute("index","material-page")
+                .modelAttribute("page",0)
+                .modelAttribute("lastPage", 0)
+                .modelAttribute("search", new SearchDTO())
                 .build());
     }
 

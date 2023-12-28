@@ -1,19 +1,31 @@
 <div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
-        <div class="col-70-inline-flex">
-            <div class="flex-center" style="width: 100%">
-                <form th:method="POST" th:action="@{/matrial/search}" style="padding: 1vh">
-                    <input type="text" placeholder="поиск материалов" style="width: 70%; height: 30px">
-                    <input type="submit" value="поиск" class="input-button" style="width: 20%">
-                </form>
+        <div class="row-100-block" th:if="${roleAdmin} or ${roleModerator}">
+            <div class="col-100-inline-flex">
+                <div class="flex-center" style="width: 100%">
+                    <form th:method="POST" th:action="@{/material/search}" style="padding: 1vh; display: block; width: 100%" th:object="${search}">
+                        <input type="text" placeholder="поиск материалов" style="display: inline-block; padding: 0.5vh; width: 90%" th:field="*{searchMessage}">
+                        <input type="submit" value="поиск" class="input-button" style="display: inline-block">
+                    </form>
+                </div>
             </div>
         </div>
-        <div class="col-30-inline-flex">
-            <div class="flex-center" style="width: 100%" th:if="${rolePublisher}">
-                <form th:method="GET" th:action="@{/material/post}" class="text-center">
-                    <input type="submit" value="добавить пост" class="input-button">
-                </form>
+        <div class="row-100" th:if="${rolePublisher}">
+            <div class="col-70-inline-flex">
+                <div class="flex-center" style="width: 100%">
+                    <form th:method="POST" th:action="@{/material/search}" style="padding: 1vh; display: block; width: 100%" th:object="${search}">
+                        <input type="text" placeholder="поиск материалов" style="display: inline-block; padding: 0.5vh; width: 80%" th:field="*{searchMessage}">
+                        <input type="submit" value="поиск" class="input-button" style="display: inline-block">
+                    </form>
+                </div>
+            </div>
+            <div class="col-30-inline-flex border">
+                <div class="flex-center" style="width: 100%" th:if="${rolePublisher}">
+                    <form th:method="GET" th:action="@{/material/post}" class="text-center">
+                        <input type="submit" value="добавить пост" class="input-button">
+                    </form>
+                </div>
             </div>
         </div>
     </div>

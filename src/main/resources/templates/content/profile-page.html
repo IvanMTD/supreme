@@ -1,6 +1,6 @@
 <div class="row-100">
     <div class="col-20"></div>
-    <div class="col-60">
+    <div class="col-60" style="padding: 10vh 0">
         <div class="col-100 shadow border" style="padding: 1vh; margin-top: 1vh">
             <div class="row-100" th:each="role : ${user.getRoles()}">
                 <p th:text="'Текущая роль ' + ${role.getDisplayName()}"></p>
@@ -10,7 +10,7 @@
                     <img th:src="'/download/' + ${sportTag.getImageId()}" width="32" height="32">
                 </div>
             </div>
-            <div class="row-100-block" th:if="${rolePublisher}">
+            <div class="row-100-block" th:if="${rolePublisher} and ${posts.size() != 0}">
                 <form th:method="GET" id="optionForm">
                     <input hidden name="_csrf" th:value="${_csrf.getToken()}">
                 </form>

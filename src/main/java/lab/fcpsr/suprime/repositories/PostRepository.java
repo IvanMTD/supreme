@@ -6,6 +6,7 @@ import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
@@ -16,6 +17,8 @@ public interface PostRepository extends ReactiveCrudRepository<Post, Integer> {
     Flux<Post> findAllByVerifiedTrueOrderByIdDesc(Pageable pageable);
     Flux<Post> findAllByVerifiedTrueOrderByIdDesc();
     Flux<Post> findAllByUserId(int userId);
+    Mono<Post> findByIdAndVerifiedTrue(int id);
+    Mono<Post> findByIdAndVerifiedFalse(int id);
     Flux<Post> findAllByUserIdAndVerifiedFalse(int userId, Pageable pageable);
     Flux<Post> findAllByUserIdAndVerifiedFalse(int userId);
     Flux<Post> findAllByContentContainsIgnoreCaseAndVerifiedIsTrue(String search);

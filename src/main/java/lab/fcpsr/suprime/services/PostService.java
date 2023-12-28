@@ -8,6 +8,7 @@ import lab.fcpsr.suprime.models.Role;
 import lab.fcpsr.suprime.repositories.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.reactivestreams.Publisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -172,5 +173,13 @@ public class PostService {
                     post.setVerified(false);
                     return postRepository.save(post);
                 });
+    }
+
+    public Mono<Post> findByIdAndVerifiedTrue(Integer id) {
+        return postRepository.findByIdAndVerifiedTrue(id);
+    }
+
+    public Mono<Post> findByIdAndVerifiedFalse(Integer id) {
+        return postRepository.findByIdAndVerifiedFalse(id);
     }
 }
