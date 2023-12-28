@@ -179,10 +179,6 @@
    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);*/
 }
 
-.media-type {
-
-}
-
 .bottom-container {
     position: relative;
     border: solid black 1px;
@@ -194,8 +190,16 @@
     bottom: 1vh;
 }
 
+.media-type {
+
+}
+
 @media only screen and (max-width: 1536px) {
     /* For mobile phones: */
+    [class*="col-20"] {
+        display: none;
+        width: 0;
+    }
     [class*="media-type"] {
         width: 100%;
     }
@@ -225,7 +229,4 @@
     [class*="flex-element"]{
         margin: auto auto 1vh;
     }
-    /*[class*="col-40"] {
-        width: 100%;
-    }*/
 }

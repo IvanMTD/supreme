@@ -2,8 +2,7 @@
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
         <form th:method="POST" th:action="@{/search}" style="padding: 1vh; display: block; width: 100%" th:object="${search}">
-            <input type="text" placeholder="поиск материалов" id="search" name="search" style="display: inline-block; padding: 0.5vh; width: 90%" th:field="*{searchMessage}">
-            <input type="submit" value="поиск" class="input-button" style="display: inline-block">
+            <input type="search" placeholder="поиск материалов" id="search" name="search" style="display: inline-block; padding: 0.5vh; width: 100%" th:field="*{searchMessage}">
         </form>
     </div>
     <div class="col-20"></div>
