@@ -58,7 +58,7 @@ public class MaterialController extends SuperController {
     public Mono<Rendering> searchResult(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "search") SearchDTO search){
         return Mono.just(Rendering
                 .view("template")
-                .modelAttribute("posts",searchService.searchPosts(search.getSearchMessage()).flatMap(postService::findByIdAndVerifiedFalse))
+                .modelAttribute("posts",searchService.searchPosts(search.getSearchMessage()).flatMap(id -> postService.findByIdAndVerifiedFalse(user,id)))
                 .modelAttribute("index","material-page")
                 .modelAttribute("page",0)
                 .modelAttribute("lastPage", 0)

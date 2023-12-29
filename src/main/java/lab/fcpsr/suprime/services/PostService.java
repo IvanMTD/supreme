@@ -179,7 +179,26 @@ public class PostService {
         return postRepository.findByIdAndVerifiedTrue(id);
     }
 
-    public Mono<Post> findByIdAndVerifiedFalse(Integer id) {
-        return postRepository.findByIdAndVerifiedFalse(id);
+    public Mono<Post> findByIdAndVerifiedFalse(AppUser user, Integer id) {
+        return postRepository.findByIdAndVerifiedFalse(id).flatMap(post -> {
+            for(Role role : user.getRoles()){
+                if(role.equals(Role.ADMIN)){
+                    return Mono.just(post);
+                }else if(role.equals(Role.MODERATOR)){
+                    if(user.getSportTagIds().stream().anyMatch(tagId -> post.getSportTagIds().stream().anyMatch(postTagId -> postTagId.equals(tagId)))){
+                        return Mono.just(post);
+                    }else{
+                        return Mono.empty();
+                    }
+                }else if(role.equals(Role.PUBLISHER)){
+                    if(user.getPostIds().stream().anyMatch(postId -> postId.equals(id))){
+                        return Mono.just(post);
+                    }else{
+                        return Mono.empty();
+                    }
+                }
+            }
+            return Mono.empty();
+        });
     }
 }

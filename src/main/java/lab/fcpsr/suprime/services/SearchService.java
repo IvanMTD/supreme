@@ -48,13 +48,17 @@ public class SearchService {
 
     @SneakyThrows
     public Flux<Integer> searchPosts(String request){
-        SearchRequest searchRequest = new SearchRequest();
-        searchRequest.setIndex(table);
-        QueryFilter queryFilter = new QueryFilter();
-        queryFilter.setQueryString(request);
-        searchRequest.setFulltextFilter(queryFilter);
-        SearchResponse response = search.search(searchRequest);
-        return parse(response);
+        if(request.equals("")){
+            return Flux.empty();
+        }else {
+            SearchRequest searchRequest = new SearchRequest();
+            searchRequest.setIndex(table);
+            QueryFilter queryFilter = new QueryFilter();
+            queryFilter.setQueryString(request);
+            searchRequest.setFulltextFilter(queryFilter);
+            SearchResponse response = search.search(searchRequest);
+            return parse(response);
+        }
     }
 
     private Flux<Integer> parse(SearchResponse response){

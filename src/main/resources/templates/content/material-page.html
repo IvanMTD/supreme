@@ -33,19 +33,21 @@
     <div class="col-20"></div>
     <div class="col-60">
         <div class="flex-container">
-            <div class="flex-element shadow border" th:each="post,stat:${posts}">
-                <div class="row-100-block text-center">
-                    <h4 th:text="${post.getName()}">name</h4>
-                </div>
-                <div class="row-100-block">
-                    <img class="image" th:src="'/download/' + ${post.getImageId()}">
-                </div>
-                <div class="row-100-block flex-grow">
-                    <p th:text="${post.getAnnotation()}"></p>
-                </div>
-                <div class="row-100">
+            <div class="flex-element border target" th:each="post,stat:${posts}">
+                <a class="link-decoration" th:href="@{/material/edit/post/{id}(id = ${post.getId()})}">
+                    <div class="row-100-block text-center">
+                        <h4 th:text="${post.getName()}">name</h4>
+                    </div>
+                    <div class="row-100-block">
+                        <img class="image" th:src="'/download/' + ${post.getImageId()}">
+                    </div>
+                    <div class="row-100-block flex-grow">
+                        <p th:text="${post.getAnnotation()}"></p>
+                    </div>
+                </a>
+                <!--<div class="row-100">
                     <a class="link-button-simple" th:href="@{/material/edit/post/{id}(id = ${post.getId()})}">Редактировать</a>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
