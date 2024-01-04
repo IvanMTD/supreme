@@ -1,12 +1,15 @@
 .my-slider {
-    height: 30px;
-    transition: height 1s;
-    transition-timing-function: ease-in-out;
+    max-height: 85px;
     overflow: hidden;
 }
 
 .my-slider:hover {
-    height: 300px;
+    max-height: 800px;
+    overflow: hidden;
+}
+
+.transition-execute {
+    transition: max-height 2s ease;
 }
 
 #js-show-iframe-wrapper{

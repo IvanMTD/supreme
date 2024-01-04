@@ -32,7 +32,7 @@ public class ManticoreConfiguration {
     @SneakyThrows
     public UtilsApi utils(){
         UtilsApi utils = new UtilsApi(client());
-        String tableCommand = "create table if not exists " + table + " (post_id text, name text, annotation text, content text) morphology='stem_enru, libstemmer_ru' html_strip = '1'";
+        String tableCommand = "create table if not exists " + table + " (post_id text, name text, annotation text, content text, tag text) morphology='stem_enru, libstemmer_ru' html_strip = '1'";
         List<Object> response = utils.sql(tableCommand,true);
         for(Object r : response){
             log.info("CREATE TABLE RESPONSE: " + r.toString());

@@ -58,7 +58,7 @@ public class MaterialController extends SuperController {
     public Mono<Rendering> searchResult(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "search") SearchDTO search){
         return Mono.just(Rendering
                 .view("template")
-                .modelAttribute("posts",searchService.searchPosts(search.getSearchMessage()).flatMap(id -> postService.findByIdAndVerifiedFalse(user,id)))
+                .modelAttribute("posts",searchService.searchPosts(search.getSearchMessage()).flatMap(id -> userService.findById(user.getId()).flatMap(u -> postService.findByIdAndVerifiedFalse(u,id))))
                 .modelAttribute("index","material-page")
                 .modelAttribute("page",0)
                 .modelAttribute("lastPage", 0)
@@ -119,9 +119,14 @@ public class MaterialController extends SuperController {
                                 return postService.save(postDTO);
                             })
                             .flatMap(post -> userService.setupPost(post)
-                                    .flatMap(u -> fileService.setupPost(post)
+                                    .flatMap(u -> fileService.setupPost(post))
                                     .flatMap(f -> sportTagService.setupPost(post).collectList())
-                                    .flatMap(sl -> searchService.insertPost(post).then(Mono.just(Rendering.redirectTo("/material").build())))));
+                                    .flatMap(sl -> searchService.insertPost(post,sl))
+                                    .flatMap(r -> {
+                                        log.info("RESPONSE: " + r.toString());
+                                        return Mono.just(Rendering.redirectTo("/material").build());
+                                    })
+                            );
                 });
     }
 
@@ -158,24 +163,32 @@ public class MaterialController extends SuperController {
         }
 
         Mono<MinioFile> imageMono = null;
-        if(!postDTO.getImage().filename().equals("")){
-            imageMono = postService.findById(id)
-                    .flatMap(post -> fileService.findById(post.getImageId())
-                            .flatMap(file -> minioService.delete(file).then(Mono.just(file)))
-                            .flatMap(file -> fileService.deleteById(file.getId()))
-                            .flatMap(file -> minioService.uploadStream(postDTO.getImage()).flatMap(fileService::save)));
+        if(postDTO.getImage() != null) {
+            if (!postDTO.getImage().filename().equals("")) {
+                imageMono = postService.findById(id)
+                        .flatMap(post -> fileService.findById(post.getImageId())
+                                .flatMap(file -> minioService.delete(file).then(Mono.just(file)))
+                                .flatMap(file -> fileService.deleteById(file.getId()))
+                                .flatMap(file -> minioService.uploadStream(postDTO.getImage()).flatMap(fileService::save)));
+            }
         }
         Mono<MinioFile> fileMono = null;
-        if(!postDTO.getFile().filename().equals("")){
-            fileMono = postService.findById(id)
-                    .flatMap(post -> fileService.findById(post.getFileId())
-                            .flatMap(file -> minioService.delete(file).then(Mono.just(file)))
-                            .flatMap(file -> fileService.deleteById(file.getId()))
-                            .flatMap(file -> minioService.uploadStream(postDTO.getFile()).flatMap(fileService::save)));
+        if(postDTO.getFile() != null) {
+            if (!postDTO.getFile().filename().equals("")) {
+                fileMono = postService.findById(id)
+                        .flatMap(post -> fileService.findById(post.getFileId())
+                                .flatMap(file -> minioService.delete(file).then(Mono.just(file)))
+                                .flatMap(file -> fileService.deleteById(file.getId()))
+                                .flatMap(file -> minioService.uploadStream(postDTO.getFile()).flatMap(fileService::save)));
+            }
         }
 
         return postService.updatePost(id, postDTO, imageMono, fileMono)
-                .flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
+                .flatMap(searchService::updatePost)
+                .flatMap(response -> {
+                    log.info(response.toString());
+                    return Mono.just(Rendering.redirectTo("/material").build());
+                });
     }
 
     @GetMapping("/post/verify/{id}")
@@ -197,6 +210,10 @@ public class MaterialController extends SuperController {
                 .flatMap(sportTagService::deletePostFromSportTags)
                 .flatMap(post -> fileService.deletePostData(post.getImageId()).flatMap(file -> minioService.delete(file).then(Mono.just(post))))
                 .flatMap(post -> fileService.deletePostData(post.getFileId()).flatMap(file -> minioService.delete(file).then(Mono.just(post))))
-                .flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
+                .flatMap(searchService::deletePost)
+                .flatMap(deleteResponse -> {
+                    log.info("DELETE: " + deleteResponse.toString());
+                    return Mono.just(Rendering.redirectTo("/material").build());
+                });
     }
 }

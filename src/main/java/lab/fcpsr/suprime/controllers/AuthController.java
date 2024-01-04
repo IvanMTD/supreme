@@ -50,6 +50,7 @@ public class AuthController extends SuperController {
         );
     }
 
+    // ПЕРЕДЕЛАТЬ! ДОБАВИТЬ ДОБАВЛЕНИЕ USER ID в SPORT TAG если он модератор!
     @PostMapping("/reg")
     @PreAuthorize("@RoleService.isAdmin(#user)")
     public Mono<Rendering> registered(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "user") @Valid AppUserDTO userDTO, Errors userErrors, ServerWebExchange exchange){
