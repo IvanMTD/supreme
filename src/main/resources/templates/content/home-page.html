@@ -1,8 +1,8 @@
 <div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
-        <form th:method="POST" th:action="@{/search}" style="padding: 1vh; display: block; width: 100%" th:object="${search}">
-            <input type="search" placeholder="поиск материалов" id="search" name="search" style="display: inline-block; padding: 0.5vh; width: 100%" th:field="*{searchMessage}">
+        <form th:method="GET" th:action="@{/search}" style="padding: 1vh; display: block; width: 100%">
+            <input type="search" placeholder="введите свой запрос здесь" id="search" name="search" style="display: inline-block; padding: 0.5vh; width: 100%">
         </form>
     </div>
     <div class="col-20"></div>

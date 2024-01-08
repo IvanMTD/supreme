@@ -50,40 +50,32 @@ public class AuthController extends SuperController {
         );
     }
 
-    // ПЕРЕДЕЛАТЬ! ДОБАВИТЬ ДОБАВЛЕНИЕ USER ID в SPORT TAG если он модератор!
     @PostMapping("/reg")
     @PreAuthorize("@RoleService.isAdmin(#user)")
     public Mono<Rendering> registered(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "user") @Valid AppUserDTO userDTO, Errors userErrors, ServerWebExchange exchange){
-        return exchange.getFormData()
-                .flatMap(form -> {
-                    List<String> ids = form.get("sportTag");
-                    if(ids == null){
-                        ids = new ArrayList<>();
-                    }
-                    return Mono.just(ids);
-                })
-                .flatMap(ids -> userValidation.checkUsername(userDTO,userErrors)
-                        .flatMap(userError -> {
-                            List<Integer> tagIds = null;
-                            if(ids.size() != 0){
-                                tagIds = new ArrayList<>();
-                                for(String id : ids){
-                                    tagIds.add(Integer.valueOf(id));
-                                }
-                            }
-                            userDTO.setModerTagIds(tagIds);
-                            userValidation.validate(userDTO,userError);
-                            if(userError.hasErrors()){
-                                return Mono.just(Rendering
-                                        .view("template")
-                                        .modelAttribute("index","reg-page")
-                                        .modelAttribute("sportTags", sportTagService.findAllToDTO())
-                                        .modelAttribute("user", userDTO)
-                                        .build());
-                            }
-                            return userService.save(userDTO).map(u -> Rendering.redirectTo("/").build());
-                        })
-                );
+        return exchange.getFormData().flatMap(form -> {
+            List<String> sportTags = form.get("sportTag");
+            if(sportTags == null){
+                sportTags = new ArrayList<>();
+            }
+            return Mono.just(sportTags);
+        }).flatMap(sportTags -> userValidation.checkUsername(userDTO, userErrors).flatMap(userError -> {
+            List<Integer> tags = new ArrayList<>();
+            for(String tag : sportTags){
+                tags.add(Integer.valueOf(tag));
+            }
+            userDTO.setModerTagIds(tags);
+            userValidation.validate(userDTO,userError);
+            if(userError.hasErrors()){
+                return Mono.just(Rendering
+                        .view("template")
+                        .modelAttribute("index","reg-page")
+                        .modelAttribute("sportTags", sportTagService.findAllToDTO())
+                        .modelAttribute("user", userDTO)
+                        .build());
+            }
+            return userService.save(userDTO).flatMap(u -> sportTagService.addUserInTags(u).collectList()).flatMap(l -> Mono.just(Rendering.redirectTo("/").build()));
+        }));
     }
 
     @GetMapping("/profile")

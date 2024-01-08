@@ -7,43 +7,50 @@
             </div>
             <div class="col-50-inline-flex" style="width: 50%; min-height: 500px">
                 <div class="flex-center shadow border" style="padding: 2vh">
-                    <p>your e-mail</p>
-                    <input type="email" th:field="*{mail}"><br>
+                    <label for="email">e-mail:</label>
+                    <input type="email" id="email" th:field="*{mail}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('mail')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{mail}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>
-                    <p>password</p>
-                    <input type="password" th:field="*{password}"><br>
+                    <br>
+                    <label for="password">password:</label>
+                    <input id="password" type="password" th:field="*{password}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('password')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{password}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>
-                    <p>confirm your password</p>
-                    <input type="password" th:field="*{confirmPassword}"><br>
+                    <br>
+                    <label for="cPassword">confirm password:</label>
+                    <input id="cPassword" type="password" th:field="*{confirmPassword}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('confirmPassword')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{confirmPassword}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>
-                    <p>first name</p>
-                    <input type="text" th:field="*{firstName}"><br>
+                    <br>
+                    <label for="firstName">first name</label>
+                    <input id="firstName" type="text" th:field="*{firstName}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('firstName')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{firstName}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>
-                    <p>middle name</p>
-                    <input type="text" th:field="*{middleName}"><br>
+                    <br>
+                    <label for="middleName">middle name</label>
+                    <input id="middleName" type="text" th:field="*{middleName}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('middleName')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{middleName}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>
-                    <p>lastname</p>
-                    <input type="text" th:field="*{lastName}"><br>
+                    <br>
+                    <label for="lastName">lastname</label>
+                    <input id="lastName" type="text" th:field="*{lastName}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('lastName')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{lastName}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>
-                    <p>birthday</p>
-                    <input type="date" th:field="*{birthday}" style="width: 161px"><br>
+                    <br>
+                    <label for="birthday">birthday</label>
+                    <input id="birthday" type="date" th:field="*{birthday}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('birthday')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{birthday}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>
-                    <p>phone number</p>
-                    <input type="text" th:field="*{phone}"><br>
+                    <br>
+                    <label for="phone">phone number</label>
+                    <input id="phone" type="text" th:field="*{phone}" style="width: 100%">
                     <div th:if="${#fields.hasErrors('phone')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{phone}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>

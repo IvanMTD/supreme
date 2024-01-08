@@ -1,6 +1,7 @@
 package lab.fcpsr.suprime.services;
 
 import lab.fcpsr.suprime.dto.SportTagDTO;
+import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.repositories.SportTagRepository;
@@ -73,5 +74,12 @@ public class SportTagService{
                 })
                 .collectList()
                 .flatMap(sportTags -> Mono.just(post));
+    }
+
+    public Flux<SportTag> addUserInTags(AppUser user) {
+        return sportTagRepository.findAllByIdIn(user.getSportTagIds()).flatMap(sportTag -> {
+            sportTag.addUser(user);
+            return sportTagRepository.save(sportTag);
+        });
     }
 }

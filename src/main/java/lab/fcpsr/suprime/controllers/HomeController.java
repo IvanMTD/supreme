@@ -1,7 +1,7 @@
 package lab.fcpsr.suprime.controllers;
 
 import lab.fcpsr.suprime.controllers.base.SuperController;
-import lab.fcpsr.suprime.dto.SearchDTO;
+import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
@@ -47,24 +48,22 @@ public class HomeController extends SuperController {
                 .modelAttribute("index","home-page")
                 .modelAttribute("page",num)
                 .modelAttribute("lastPage", postService.findAllVerifiedLastPage(itemOnPage))
-                .modelAttribute("search", new SearchDTO())
                 .build());
     }
 
-    @PostMapping("/search")
-    public Mono<Rendering> searchResult(@ModelAttribute(name = "search") SearchDTO search){
+    @GetMapping("/search")
+    public Mono<Rendering> searchResult(@RequestParam(name = "search") String request){
         return Mono.just(Rendering
                 .view("template")
-                .modelAttribute("posts",searchService.searchPosts(search.getSearchMessage()).flatMap(postService::findByIdAndVerifiedTrue))
+                .modelAttribute("posts",searchService.searchPosts(request).flatMap(postService::findByIdAndVerifiedTrue))
                 .modelAttribute("index","home-page")
                 .modelAttribute("page",0)
                 .modelAttribute("lastPage", 0)
-                .modelAttribute("search", new SearchDTO())
                 .build());
     }
 
     @GetMapping("/read/post/{id}")
-    public Mono<Rendering> readPost(@PathVariable(name = "id") int id){
+    public Mono<Rendering> readPost(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
         return postService.findById(id)
                 .flatMap(post -> Mono.just(Rendering
                         .view("template")
@@ -73,6 +72,7 @@ public class HomeController extends SuperController {
                         .modelAttribute("user",userService.findById(post.getUserId()))
                         .modelAttribute("sportTags",sportTagService.findAllByIds(post.getSportTagIds()))
                         .modelAttribute("file", fileService.findByPostId(post.getId()))
+                        .modelAttribute("moderation", roleService.checkModeration(user,id))
                         .build()
                 ))
                 .defaultIfEmpty(Rendering.redirectTo("/").build());

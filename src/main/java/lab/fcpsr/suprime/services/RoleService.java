@@ -1,6 +1,7 @@
 package lab.fcpsr.suprime.services;
 
 import lab.fcpsr.suprime.models.AppUser;
+import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,5 +85,20 @@ public class RoleService {
                     });
         }
         return Mono.just(false);
+    }
+
+    public Mono<Boolean> checkModeration(AppUser user, int postId) {
+        return postService.findById(postId).flatMap(post -> {
+            if(user != null){
+                if (user.getRoles().stream().anyMatch(role -> role.equals(Role.ADMIN))) {
+                    return Mono.just(true);
+                } else if (user.getRoles().stream().anyMatch(role -> role.equals(Role.MODERATOR))) {
+                    if (post.getSportTagIds().stream().anyMatch(pst -> user.getSportTagIds().stream().anyMatch(st -> st.equals(pst)))) {
+                        return Mono.just(true);
+                    }
+                }
+            }
+            return Mono.just(false);
+        });
     }
 }

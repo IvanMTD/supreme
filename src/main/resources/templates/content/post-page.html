@@ -15,7 +15,7 @@
         <div class="row-100">
             <div th:utext="${post.getContent()}"></div>
         </div>
-        <div class="row-100 shadow border" style="padding: 1vh" th:if="${!roleAdmin}">
+        <div class="row-100 shadow border" style="padding: 1vh" th:if="${!moderation}">
             <div class="col-50-inline-flex">
                 <a th:href="@{/download/{id}(id=${file.getId()})}" class="link-button-simple flex-center">Скачать материалы</a>
             </div>
@@ -23,7 +23,7 @@
                 <p class="flex-center" th:text="${file.getName()}"></p>
             </div>
         </div>
-        <div class="row-100 shadow border" style="padding: 1vh" th:if="${roleAdmin}">
+        <div class="row-100 shadow border" style="padding: 1vh" th:if="${moderation}">
             <div class="col-33" style="display: inline-flex">
                 <a th:href="@{/download/{id}(id=${file.getId()})}" class="link-button-simple flex-center">Скачать материалы</a>
             </div>

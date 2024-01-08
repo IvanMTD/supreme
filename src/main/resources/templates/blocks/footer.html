@@ -5,29 +5,31 @@
         <hr class="hr-horizontal-gradient">
         <div class="col-33">
             <ul class="footer-navbar text-left">
-                <li><a th:href="@{/}">Главная</a></li>
-                <li><a th:href="@{/material/page/0}" th:if="${baseAuth}">Редакция</a></li>
-                <li><a th:href="@{/contact}">Контакты</a></li>
-                <li><a th:href="@{/auth/login}" th:if="${!baseAuth}">Вход</a></li>
-                <li><a id="logout" href="#" onclick="document.getElementById('logoutForm').submit()" th:if="${baseAuth}">Выход</a></li>
+                <b/>
+                    <li><a th:href="@{/}">Главная</a></li>
+                    <li><a th:href="@{/material/page/0}" th:if="${baseAuth}">Редакция</a></li>
+                    <li><a th:href="@{/contact}">Контакты</a></li>
+                    <li><a th:href="@{/auth/login}" th:if="${!baseAuth}">Вход</a></li>
+                    <li><a id="logout" href="#" onclick="document.getElementById('logoutForm').submit()" th:if="${baseAuth}">Выход</a></li>
+                </b>
             </ul>
         </div>
         <div class="col-33 text-center">
-            <p>Разработано ФГБУ "ФЦПСР"</p>
+            <p><b>Разработано ФГБУ "ФЦПСР"</b></p>
         </div>
         <div class="col-33">
             <ul class="footer-navbar text-right">
                 <li>
-                    <a href="https://spring.io/"><img src="/img/spring-logo.svg" height="32" style="padding: 2px"></a>
+                    <a href="https://spring.io/"><img src="/img/spring-logo.svg" style="padding: 0.5vh; height: 32px"></a>
                 </li>
                 <li>
-                    <a href="https://www.postgresql.org/"><img src="/img/postgresql-logo.png" height="32" style="padding: 2px"></a>
+                    <a href="https://www.postgresql.org/"><img src="/img/postgresql-logo.png" style="padding: 0.5vh; height: 32px"></a>
                 </li>
                 <li>
-                    <a href="https://min.io/"><img src="/img/minio-logo.svg" height="48" style="padding: 2px"></a>
+                    <a href="https://min.io/"><img src="/img/minio-logo.svg" style="padding: 0.5vh; height: 48px"></a>
                 </li>
                 <li>
-                    <a href="https://manticoresearch.com/"><img src="/img/manticore-logo.svg" height="32" style="padding: 2px"></a>
+                    <a href="https://manticoresearch.com/"><img src="/img/manticore-logo.svg" style="padding: 0.5vh; height: 32px"></a>
                 </li>
             </ul>
         </div>
