@@ -2,7 +2,8 @@ package lab.fcpsr.suprime.models;
 
 public enum Role {
     ADMIN("Администратор"),
-    MODERATOR("Модератор"),
+    MAIN_MODERATOR("Главный Редактор"),
+    MODERATOR("Редактор"),
     PUBLISHER("Публицист"),
     READER("Читатель");
 

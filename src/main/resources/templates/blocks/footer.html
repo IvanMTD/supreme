@@ -7,8 +7,9 @@
             <ul class="footer-navbar text-left">
                 <b/>
                     <li><a th:href="@{/}">Главная</a></li>
-                    <li><a th:href="@{/material/page/0}" th:if="${baseAuth}">Редакция</a></li>
+                    <li><a th:href="@{/material/page/0}" th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublusher}">Редакция</a></li>
                     <li><a th:href="@{/contact}">Контакты</a></li>
+                    <li><a th:href="@{/auth/profile}" th:if="${baseAuth}">Профиль</a></li>
                     <li><a th:href="@{/auth/login}" th:if="${!baseAuth}">Вход</a></li>
                     <li><a id="logout" href="#" onclick="document.getElementById('logoutForm').submit()" th:if="${baseAuth}">Выход</a></li>
                 </b>

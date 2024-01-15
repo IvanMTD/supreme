@@ -1,7 +1,6 @@
 package lab.fcpsr.suprime.services;
 
 import lab.fcpsr.suprime.models.AppUser;
-import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +24,17 @@ public class RoleService {
         if(user != null) {
             for (Role role : user.getRoles()) {
                 if (role.equals(Role.ADMIN)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isMainModerator(AppUser user) {
+        if(user != null){
+            for(Role role : user.getRoles()){
+                if(role.equals(Role.MAIN_MODERATOR)){
                     return true;
                 }
             }
@@ -61,7 +71,9 @@ public class RoleService {
                         for(Role role : u.getRoles()){
                             if(role.equals(Role.ADMIN)){
                                 return Mono.just(true);
-                            }else if(role.equals(Role.MODERATOR)){
+                            }else if(role.equals(Role.MAIN_MODERATOR)){
+                                return Mono.just(true);
+                            } else if(role.equals(Role.MODERATOR)){
                                 return postService.findById(postId)
                                         .flatMap(post -> sportTagService.findAll()
                                                 .filter(sportTag -> post.getSportTagIds().stream().anyMatch(id -> id == sportTag.getId()))
@@ -91,6 +103,8 @@ public class RoleService {
         return postService.findById(postId).flatMap(post -> {
             if(user != null){
                 if (user.getRoles().stream().anyMatch(role -> role.equals(Role.ADMIN))) {
+                    return Mono.just(true);
+                } else if (user.getRoles().stream().anyMatch(role -> role.equals(Role.MAIN_MODERATOR))){
                     return Mono.just(true);
                 } else if (user.getRoles().stream().anyMatch(role -> role.equals(Role.MODERATOR))) {
                     if (post.getSportTagIds().stream().anyMatch(pst -> user.getSportTagIds().stream().anyMatch(st -> st.equals(pst)))) {

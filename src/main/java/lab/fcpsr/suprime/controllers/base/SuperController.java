@@ -39,6 +39,10 @@ public class SuperController {
         return roleService.isAdmin(user);
     }
 
+    @ModelAttribute(name = "roleMainModerator")
+    public boolean roleMainModerator(@AuthenticationPrincipal AppUser user){
+        return roleService.isMainModerator(user);
+    }
     @ModelAttribute(name = "roleModerator")
     public boolean roleModerator(@AuthenticationPrincipal AppUser user){
         return roleService.isModerator(user);

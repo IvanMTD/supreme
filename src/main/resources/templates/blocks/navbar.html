@@ -6,7 +6,7 @@
             <li class="float-left">
                 <a id="home" th:href="@{/page/0}">Главная</a>
             </li>
-            <li th:if="${roleAdmin} or ${roleModerator} or ${rolePublisher}" class="float-left">
+            <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}" class="float-left">
                 <a id="materials" th:href="@{/material/page/0}">Редакция</a>
             </li>
             <li class="float-left">

@@ -32,13 +32,13 @@ public class MaterialController extends SuperController {
     }
 
     @GetMapping
-    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
     public Mono<Rendering> materialPageMain(@AuthenticationPrincipal AppUser user){
         return Mono.just(Rendering.redirectTo("/material/page/0").build());
     }
 
     @GetMapping("/page/{num}")
-    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
     public Mono<Rendering> materialPage(@AuthenticationPrincipal AppUser user, @PathVariable int num){
         Flux<Post> postFlux = userService.findById(user.getId()).flatMapMany(u -> postService.findPostsByUserRole(u, PageRequest.of(num,itemOnPage)));
         Mono<Integer> lastPage = userService.findById(user.getId()).flatMap(u -> postService.findPostsByUserRoleGetLastPage(u,itemOnPage));
@@ -52,7 +52,7 @@ public class MaterialController extends SuperController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
     public Mono<Rendering> searchResult(@AuthenticationPrincipal AppUser user, @RequestParam(name = "search") String request){
         return Mono.just(Rendering
                 .view("template")
