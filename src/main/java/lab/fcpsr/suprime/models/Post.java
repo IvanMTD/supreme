@@ -29,6 +29,7 @@ public class Post {
     private @NonNull LocalDate placedAt;
 
     private boolean verified;
+    private boolean allowed;
 
     public Post(PostDTO postDTO){
         setImageId(postDTO.getImageId());
@@ -40,6 +41,9 @@ public class Post {
         setUserId(postDTO.getUserId());
         setSportTagIds(postDTO.getSportTagIds());
         setFileId(postDTO.getFileId());
+
+        setVerified(false);
+        setAllowed(false);
     }
 
     public void addSportTag(SportTag sportTag){

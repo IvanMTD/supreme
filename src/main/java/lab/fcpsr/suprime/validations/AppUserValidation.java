@@ -57,7 +57,7 @@ public class AppUserValidation implements Validator {
     }
 
     private void checkRoles(AppUserDTO userDTO, Errors errors){
-        if(!userDTO.isAdmin() && !userDTO.isModerator() && !userDTO.isPublisher()){
+        if(!userDTO.isAdmin() && !userDTO.isMainModerator() && !userDTO.isModerator() && !userDTO.isPublisher()){
             errors.rejectValue("admin","","Выберите хотя бы одну роль");
         }else{
             if(userDTO.isModerator()){

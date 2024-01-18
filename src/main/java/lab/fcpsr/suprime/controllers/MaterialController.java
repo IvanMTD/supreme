@@ -77,9 +77,15 @@ public class MaterialController extends SuperController {
     }
 
     @GetMapping("/off/verified/{id}")
-    @PreAuthorize("@RoleService.checkModeration(#user,#id)")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
     public Mono<Rendering> verifyOff(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
-        return postService.verifyOff(id).flatMap(post -> Mono.just(Rendering.redirectTo("/").build()));
+        return postService.verifyOff(id).flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
+    }
+
+    @GetMapping("/off/allowed/{id}")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> allowOff(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
+        return postService.allowOff(id).flatMap(post -> Mono.just(Rendering.redirectTo("/").build()));
     }
 
     @PostMapping("/post")
@@ -191,12 +197,19 @@ public class MaterialController extends SuperController {
     @GetMapping("/post/verify/{id}")
     @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isModerator(#user)")
     public Mono<Rendering> verifyPost(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
-        return postService.findById(id)
-                .flatMap(post -> {
+        return postService.findById(id).flatMap(post -> {
                     post.setVerified(true);
                     return postService.save(post);
-                })
-                .flatMap(post -> Mono.just(Rendering.redirectTo("/").build()));
+                }).flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
+    }
+
+    @GetMapping("/post/allowed/{id}")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> allowedPost(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
+        return postService.findById(id).flatMap(post -> {
+            post.setAllowed(true);
+            return postService.save(post);
+        }).flatMap(post -> Mono.just(Rendering.redirectTo("/").build()));
     }
 
     @GetMapping("/post/delete/{id}")

@@ -30,7 +30,8 @@ create table if not exists Post (
     annotation text,
     content text,
     placed_at date,
-    verified bool
+    verified bool,
+    allowed bool
 );
 
 create table if not exists App_User (

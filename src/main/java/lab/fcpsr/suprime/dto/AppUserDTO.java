@@ -1,6 +1,7 @@
 package lab.fcpsr.suprime.dto;
 
 import jakarta.validation.constraints.*;
+import lab.fcpsr.suprime.models.Role;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,6 +37,7 @@ public class AppUserDTO {
     private String phone;
 
     private boolean admin;
+    private boolean mainModerator;
     private boolean moderator;
     private boolean publisher;
     private List<Integer> moderTagIds;

@@ -59,9 +59,11 @@
             <div class="col-50-inline-flex" style="width: 50%; min-height: 500px">
                 <div class="flex-center">
                     <input type="checkbox" name="admin" id="admin" th:field="*{admin}" onclick="setAdmin()">
-                    <label for="admin">admin</label><br>
+                    <label for="admin">Администратор</label><br>
+                    <input type="checkbox" name="mainModerator" id="mainModerator" th:field="*{mainModerator}" onclick="setMainModerator()">
+                    <label for="mainModerator">Главный редактор</label><br>
                     <input type="checkbox" name="moderator" id="moderator" th:field="*{moderator}" th:if="${sportTags.size()} != 0" onclick="setModerator()">
-                    <label for="moderator" th:if="${sportTags.size()} != 0">moderator</label>
+                    <label for="moderator" th:if="${sportTags.size()} != 0">Редактор</label>
                     <br th:if="${sportTags.size()} != 0">
                     <div id="hidden-block" hidden class="shadow border">
                         <div style="display:block; width: 300px; padding: 1vh">
@@ -72,7 +74,7 @@
                         </div>
                     </div>
                     <input type="checkbox" name="publisher" id="publisher" th:field="*{publisher}" onclick="setPublisher()" th:if="${sportTags.size()} != 0">
-                    <label for="publisher" th:if="${sportTags.size()} != 0">publisher</label><br>
+                    <label for="publisher" th:if="${sportTags.size()} != 0">Автор</label><br>
                     <div th:if="${#fields.hasErrors('admin')}" style="border: solid 1px red; background: pink">
                         <p th:errors="*{admin}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                     </div>

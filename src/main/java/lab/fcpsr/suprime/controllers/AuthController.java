@@ -41,12 +41,12 @@ public class AuthController extends SuperController {
     @GetMapping("/reg")
     @PreAuthorize("@RoleService.isAdmin(#user)")
     public Mono<Rendering> registrationPage(@AuthenticationPrincipal AppUser user){
-        return Mono.just(Rendering
-                .view("template")
-                .modelAttribute("index","reg-page")
-                .modelAttribute("sportTags", sportTagService.findAllToDTO())
-                .modelAttribute("user", new AppUserDTO())
-                .build()
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","reg-page")
+                        .modelAttribute("sportTags", sportTagService.findAllToDTO())
+                        .modelAttribute("user", new AppUserDTO())
+                        .build()
         );
     }
 
@@ -81,13 +81,13 @@ public class AuthController extends SuperController {
     @GetMapping("/profile")
     @PreAuthorize("@RoleService.isAuthorize(#user)")
     public Mono<Rendering> profilePage(@AuthenticationPrincipal AppUser user){
-        return Mono.just(Rendering
-                .view("template")
-                .modelAttribute("index","profile-page")
-                .modelAttribute("user", userService.findById(user.getId()))
-                .modelAttribute("sportTags",userService.findById(user.getId()).flatMapMany(u -> sportTagService.findAllByIds(u.getSportTagIds())))
-                .modelAttribute("posts", userService.findById(user.getId()).flatMapMany(u -> postService.findAllByIds(u.getPostIds())))
-                .build()
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","profile-page")
+                        .modelAttribute("user", userService.findById(user.getId()))
+                        .modelAttribute("sportTags",userService.findById(user.getId()).flatMapMany(u -> sportTagService.findAllByIds(u.getSportTagIds())))
+                        .modelAttribute("posts", userService.findById(user.getId()).flatMapMany(u -> postService.findAllByIds(u.getPostIds())))
+                        .build()
         );
     }
 }

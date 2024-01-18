@@ -45,14 +45,15 @@ public class AppUser implements UserDetails {
 
         if(verifiedUser.isAdmin()){
             roles.add(Role.ADMIN);
+        }else if(verifiedUser.isMainModerator()){
+            roles.add(Role.MAIN_MODERATOR);
+        }else if(verifiedUser.isModerator()){
+            roles.add(Role.MODERATOR);
+            sportTagIds.addAll(verifiedUser.getModerTagIds());
+        }else if(verifiedUser.isPublisher()){
+            roles.add(Role.PUBLISHER);
         }else{
-            if(verifiedUser.isPublisher()){
-                roles.add(Role.PUBLISHER);
-            }
-            if(verifiedUser.isModerator()){
-                roles.add(Role.MODERATOR);
-                sportTagIds.addAll(verifiedUser.getModerTagIds());
-            }
+            roles.add(Role.READER);
         }
     }
 

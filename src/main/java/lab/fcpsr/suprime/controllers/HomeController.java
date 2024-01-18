@@ -44,10 +44,10 @@ public class HomeController extends SuperController {
     public Mono<Rendering> pages(@PathVariable int num){
         return Mono.just(Rendering
                 .view("template")
-                .modelAttribute("posts",postService.findAllVerified(PageRequest.of(num,itemOnPage)))
                 .modelAttribute("index","home-page")
                 .modelAttribute("page",num)
-                .modelAttribute("lastPage", postService.findAllVerifiedLastPage(itemOnPage))
+                .modelAttribute("posts",postService.findAllAllowed(PageRequest.of(num,itemOnPage)))
+                .modelAttribute("lastPage", postService.findAllAllowedLastPage(itemOnPage))
                 .build());
     }
 
@@ -55,7 +55,7 @@ public class HomeController extends SuperController {
     public Mono<Rendering> searchResult(@RequestParam(name = "search") String request){
         return Mono.just(Rendering
                 .view("template")
-                .modelAttribute("posts",searchService.searchPosts(request).flatMap(postService::findByIdAndVerifiedTrue))
+                .modelAttribute("posts",searchService.searchPosts(request).flatMap(postService::findByIdAndAllowedTrue))
                 .modelAttribute("index","home-page")
                 .modelAttribute("page",0)
                 .modelAttribute("lastPage", 0)
@@ -65,15 +65,15 @@ public class HomeController extends SuperController {
     @GetMapping("/read/post/{id}")
     public Mono<Rendering> readPost(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id){
         return postService.findById(id)
-                .flatMap(post -> Mono.just(Rendering
-                        .view("template")
-                        .modelAttribute("index","post-page")
-                        .modelAttribute("post",post)
-                        .modelAttribute("user",userService.findById(post.getUserId()))
-                        .modelAttribute("sportTags",sportTagService.findAllByIds(post.getSportTagIds()))
-                        .modelAttribute("file", fileService.findByPostId(post.getId()))
-                        .modelAttribute("moderation", roleService.checkModeration(user,id))
-                        .build()
+                .flatMap(post -> Mono.just(
+                        Rendering.view("template")
+                                .modelAttribute("index","post-page")
+                                .modelAttribute("post",post)
+                                .modelAttribute("user",userService.findById(post.getUserId()))
+                                .modelAttribute("sportTags",sportTagService.findAllByIds(post.getSportTagIds()))
+                                .modelAttribute("file", fileService.findByPostId(post.getId()))
+                                .modelAttribute("moderation", roleService.checkModeration(user,id))
+                                .build()
                 ))
                 .defaultIfEmpty(Rendering.redirectTo("/").build());
     }
@@ -83,7 +83,8 @@ public class HomeController extends SuperController {
     public Mono<Rendering> upload(@RequestPart("file") FilePart file){
         log.info("incoming file " + file.filename());
         return minioService
-                .uploadStream(file).flatMap(response -> fileService.save(response)
+                .uploadStream(file)
+                .flatMap(response -> fileService.save(response)
                         .doOnNext(mf -> log.info("file saved in data_db witch id " + mf.getId()))
                         .map(mf -> Rendering.redirectTo("/").build())
                 );

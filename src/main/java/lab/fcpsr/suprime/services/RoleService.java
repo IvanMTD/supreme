@@ -106,11 +106,11 @@ public class RoleService {
                     return Mono.just(true);
                 } else if (user.getRoles().stream().anyMatch(role -> role.equals(Role.MAIN_MODERATOR))){
                     return Mono.just(true);
-                } else if (user.getRoles().stream().anyMatch(role -> role.equals(Role.MODERATOR))) {
+                } /*else if (user.getRoles().stream().anyMatch(role -> role.equals(Role.MODERATOR))) {
                     if (post.getSportTagIds().stream().anyMatch(pst -> user.getSportTagIds().stream().anyMatch(st -> st.equals(pst)))) {
                         return Mono.just(true);
                     }
-                }
+                }*/
             }
             return Mono.just(false);
         });

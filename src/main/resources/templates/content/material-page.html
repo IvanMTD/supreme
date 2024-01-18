@@ -35,6 +35,12 @@
         <div class="flex-container">
             <div class="flex-element border target" th:each="post,stat:${posts}">
                 <a class="link-decoration" th:href="@{/material/edit/post/{id}(id = ${post.getId()})}">
+                    <div class="row-100-block text-center" style="background: darkred" th:if="${!post.isVerified()}">
+                        <p style="color: white">не проверенно</p>
+                    </div>
+                    <div class="row-100-block text-center" style="background: darkgreen" th:if="${post.isVerified() && !post.isAllowed()}">
+                        <p style="color: white">прошел первичную проверку</p>
+                    </div>
                     <div class="row-100-block text-center">
                         <h4 th:text="${post.getName()}">name</h4>
                     </div>
@@ -45,9 +51,6 @@
                         <p th:text="${post.getAnnotation()}"></p>
                     </div>
                 </a>
-                <!--<div class="row-100">
-                    <a class="link-button-simple" th:href="@{/material/edit/post/{id}(id = ${post.getId()})}">Редактировать</a>
-                </div>-->
             </div>
         </div>
     </div>

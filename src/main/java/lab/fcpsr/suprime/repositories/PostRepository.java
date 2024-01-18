@@ -15,11 +15,16 @@ public interface PostRepository extends ReactiveCrudRepository<Post, Integer> {
     Flux<Post> findAllByVerifiedIsFalse(Pageable pageable);
     Flux<Post> findAllByVerifiedIsFalse();
     Flux<Post> findAllByVerifiedTrueOrderByIdDesc(Pageable pageable);
+    Flux<Post> findAllByAllowedTrueOrderByIdDesc(Pageable pageable);
     Flux<Post> findAllByVerifiedTrueOrderByIdDesc();
+    Flux<Post> findAllByAllowedTrueOrderByIdDesc();
     Flux<Post> findAllByUserId(int userId);
     Mono<Post> findByIdAndVerifiedTrue(int id);
+    Mono<Post> findByIdAndAllowedTrue(int id);
     Mono<Post> findByIdAndVerifiedFalse(int id);
     Flux<Post> findAllByUserIdAndVerifiedFalse(int userId, Pageable pageable);
+    Flux<Post> findPostsByUserIdAndVerifiedFalseOrAllowedFalse(int userId, Pageable pageable);
+    Flux<Post> findPostsByVerifiedTrueAndAllowedFalse();
     Flux<Post> findAllByUserIdAndVerifiedFalse(int userId);
     Flux<Post> findAllByContentContainsIgnoreCaseAndVerifiedIsTrue(String search);
     @Query("select * from post where post.sport_tag_ids && :ids and verified = false")

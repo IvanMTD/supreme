@@ -87,6 +87,8 @@ public class PostService {
         for(Role role : user.getRoles()){
             if(role.equals(Role.ADMIN)){
                 return postRepository.findAllByVerifiedIsFalse(pageable);
+            }else if(role.equals(Role.MAIN_MODERATOR)){
+                return postRepository.findPostsByVerifiedTrueAndAllowedFalse();
             }else if(role.equals(Role.MODERATOR)){
                 List<Integer> sportTagIds = new ArrayList<>(user.getSportTagIds());
                 Integer[] ids = new Integer[sportTagIds.size()];
@@ -107,7 +109,9 @@ public class PostService {
                             return Flux.fromIterable(posts);
                         });
             }else if(role.equals(Role.PUBLISHER)){
-                return postRepository.findAllByUserIdAndVerifiedFalse(user.getId(), pageable);
+                return postRepository.findPostsByUserIdAndVerifiedFalseOrAllowedFalse(user.getId(), pageable).doOnNext(p -> {
+                    log.info(p.toString());
+                });
             }else{
                 return Flux.empty();
             }
@@ -143,8 +147,18 @@ public class PostService {
         return postRepository.findAllByVerifiedTrueOrderByIdDesc(pageable);
     }
 
+    public Flux<Post> findAllAllowed(Pageable pageable){
+        return postRepository.findAllByAllowedTrueOrderByIdDesc(pageable);
+    }
+
     public Mono<Integer> findAllVerifiedLastPage(int itemOnPage) {
         return postRepository.findAllByVerifiedTrueOrderByIdDesc()
+                .collectList()
+                .flatMap(list -> Mono.just(getLastPage(list.size(), itemOnPage)));
+    }
+
+    public Mono<Integer> findAllAllowedLastPage(int itemOnPage) {
+        return postRepository.findAllByAllowedTrueOrderByIdDesc()
                 .collectList()
                 .flatMap(list -> Mono.just(getLastPage(list.size(), itemOnPage)));
     }
@@ -175,8 +189,20 @@ public class PostService {
                 });
     }
 
+    public Mono<Object> allowOff(int id) {
+        return postRepository.findById(id)
+                .flatMap(post -> {
+                    post.setAllowed(false);
+                    return postRepository.save(post);
+                });
+    }
+
     public Mono<Post> findByIdAndVerifiedTrue(Integer id) {
         return postRepository.findByIdAndVerifiedTrue(id);
+    }
+
+    public Mono<Post> findByIdAndAllowedTrue(Integer id) {
+        return postRepository.findByIdAndAllowedTrue(id);
     }
 
     public Mono<Post> findByIdAndVerifiedFalse(AppUser user, Integer id) {
