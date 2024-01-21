@@ -7,6 +7,16 @@
     padding: 0;
 }
 
+.top-bar-center{
+    background: white;
+}
+
+.top-bar-center a{
+    text-decoration: none;
+    background-color: white;
+    color: black;
+}
+
 .text-center {
     text-align: center;
 }
@@ -44,7 +54,7 @@
     min-width: 50px;
     width: 100%;
     max-width: 100px;
-    height: 30px;
+    height: 34px;
     background: lightgray;
     color: black;
     border: solid darkgray 1px;
@@ -55,6 +65,7 @@
     background: royalblue;
     color: whitesmoke;
     border: solid darkblue 1px;
+    border-radius: 10px;
     text-decoration: none;
 }
 

@@ -61,8 +61,8 @@
                     </div>
                     <div class="row-100-block" style="padding-top: 2vh">
                         <a th:href="@{/material}" class="link-button-simple">Назад</a>
-                        <input class="input-button" id="inputButtonFake" type="submit" value="Обновить" hidden disabled="disabled">
-                        <input class="input-button" id="inputButton" type="submit" value="Обновить" onclick="hiddenControl()">
+                        <input type="submit" value="Обновить" class="input-button" id="inputButtonFake" hidden disabled="disabled" style="border-radius: 10px">
+                        <input type="submit" value="Обновить" class="input-button" id="inputButton" onclick="hiddenControl()" style="border-radius: 10px">
                         <a th:href="@{/material/post/verify/{id}(id=${post.getId()})}" class="link-button-simple" th:if="${roleAdmin} or ${roleModerator}">Проверенно</a>
                         <a th:href="@{/material/off/verified/{id}(id=${post.getId()})}" class="link-button-simple" th:if="${roleAdmin} or ${roleMainModerator}">Отменить проверку</a>
                         <a th:href="@{/material/post/allowed/{id}(id=${post.getId()})}" class="link-button-simple" th:if="${roleAdmin} or ${roleMainModerator}">Опубликовать</a>

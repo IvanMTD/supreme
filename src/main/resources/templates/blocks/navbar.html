@@ -1,3 +1,37 @@
+<div class="obvodka-menu">
+    <div class="small-12 large-2 small-centered columns">
+        <div class="title-bar" data-hide-for="medium" data-responsive-toggle="mainNavigation">
+            <div class="title-bar-left">
+                <button class="menu-icon" data-toggle="mainNavigation" type="button"></button>
+            </div>
+        </div>
+        <div class="top-bar" id="mainNavigation" style="background: white">
+            <div class="top-bar-center">
+                <ul class="menu vertical medium-horizontal" style="background: white">
+                    <!--<li><a href="#">Тренинг</a></li>
+                    <li><a href="#">Питание</a></li>
+                    <li><a href="#">Здоровье</a></li>-->
+                    <li class="float-left">
+                        <a id="home" th:href="@{/page/0}">Главная</a>
+                    </li>
+                    <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}" class="float-left">
+                        <a id="materials" th:href="@{/material/page/0}">Редакция</a>
+                    </li>
+                    <li class="float-left">
+                        <a id="contact" th:href="@{/contact}">Контакты</a>
+                    </li>
+                    <li th:if="${baseAuth}" class="float-right">
+                        <a class="whited" th:href="@{/auth/profile}">Профиль</a>
+                    </li>
+                    <li th:if="${roleAdmin}" class="float-right">
+                        <a class="whited" th:href="@{/admin}">Админ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--
 <div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60">
@@ -27,4 +61,4 @@
         </ul>
     </div>
     <div class="col-20"></div>
-</div>
+</div>-->
