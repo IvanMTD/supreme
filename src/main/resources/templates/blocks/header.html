@@ -2,7 +2,9 @@
     <form id="logoutForm" method="post" th:action="@{/logout}"></form>
     <div class="small-2 large-5 columns" style="padding: 1vh"></div>
     <div class="small-4 large-2 columns">
-        <img alt="домен спорт" class="header_logo_sreda" src="/img/logo.png">
+        <a th:href="@{/}">
+            <img alt="домен спорт" class="header_logo_sreda" src="/img/logo.png">
+        </a>
     </div>
     <div class="small-6 large-5 columns top-menu-rightbloc">
         <img alt="поиск" class="top-icon" src="/img/icon-serch.png">

@@ -1,3 +1,29 @@
+<div class="row otstup-verh">
+    <div class="large-9 columns">
+        <h4 class="zagolovok-tekstoviy-bloc" th:text="${post.getName()}"></h4>
+        <img class="image" th:src="'/download/' + ${post.getImageId()}">
+        <div th:utext="${post.getContent()}"></div>
+    </div>
+    <div class="large-3 columns ">
+        <h2 class="zagolovok-tekstoviy-bloc">Популярные статьи</h2>
+        <div class="media-object" th:each="p : ${posts}">
+            <div class="media-object-section">
+                <a th:href="@{/read/post/{id}(id=${p.getId()})}" style="text-decoration: none">
+                    <img class="thumbnail img-anons" th:src="'/download/' + ${p.getImageId()}">
+                </a>
+            </div>
+            <div class="media-object-section">
+                <a th:href="@{/read/post/{id}(id=${p.getId()})}" style="text-decoration: none">
+                    <h4 class="cover-h2" th:text="${p.getName()}"></h4>
+                </a>
+                <img th:each="sportId : ${p.getSportTags()}" th:src="'/download/tag/' + ${sportId}" width="24" height="24">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--
 <div class="col-20"></div>
 <div class="col-60">
     <div class="flex-container">
@@ -39,4 +65,4 @@
         </div>
     </div>
 </div>
-<div class="col-20"></div>
+<div class="col-20"></div>-->

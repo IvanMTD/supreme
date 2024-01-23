@@ -1,3 +1,31 @@
+<div class="row" style="padding: 6vh 0">
+    <div class="medium-6 outer" style="margin: auto">
+        <form th:method="POST" th:action="@{/auth/login}" class="log-in-form">
+            <p style="color: red" th:if="${!param.error.isEmpty()}">Incorrect login or password</p>
+            <h4 class="text-center zagolovok-form">Войти</h4>
+            <label class="label-forms">Email
+                <input placeholder="somebody@example.ru" type="email" name="username" id="username">
+            </label>
+            <label class="label-forms">Password
+                <input placeholder="Password" type="password" name="password" id="password">
+            </label>
+            <input id="show-password" type="checkbox"><label class="label-forms" for="show-password">Показать пароль</label>
+            <script>
+                $('body').on('click', '#show-password', function(){
+                    if ($(this).is(':checked')){
+                        $('#password').attr('type', 'text');
+                    } else {
+                        $('#password').attr('type', 'password');
+                    }
+                });
+            </script>
+            <p><input class="button expanded primary hollow" type="submit" value="Log in"></p>
+            <p class="text-center"><a href="#">Забыли пароль?</a></p>
+        </form>
+    </div>
+</div>
+
+<!--
 <div class="row-100">
     <div class="col-20"></div>
     <div class="col-60">
@@ -17,4 +45,4 @@
         </div>
     </div>
     <div class="col-20"></div>
-</div>
+</div>-->

@@ -29,7 +29,7 @@ import java.nio.file.Path;
 @Controller
 public class HomeController extends SuperController {
 
-    private final int itemOnPage = 4;
+    private final int itemOnPage = 10;
 
     public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
         super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
@@ -69,6 +69,7 @@ public class HomeController extends SuperController {
                         Rendering.view("template")
                                 .modelAttribute("index","post-page")
                                 .modelAttribute("post",post)
+                                .modelAttribute("posts",postService.findAllAllowed(PageRequest.of(0,5)))
                                 .modelAttribute("user",userService.findById(post.getUserId()))
                                 .modelAttribute("sportTags",sportTagService.findAllByIds(post.getSportTagIds()))
                                 .modelAttribute("file", fileService.findByPostId(post.getId()))
@@ -94,6 +95,15 @@ public class HomeController extends SuperController {
     @GetMapping("/download/{id}")
     public Mono<ResponseEntity<Mono<InputStreamResource>>> download(@PathVariable(name = "id") int id){
         return fileService.findById(id).map(fileInfo -> ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileInfo.getUid())
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                .body(minioService.download(fileInfo)));
+    }
+
+    @ResponseBody
+    @GetMapping("/download/tag/{id}")
+    public Mono<ResponseEntity<Mono<InputStreamResource>>> downloadTag(@PathVariable(name = "id") int id){
+        return sportTagService.findById(id).flatMap(sportTag -> fileService.findById(sportTag.getImageId())).map(fileInfo -> ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileInfo.getUid())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
                 .body(minioService.download(fileInfo)));

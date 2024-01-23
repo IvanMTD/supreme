@@ -9,7 +9,9 @@ import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -48,5 +50,13 @@ public class Post {
 
     public void addSportTag(SportTag sportTag){
         this.sportTagIds.add(sportTag.getId());
+    }
+
+    public List<Integer> getSportTags(){
+        List<Integer> ids = new ArrayList<>();
+        for(Integer id : sportTagIds){
+            ids.add(id);
+        }
+        return ids;
     }
 }

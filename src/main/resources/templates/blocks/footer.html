@@ -1,3 +1,70 @@
+<footer class="marketing-site-footer">
+    <div class="row medium-unstack">
+        <div class="medium-4 columns">
+            <h4 class="marketing-site-footer-name" th:text="${title}"></h4>
+            <p>"Все что Вы хотели знать о спорте здесь и сейчас! Мы расскажем как правильно и что нужно делать. Присоединяйтесь!"</p>
+            <ul class="menu marketing-site-footer-menu-social simple">
+                <li><a href="#"><i aria-hidden="true" class="fa fa-youtube-square"></i></a></li>
+                <li><a href="#"><i aria-hidden="true" class="fa fa-facebook-square"></i></a></li>
+                <li><a href="#"><i aria-hidden="true" class="fa fa-twitter-square"></i></a></li>
+            </ul>
+        </div>
+        <div class="medium-4 columns">
+            <h4 class="marketing-site-footer-title">Контактная информация</h4>
+            <div class="marketing-site-footer-block">
+                <i aria-hidden="true" class="fa fa-map-marker"></i>
+                <p>Российская Федерация<br>Москва, Казакова 18к8</p>
+            </div>
+            <div class="marketing-site-footer-block">
+                <i aria-hidden="true" class="fa fa-phone"></i>
+                <p>8 (800) 555-5555</p>
+            </div>
+            <div class="marketing-site-footer-block">
+                <i aria-hidden="true" class="fa fa-envelope-o"></i>
+                <p>postmaster@fcpsr.ru</p>
+            </div>
+        </div>
+        <div class="medium-4 columns">
+            <h4 class="marketing-site-footer-title">ВКонтакте</h4>
+            <div class="row small-up-3">
+                <div class="column column-block">
+                    <img alt="" src="https://placehold.it/75"/>
+                </div>
+                <div class="column column-block">
+                    <img alt="" src="https://placehold.it/75"/>
+                </div>
+                <div class="column column-block">
+                    <img alt="" src="https://placehold.it/75"/>
+                </div>
+                <div class="column column-block">
+                    <img alt="" src="https://placehold.it/75"/>
+                </div>
+                <div class="column column-block">
+                    <img alt="" src="https://placehold.it/75"/>
+                </div>
+                <div class="column column-block">
+                    <img alt="" src="https://placehold.it/75"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="marketing-site-footer-bottom">
+        <div class="row large-unstack align-middle">
+            <div class="column">
+                <ul class="menu marketing-site-footer-bottom-links" style="float: left">
+                    <li><a th:href="@{/}">Главная</a></li>
+                    <li><a th:href="@{/material/page/0}" th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublusher}">Редакция</a></li>
+                    <li><a th:href="@{/contact}">Контакты</a></li>
+                    <li><a th:href="@{/auth/profile}" th:if="${baseAuth}">Профиль</a></li>
+                    <li><a th:href="@{/auth/login}" th:if="${!baseAuth}">Вход</a></li>
+                    <li><a id="logout" href="#" onclick="document.getElementById('logoutForm').submit()" th:if="${baseAuth}">Выход</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--
 <form id="logoutForm" method="post" th:action="@{/logout}"></form>
 <div class="row-100">
     <div class="col-20"></div>
@@ -36,4 +103,4 @@
         </div>
     </div>
     <div class="col-20"></div>
-</div>
+</div>-->

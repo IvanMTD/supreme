@@ -1,4 +1,75 @@
-<div class="row-100-block">
+<div class="row otstup-verh">
+    <div class="large-3 columns">
+        <div class="responsive-blog-post">
+            <div class="individual-post">
+                <a th:href="@{/read/post/{id}(id=${posts.get(1).getId()})}" style="text-decoration: none">
+                    <img th:src="'/download/' + ${posts.get(1).getImageId()}">
+                    <h4 class="cover-h2" th:text="${posts.get(1).getName()}" style="text-decoration: none"></h4>
+                </a>
+            </div>
+        </div>
+        <div class="responsive-blog-post">
+            <div class="individual-post">
+                <a th:href="@{/read/post/{id}(id=${posts.get(2).getId()})}" style="text-decoration: none">
+                    <img th:src="'/download/' + ${posts.get(2).getImageId()}">
+                    <h4 class="cover-h2" th:text="${posts.get(2).getName()}" style="text-decoration: none"></h4>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="large-6 columns ">
+        <div class="responsive-blog-post">
+            <div class="individual-post">
+                <a th:href="@{/read/post/{id}(id=${posts.get(0).getId()})}" style="text-decoration: none">
+                    <img th:src="'/download/' + ${posts.get(0).getImageId()}">
+                    <h1 class="osn-cover-h1" th:text="${posts.get(0).getAnnotation()}"></h1>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="large-3 columns">
+        <p class="lead" style="text-align: center">ПОПУЛЯРНОЕ</p>
+        <div class="media-object" th:each="i : ${#numbers.sequence(3, 6)}" th:if="${posts.size() >= 6}">
+            <div class="media-object-section">
+                <a th:href="@{/read/post/{id}(id=${posts.get(i).getId()})}">
+                    <img class="thumbnail img-anons" th:src="'/download/' + ${posts.get(i).getImageId()}">
+                </a>
+            </div>
+            <div class="media-object-section">
+                <img th:each="sportId : ${posts.get(i).getSportTags()}" th:src="'/download/tag/' + ${sportId}" width="24" height="24">
+                <a th:href="@{/read/post/{id}(id=${posts.get(i).getId()})}" style="text-decoration: none">
+                    <h3 class="cover-h2" th:text="${posts.get(i).getName()}"></h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row col">
+        <h4 class="text-center">НЕДАВНИЕ</h4>
+    </div>
+    <hr>
+    <div class="row small-up-3 medium-up-4 large-up-5">
+        <div class="column" th:each="i : ${#numbers.sequence( 0, 4)}" th:if="${posts.size() >= 4}">
+            <div class="card-flex-article">
+                <!--<div class="article-details">
+                    <img th:each="sportId : ${posts.get(i).getSportTags()}" th:src="'/download/tag/' + ${sportId}" width="24" height="24">
+                </div>-->
+                <a th:href="@{/read/post/{id}(id=${posts.get(i).getId()})}" style="text-decoration: none">
+                    <div class="card-image">
+                        <img th:src="'/download/' + ${posts.get(i).getImageId()}">
+                        <span class="label alert card-tag">#SPORT</span>
+                    </div>
+                    <div class="card-section">
+                        <h3 class="article-title" th:text="${posts.get(i).getName()}"></h3>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
         <form th:method="GET" th:action="@{/search}" style="padding: 1vh; display: block; width: 100%">
@@ -42,4 +113,4 @@
         </div>
     </div>
     <div class="col-20"></div>
-</div>
+</div>-->
