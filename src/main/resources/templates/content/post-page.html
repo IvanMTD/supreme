@@ -16,7 +16,7 @@
                 <a th:href="@{/read/post/{id}(id=${p.getId()})}" style="text-decoration: none">
                     <h4 class="cover-h2" th:text="${p.getName()}"></h4>
                 </a>
-                <img th:each="sportId : ${p.getSportTags()}" th:src="'/download/tag/' + ${sportId}" width="24" height="24">
+                <!--<img th:each="sportId : ${p.getSportTags()}" th:src="'/download/tag/' + ${sportId}" width="24" height="24">-->
             </div>
         </div>
     </div>

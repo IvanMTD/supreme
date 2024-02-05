@@ -36,7 +36,7 @@
                 </a>
             </div>
             <div class="media-object-section">
-                <img th:each="sportId : ${posts.get(i).getSportTags()}" th:src="'/download/tag/' + ${sportId}" width="24" height="24">
+                <!--<img th:each="sportId : ${posts.get(i).getSportTags()}" th:src="'/download/tag/' + ${sportId}" width="24" height="24">-->
                 <a th:href="@{/read/post/{id}(id=${posts.get(i).getId()})}" style="text-decoration: none">
                     <h3 class="cover-h2" th:text="${posts.get(i).getName()}"></h3>
                 </a>
