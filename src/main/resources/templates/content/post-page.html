@@ -1,4 +1,18 @@
 <div class="row otstup-verh">
+    <div th:if="${baseAuth}">
+        <div th:if="${!bookmark}">
+            <form th:method="GET" th:action="@{/bookmark}">
+                <input type="text" name="bookmark" th:value="${post.getId}" style="display: none">
+                <input type="submit" value="В закладки">
+            </form>
+        </div>
+        <div th:if="${bookmark}">
+            <form th:method="GET" th:action="@{/bookmark/off}">
+                <input type="text" name="bookmark" th:value="${post.getId}" style="display: none">
+                <input type="submit" value="Убрать из закладок">
+            </form>
+        </div>
+    </div>
     <div class="large-9 columns">
         <h4 class="zagolovok-tekstoviy-bloc" th:text="${post.getName()}"></h4>
         <img class="image" th:src="'/download/' + ${post.getImageId()}">

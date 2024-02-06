@@ -1,12 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Play&display=swap');
-
-* {
-    font-family: 'Play', sans-serif;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 .top-bar-center{
     background: white;
 }

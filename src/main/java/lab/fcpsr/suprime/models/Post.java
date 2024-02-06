@@ -22,6 +22,7 @@ public class Post {
     private int id;
     private int userId;
     private Set<Integer> sportTagIds = new HashSet<>();
+    private Set<Integer> userSaveList = new HashSet<>();
     private int fileId;
     private int imageId;
 
@@ -50,6 +51,9 @@ public class Post {
 
     public void addSportTag(SportTag sportTag){
         this.sportTagIds.add(sportTag.getId());
+    }
+    public void addUserInSaveList(AppUser user){
+        userSaveList.add(user.getId());
     }
 
     public List<Integer> getSportTags(){

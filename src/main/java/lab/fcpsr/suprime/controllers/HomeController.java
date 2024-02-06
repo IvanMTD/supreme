@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,30 @@ public class HomeController extends SuperController {
     @GetMapping("/")
     public Mono<Rendering> homePage(){
         return Mono.just(Rendering.redirectTo("/page/0").build());
+    }
+
+    @GetMapping("/bookmark")
+    @PreAuthorize("@RoleService.isAuthorize(#user)")
+    public Mono<Rendering> bookmarkSave(@AuthenticationPrincipal AppUser user, @RequestParam(name = "bookmark") int postId){
+        return postService.findById(postId).flatMap(post -> {
+            post.addUserInSaveList(user);
+            return postService.save(post);
+        }).flatMap(post -> userService.findById(user.getId()).flatMap(u -> {
+            u.addPostInSaveList(post);
+            return userService.save(u);
+        })).flatMap(u -> Mono.just(Rendering.redirectTo("/read/post/" + postId).build()));
+    }
+
+    @GetMapping("/bookmark/off")
+    @PreAuthorize("@RoleService.isAuthorize(#user)")
+    public Mono<Rendering> bookmarkOff(@AuthenticationPrincipal AppUser user, @RequestParam(name = "bookmark") int postId){
+        return postService.findById(postId).flatMap(post -> {
+            post.getUserSaveList().remove(user.getId());
+            return postService.save(post);
+        }).flatMap(post -> userService.findById(user.getId()).flatMap(u -> {
+            u.getPostSaveList().remove(post.getId());
+            return userService.save(u);
+        })).flatMap(u -> Mono.just(Rendering.redirectTo("/read/post/" + postId).build()));
     }
 
     @GetMapping("/page/{num}")
@@ -74,6 +99,7 @@ public class HomeController extends SuperController {
                                 .modelAttribute("sportTags",sportTagService.findAllByIds(post.getSportTagIds()))
                                 .modelAttribute("file", fileService.findByPostId(post.getId()))
                                 .modelAttribute("moderation", roleService.checkModeration(user,id))
+                                .modelAttribute("bookmark", postService.userBookmark(user, id))
                                 .build()
                 ))
                 .defaultIfEmpty(Rendering.redirectTo("/").build());

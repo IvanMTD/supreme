@@ -22,6 +22,7 @@ public class AppUser implements UserDetails {
 
     private Set<Integer> sportTagIds = new HashSet<>();
     private Set<Integer> postIds = new HashSet<>();
+    private Set<Integer> postSaveList = new HashSet<>();
     private Set<Role> roles = new HashSet<>();
 
     private @NonNull String mail;
@@ -71,6 +72,10 @@ public class AppUser implements UserDetails {
 
     public void addSportTag(SportTag sportTag){
         this.sportTagIds.add(sportTag.getId());
+    }
+
+    public void addPostInSaveList(Post post){
+        postSaveList.add(post.getId());
     }
 
     public void addPost(Post post){

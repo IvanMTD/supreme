@@ -22,6 +22,10 @@ public class AppReactiveUserDetailService implements ReactiveUserDetailsService 
         AppUser user = new AppUser(userDTO);
         return userRepository.save(user);
     }
+
+    public Mono<AppUser> save(AppUser user) {
+        return userRepository.save(user);
+    }
     public Mono<AppUser> findByEmail(String mail){
         return userRepository.findByMail(mail);
     }

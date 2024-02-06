@@ -27,6 +27,8 @@ public interface PostRepository extends ReactiveCrudRepository<Post, Integer> {
     Flux<Post> findPostsByVerifiedTrueAndAllowedFalse();
     Flux<Post> findAllByUserIdAndVerifiedFalse(int userId);
     Flux<Post> findAllByContentContainsIgnoreCaseAndVerifiedIsTrue(String search);
+    @Query("select * from post where :userId = any(user_save_list)")
+    Mono<Post> findPostWhereUserIdInUserSaveList(@Param("userId") Integer userId);
     @Query("select * from post where post.sport_tag_ids && :ids and verified = false")
     Flux<Post> findAllBySportTagIdsAny(@Param("ids") Integer[] ids);
 }

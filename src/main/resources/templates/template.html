@@ -4,27 +4,34 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title th:text="${title}">title</title>
+
+        <!-- include libraries(jQuery, bootstrap) -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <script src="/js/jquery.js" type="text/javascript"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+        <!-- include summernote css/js -->
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+        <!-- yandex map -->
         <script src="https://api-maps.yandex.ru/2.1/?apikey=7c13cf7d-c937-4ca6-8021-145ac16bdcae&lang=ru_RU" type="text/javascript"></script>
+        <link href="/css/map.css" rel="stylesheet">
+        <script src="/js/map.js" type="text/javascript"></script>
+
+        <!--main-->
         <!--<link href="/css/grid.css" rel="stylesheet">
         <link href="/css/color-and-align.css" rel="stylesheet">-->
-        <link href="/css/map.css" rel="stylesheet">
+        <script src="/js/reg-checkbox.js" th:inline="javascript"></script>
+
+        <!-- foundation -->
         <link href="/css/index.css" rel="stylesheet">
         <link href="/css/fonts.css" rel="stylesheet">
         <link href="/css/foundation.css" rel="stylesheet">
         <link href="/css/style.css" rel="stylesheet">
-        <!--<link href="/css/wget-s1.css" rel="stylesheet">
-        <link href="/css/wget-s2.css" rel="stylesheet">-->
-        <script src="/js/reg-checkbox.js" th:inline="javascript"></script>
-        <script src="/js/map.js" type="text/javascript"></script>
         <script src="/js/app.js" type="text/javascript"></script>
         <script src="/js/foundation.js" type="text/javascript"></script>
-        <script src="/js/jquery.js" type="text/javascript"></script>
         <script src="/js/what-input.js" type="text/javascript"></script>
-        <!--<script src='https://pos.gosuslugi.ru/bin/script.min.js'></script>-->
     </head>
 
     <body>
@@ -52,13 +59,12 @@
                 });
             });
         </script>
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+        <!-- foundation -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/motion-ui/1.2.3/motion-ui.min.js"></script>
         <script>
             $(document).foundation();
         </script>
-        <!--<script src="/js/wget-script.js" type="text/javascript"></script>
-        <script>Widget("https://pos.gosuslugi.ru/form", 666666)</script>-->
     </body>
 </html>

@@ -1,5 +1,5 @@
 <div class="obvodka-menu">
-    <div class="small-12 large-2 small-centered columns">
+    <div class="small-12 large-4 small-centered columns">
         <div class="title-bar" data-hide-for="medium" data-responsive-toggle="mainNavigation">
             <div class="title-bar-left">
                 <button class="menu-icon" data-toggle="mainNavigation" type="button"></button>
@@ -11,28 +11,28 @@
                     <!--<li><a href="#">Тренинг</a></li>
                     <li><a href="#">Питание</a></li>
                     <li><a href="#">Здоровье</a></li>-->
-                    <li class="float-left">
-                        <a id="home" th:href="@{/page/0}">Главная</a>
+                    <li>
+                        <a th:href="@{/page/0}" style="text-decoration: none; color: black">Главная</a>
                     </li>
-                    <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}" class="float-left">
-                        <a id="materials" th:href="@{/material/page/0}">Редакция</a>
+                    <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}">
+                        <a th:href="@{/material/page/0}" style="text-decoration: none; color: black">Редакция</a>
                     </li>
-                    <li class="float-left">
-                        <a id="contact" th:href="@{/contact}">Контакты</a>
+                    <li>
+                        <a th:href="@{/contact}" style="text-decoration: none; color: black">Контакты</a>
                     </li>
                     <li th:if="${baseAuth}" class="float-right">
-                        <a class="whited" th:href="@{/auth/profile}">Профиль</a>
+                        <a th:href="@{/auth/profile}" style="text-decoration: none; color: black">Профиль</a>
                     </li>
                     <li th:if="${roleAdmin}" class="float-right">
-                        <a class="whited" th:href="@{/admin}">Админ</a>
+                        <a th:href="@{/admin}" style="text-decoration: none; color: black">Админ</a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-<!--
-<div class="row-100-block">
+
+<!--<div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60">
         <form id="logoutForm" method="post" th:action="@{/logout}"></form>

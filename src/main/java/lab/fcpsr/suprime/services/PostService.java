@@ -227,4 +227,18 @@ public class PostService {
             return Mono.empty();
         });
     }
+
+    public Mono<Boolean> userBookmark(AppUser user, int postId) {
+        if(user != null){
+            return postRepository.findById(postId).flatMap(post -> {
+                if(post.getUserSaveList().stream().anyMatch(userId -> userId == user.getId())){
+                    return Mono.just(true);
+                }else{
+                    return Mono.just(false);
+                }
+            });
+        }else{
+            return Mono.just(false);
+        }
+    }
 }
