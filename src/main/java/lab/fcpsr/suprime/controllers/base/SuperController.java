@@ -55,6 +55,6 @@ public class SuperController {
 
     @ModelAttribute(name = "title")
     public String title(){
-        return "Domen Sport";
+        return "Домен Спорт";
     }
 }

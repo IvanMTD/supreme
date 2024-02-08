@@ -1,1 +1,2 @@
-$(document).foundation()
+$(document).foundation();
+$('.js-example-basic-multiple').select2();

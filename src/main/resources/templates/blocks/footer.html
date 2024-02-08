@@ -1,5 +1,50 @@
 <footer class="marketing-site-footer">
     <div class="row medium-unstack">
+        <div class="medium-3 columns">
+            <img src="/img/logo-2.png" class="marketing-site-footer-name">
+            <div class="article-social icon-blok">
+                <a href="#" class="">
+                    <img alt="вконтакте" class="icon-niz" src="/img/icon-vk.png">
+                </a>
+                <a href="#" class="">
+                    <img alt="телеграм" class="icon-niz" src="/img/icon-telega.png">
+                </a>
+                <a href="#" class="">
+                    <img alt="телеграм" class="icon-niz" src="/img/icon-odnoklasniki.png">
+                </a>
+                <a href="#" class="">
+                    <img alt="телеграм" class="icon-niz" src="/img/icon-dzen.png">
+                </a>
+                <a href="#" class="">
+                    <img alt="телеграм" class="icon-niz" src="/img/icon-yutub.png">
+                </a>
+            </div>
+        </div>
+        <div class="medium-9 columns">
+            <ul class="menu gray-text">
+                <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}">
+                    <a th:href="@{/material/page/0}" style="text-decoration: none; color: white">Редакция</a>
+                </li>
+                <li th:if="${baseAuth}" class="float-right">
+                    <a th:href="@{/auth/profile}" style="text-decoration: none; color: white">Профиль</a>
+                </li>
+                <li th:if="${!baseAuth}">
+                    <a th:href="@{/auth/login}" style="text-decoration: none; color: white">
+                        Войти
+                    </a>
+                </li>
+                <li th:if="${baseAuth}">
+                    <a href="#" onclick="document.getElementById('logoutForm').submit()" style="text-decoration: none; color: white">
+                        Выйти
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<!--<footer class="marketing-site-footer">
+    <div class="row medium-unstack">
         <div class="medium-4 columns">
             <h4 class="marketing-site-footer-name" th:text="${title}"></h4>
             <p>"Все что Вы хотели знать о спорте здесь и сейчас! Мы расскажем как правильно и что нужно делать. Присоединяйтесь!"</p>
@@ -62,7 +107,7 @@
             </div>
         </div>
     </div>
-</footer>
+</footer>-->
 
 <!--
 <form id="logoutForm" method="post" th:action="@{/logout}"></form>

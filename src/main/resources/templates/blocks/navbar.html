@@ -1,4 +1,42 @@
 <div class="obvodka-menu">
+    <div class="top-bar row" id="mainNavigation" style="background: white">
+        <div class="top-bar-left">
+            <ul class="menu  medium-horizontal" style="background: white">
+                <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}">
+                    <a th:href="@{/material/page/0}" style="text-decoration: none; color: black">Редакция</a>
+                </li>
+                <li th:if="${baseAuth}">
+                    <a th:href="@{/bookmarks}" style="text-decoration: none; color: black">Мои закладки</a>
+                </li>
+            </ul>
+        </div>
+        <div class="top-bar-right">
+            <form id="logoutForm" method="post" th:action="@{/logout}"></form>
+            <ul class="menu  medium-horizontal" style="background: white">
+                <li th:if="${baseAuth}" class="float-right">
+                    <a th:href="@{/auth/profile}" style="text-decoration: none; color: black">Профиль</a>
+                </li>
+                <li>
+                    <a href="#" style="text-decoration: none; color: black">
+                        <img alt="поиск" class="top-icon" src="/img/icon-serch.png">Поиск
+                    </a>
+                </li>
+                <li th:if="${!baseAuth}">
+                    <a th:href="@{/auth/login}" style="text-decoration: none; color: black">
+                        <img alt="войти" class="top-icon1" src="/img/icon-login.png">Войти
+                    </a>
+                </li>
+                <li th:if="${baseAuth}">
+                    <a href="#" onclick="document.getElementById('logoutForm').submit()" style="text-decoration: none; color: black">
+                        <img alt="войти" class="top-icon1" src="/img/icon-login.png">Выйти
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--<div class="obvodka-menu">
     <div class="small-12 large-4 small-centered columns">
         <div class="title-bar" data-hide-for="medium" data-responsive-toggle="mainNavigation">
             <div class="title-bar-left">
@@ -8,9 +46,9 @@
         <div class="top-bar" id="mainNavigation" style="background: white">
             <div class="top-bar-center">
                 <ul class="menu vertical medium-horizontal" style="background: white">
-                    <!--<li><a href="#">Тренинг</a></li>
+                    &lt;!&ndash;<li><a href="#">Тренинг</a></li>
                     <li><a href="#">Питание</a></li>
-                    <li><a href="#">Здоровье</a></li>-->
+                    <li><a href="#">Здоровье</a></li>&ndash;&gt;
                     <li>
                         <a th:href="@{/page/0}" style="text-decoration: none; color: black">Главная</a>
                     </li>
@@ -30,7 +68,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <!--<div class="row-100-block">
     <div class="col-20"></div>

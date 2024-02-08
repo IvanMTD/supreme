@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -55,7 +54,6 @@ public class Post {
     public void addUserInSaveList(AppUser user){
         userSaveList.add(user.getId());
     }
-
     public List<Integer> getSportTags(){
         List<Integer> ids = new ArrayList<>();
         for(Integer id : sportTagIds){

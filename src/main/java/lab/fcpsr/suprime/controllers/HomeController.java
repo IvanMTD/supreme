@@ -2,6 +2,7 @@ package lab.fcpsr.suprime.controllers;
 
 import lab.fcpsr.suprime.controllers.base.SuperController;
 import lab.fcpsr.suprime.models.AppUser;
+import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
@@ -19,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -30,7 +32,7 @@ import java.nio.file.Path;
 @Controller
 public class HomeController extends SuperController {
 
-    private final int itemOnPage = 10;
+    private final int itemOnPage = 5;
 
     public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
         super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
@@ -39,6 +41,30 @@ public class HomeController extends SuperController {
     @GetMapping("/")
     public Mono<Rendering> homePage(){
         return Mono.just(Rendering.redirectTo("/page/0").build());
+    }
+
+    @GetMapping("/page/{num}")
+    public Mono<Rendering> pages(@PathVariable int num){
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","home-page")
+                        .modelAttribute("page",num)
+                        .modelAttribute("posts",postService.findAllAllowed(PageRequest.of(num,itemOnPage)))
+                        .modelAttribute("lastPage", postService.findAllAllowedLastPage(itemOnPage))
+                        .build()
+        );
+    }
+
+    @GetMapping("/bookmarks")
+    @PreAuthorize("@RoleService.isAuthorize(#user)")
+    public Mono<Rendering> myBookmarks(@AuthenticationPrincipal AppUser user){
+        Flux<Post> postFlux = userService.findById(user.getId()).flatMapMany(u -> postService.findAllByIds(u.getPostSaveList()));
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index", "bookmarks-page")
+                        .modelAttribute("posts",postFlux)
+                        .build()
+        );
     }
 
     @GetMapping("/bookmark")
@@ -63,17 +89,6 @@ public class HomeController extends SuperController {
             u.getPostSaveList().remove(post.getId());
             return userService.save(u);
         })).flatMap(u -> Mono.just(Rendering.redirectTo("/read/post/" + postId).build()));
-    }
-
-    @GetMapping("/page/{num}")
-    public Mono<Rendering> pages(@PathVariable int num){
-        return Mono.just(Rendering
-                .view("template")
-                .modelAttribute("index","home-page")
-                .modelAttribute("page",num)
-                .modelAttribute("posts",postService.findAllAllowed(PageRequest.of(num,itemOnPage)))
-                .modelAttribute("lastPage", postService.findAllAllowedLastPage(itemOnPage))
-                .build());
     }
 
     @GetMapping("/search")
