@@ -24,7 +24,7 @@ public interface PostRepository extends ReactiveCrudRepository<Post, Integer> {
     Mono<Post> findByIdAndVerifiedFalse(int id);
     Flux<Post> findAllByUserIdAndVerifiedFalse(int userId, Pageable pageable);
     Flux<Post> findPostsByUserIdAndVerifiedFalseOrAllowedFalse(int userId, Pageable pageable);
-    Flux<Post> findPostsByVerifiedTrueAndAllowedFalse();
+    Flux<Post> findPostsByVerifiedTrueAndAllowedFalse(Pageable pageable);
     Flux<Post> findAllByUserIdAndVerifiedFalse(int userId);
     Flux<Post> findAllByContentContainsIgnoreCaseAndVerifiedIsTrue(String search);
     @Query("select * from post where :userId = any(user_save_list)")

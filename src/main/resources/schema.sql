@@ -33,6 +33,7 @@ create table if not exists Post (
     placed_at date,
     verified bool,
     allowed bool
+ /*   preview bool   */
 );
 
 create table if not exists App_User (

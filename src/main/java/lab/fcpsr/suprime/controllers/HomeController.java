@@ -1,8 +1,10 @@
 package lab.fcpsr.suprime.controllers;
 
 import lab.fcpsr.suprime.controllers.base.SuperController;
+import lab.fcpsr.suprime.dto.TagPostDTO;
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.Post;
+import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
@@ -33,6 +35,7 @@ import java.nio.file.Path;
 public class HomeController extends SuperController {
 
     private final int itemOnPage = 5;
+    private final int popularPostCount = 2;
 
     public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
         super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
@@ -48,11 +51,27 @@ public class HomeController extends SuperController {
         return Mono.just(
                 Rendering.view("template")
                         .modelAttribute("index","home-page")
-                        .modelAttribute("page",num)
-                        .modelAttribute("posts",postService.findAllAllowed(PageRequest.of(num,itemOnPage)))
+                        .modelAttribute("page", num)
+                        .modelAttribute("posts", getTaggedPosts(num,itemOnPage))
+                        .modelAttribute("popular", getTaggedPosts(0,popularPostCount))
                         .modelAttribute("lastPage", postService.findAllAllowedLastPage(itemOnPage))
                         .build()
         );
+    }
+
+    private Flux<TagPostDTO> getTaggedPosts(int page, int count){
+        return postService.findAllAllowed(PageRequest.of(page,count)).flatMap(post -> {
+            TagPostDTO cp = new TagPostDTO();
+            cp.setPost(post);
+            return sportTagService.findAll().collectList().flatMap(tags -> {
+                for(SportTag tag : tags){
+                    if(post.getSportTagIds().stream().anyMatch(tagId -> tagId == tag.getId())){
+                        cp.addTag(tag);
+                    }
+                }
+                return Mono.just(cp);
+            });
+        });
     }
 
     @GetMapping("/bookmarks")

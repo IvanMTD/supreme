@@ -25,7 +25,7 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/material")
 public class MaterialController extends SuperController {
 
-    private final int itemOnPage = 9;
+    private final int itemOnPage = 6;
 
     public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
         super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
@@ -41,14 +41,19 @@ public class MaterialController extends SuperController {
     @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
     public Mono<Rendering> materialPage(@AuthenticationPrincipal AppUser user, @PathVariable int num){
         Flux<Post> postFlux = userService.findById(user.getId()).flatMapMany(u -> postService.findPostsByUserRole(u, PageRequest.of(num,itemOnPage)));
+        Flux<Post> allowed = postService.findAllAllowed(PageRequest.of(num,itemOnPage));
         Mono<Integer> lastPage = userService.findById(user.getId()).flatMap(u -> postService.findPostsByUserRoleGetLastPage(u,itemOnPage));
-        return Mono.just(Rendering
-                .view("template")
-                .modelAttribute("index","material-page")
-                .modelAttribute("posts", postFlux)
-                .modelAttribute("page",num)
-                .modelAttribute("lastPage",lastPage)
-                .build());
+        Mono<Integer> lastPage2 = userService.findById(user.getId()).flatMap(u -> postService.findPostsByUserRoleGetLastPage(u,itemOnPage));
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","material-page")
+                        .modelAttribute("posts", postFlux)
+                        .modelAttribute("postsAllowed",allowed)
+                        .modelAttribute("page",num)
+                        .modelAttribute("lastPage",lastPage)
+                        .modelAttribute("lastPage2",lastPage2)
+                        .build()
+        );
     }
 
     @GetMapping("/search")

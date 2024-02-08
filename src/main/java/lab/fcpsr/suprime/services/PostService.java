@@ -88,7 +88,7 @@ public class PostService {
             if(role.equals(Role.ADMIN)){
                 return postRepository.findAllByVerifiedIsFalse(pageable);
             }else if(role.equals(Role.MAIN_MODERATOR)){
-                return postRepository.findPostsByVerifiedTrueAndAllowedFalse();
+                return postRepository.findPostsByVerifiedTrueAndAllowedFalse(pageable);
             }else if(role.equals(Role.MODERATOR)){
                 List<Integer> sportTagIds = new ArrayList<>(user.getSportTagIds());
                 Integer[] ids = new Integer[sportTagIds.size()];
@@ -122,6 +122,10 @@ public class PostService {
     public Mono<Integer> findPostsByUserRoleGetLastPage(AppUser user, int itemOnPage) {
         for(Role role : user.getRoles()){
             if(role.equals(Role.ADMIN)){
+                return postRepository.findAllByVerifiedIsFalse()
+                        .collectList()
+                        .flatMap(list -> Mono.just(getLastPage(list.size(),itemOnPage)));
+            }else if(role.equals(Role.MAIN_MODERATOR)){
                 return postRepository.findAllByVerifiedIsFalse()
                         .collectList()
                         .flatMap(list -> Mono.just(getLastPage(list.size(),itemOnPage)));

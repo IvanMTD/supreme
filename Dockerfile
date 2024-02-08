@@ -11,4 +11,5 @@ FROM bellsoft/liberica-openjdk-alpine
 EXPOSE 8080 8080
 WORKDIR /app
 COPY --from=1 /app/target/supreme-1.0.0.jar /app
-CMD ["java","-Xms64m","-Xmx900m","-jar","supreme-1.0.0.jar"]
+CMD ["java","-jar","supreme-1.0.0.jar"]
+#CMD ["java","-Xms64m","-Xmx900m","-jar","supreme-1.0.0.jar"]

@@ -21,8 +21,7 @@
 }
 
 .border {
-    border: solid black 1px;
-    border-radius: 5px;
+    border: solid lightgrey 1px;
 }
 
 .blacked {
@@ -42,21 +41,16 @@
 }
 
 .input-button {
-    min-width: 50px;
-    width: 100%;
-    max-width: 100px;
+    width: 150px;
     height: 34px;
-    background: lightgray;
+    background: white;
     color: black;
-    border: solid darkgray 1px;
-    border-radius: 10px;
+    border: solid lightgrey 1px;
 }
 
 .input-button:hover {
-    background: royalblue;
-    color: whitesmoke;
-    border: solid darkblue 1px;
-    border-radius: 10px;
+    background: #2d3034;
+    color: white;
     text-decoration: none;
 }
 
@@ -83,18 +77,16 @@
     display: inline-block;
     text-decoration: none;
     text-align: center;
-    background: lightgray;
+    background: white;
     color: black;
     padding: 4px 25px;
-    border: solid darkgray 1px;
-    border-radius: 10px;
+    border: solid lightgrey 1px;
 }
 
 .link-button-simple:hover {
     text-decoration: none;
-    background-color: royalblue;
-    border: solid darkblue 1px;
-    color: whitesmoke;
+    background-color: #2d3034;
+    color: white;
 }
 
 .link-button-simple-2 {

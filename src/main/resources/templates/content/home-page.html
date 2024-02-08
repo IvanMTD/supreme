@@ -1,4 +1,6 @@
+
 <div class="row otstup-verh">
+    <!-- БЛОК "БЛИЖАЙШИЕ СОБЫТИЯ" -->
     <div class="large-3 columns">
         <p class="lead">Ближайшие события</p>
         <div class="media-object">
@@ -34,6 +36,7 @@
             </div>
         </div>
     </div>
+    <!-- БЛОКЕ СЛАЙДЕР -->
     <div class="large-6 columns">
         <div class="responsive-blog-post">
             <div class="individual-post">
@@ -56,7 +59,7 @@
                             </li>
                             <li class="orbit-slide">
                                 <figure class="orbit-figure">
-                                    <img class="orbit-image" src="./img/9.jpg" alt="Space">
+                                    <img class="orbit-image" src="/img/9.jpg" alt="Space">
                                     <figcaption class="orbit-caption">Lets Rocket!</figcaption>
                                 </figure>
                             </li>
@@ -75,73 +78,61 @@
             </div>
         </div>
     </div>
+    <!-- БЛОКЕ "ПОПУЛЯРНЫЕ СТАТЬИ" -->
     <div class="large-3 columns ">
         <p class="lead">Популярные статьи</p>
-        <div class="media-object">
+        <div class="media-object" th:each="taggedPost : ${popular}">
             <div class="media-object-section">
-                <a class="th" href="#">
-                    <img class="thumbnail img-anons" src="/img/7.jpg">
+                <a class="th" th:href="@{/read/post/{id}(id=${taggedPost.getPost().getId()})}">
+                    <img th:src="'/download/' + ${taggedPost.getPost().getImageId()}" class="thumbnail img-anons">
                 </a>
             </div>
             <div class="media-object-section">
-                <a href="#">
-                    <h3 class="calendar-title">Кедровые орехи помогут вам справиться с голодом</h3>
+                <a th:href="@{/read/post/{id}(id=${taggedPost.getPost().getId()})}">
+                    <h3 class="calendar-title" th:text="${taggedPost.getPost().getName()}"></h3>
                 </a>
-                <a href="#">
-                    <h4 class="calendar-date">Силовые тренировки</h4>
-                </a>
-            </div>
-        </div>
-        <div class="media-object">
-            <div class="media-object-section">
-                <a class="th" href="#">
-                    <img class="thumbnail img-anons" src="/img/7.jpg">
-                </a>
-            </div>
-            <div class="media-object-section">
-                <a href="#">
-                    <h3 class="calendar-title">Кедровые орехи помогут вам справиться с голодом</h3>
-                </a>
-                <a href="#">
-                    <h4 class="calendar-date">Силовые тренировки</h4>
-                </a>
+                <h4 class="calendar-date" th:each="tag : ${taggedPost.getSportTags()}" th:text="'#'+${tag.getName()}"></h4>
             </div>
         </div>
     </div>
 </div>
+
 <hr>
+<!-- ВСЕ СТАТЬИ -->
 <div class="row small-up-3 medium-up-4 large-up-5">
     <div class="column" th:each="post, stat : ${posts}">
         <div class="card-flex-article card" style="border: none">
             <div class="card-image exmpl">
-                <a th:href="@{/read/post/{id}(id=${post.getId()})}">
-                    <img th:src="'/download/' + ${post.getImageId()}">
+                <a th:href="@{/read/post/{id}(id=${post.getPost().getId()})}">
+                    <img th:src="'/download/' + ${post.getPost().getImageId()}">
                 </a>
             </div>
             <div class="card-section">
-                <a th:href="@{/read/post/{id}(id=${post.getId()})}">
-                    <h3 class="calendar-title artic" th:text="${post.getAnnotation()}"></h3>
+                <a th:href="@{/read/post/{id}(id=${post.getPost().getId()})}">
+                    <h3 class="calendar-title artic" th:text="${post.getPost().getName()}"></h3>
                 </a>
             </div>
             <div class="article-details">
-                <a href="#">
+                <!--<a href="#">
                     <h4 class="calendar-date">Силовые тренировки</h4>
-                </a>
+                </a>-->
+                <h4 class="calendar-date" th:each="tag : ${post.getSportTags()}" th:text="'#'+${tag.getName()}"></h4>
             </div>
         </div>
     </div>
 </div>
+<!-- ПЕРЕКЛЮЧАТЕЛЬ СТРАНИЦ -->
 <div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
         <div style="display: block; margin: auto">
-            <a style="border-radius: 5px" class="link-button-simple" th:href="@{/page/0}" th:if="${page > 0}">первая</a>
-            <a class="link-button-simple-2" th:text="${page - 1}" th:href="@{/page/{num}(num=${page - 2})}" th:if="${page > 1}">-2</a>
-            <a class="link-button-simple-2" th:text="${page}" th:href="@{/page/{num}(num=${page - 1})}" th:if="${page > 0}">-1</a>
-            <a class="link-button-simple-2" th:text="${page + 1}" th:href="@{/page/{num}(num=${page})}" style="background: royalblue; color: whitesmoke">текущая</a>
-            <a class="link-button-simple-2" th:text="${page + 2}" th:href="@{/page/{num}(num=${page + 1})}" th:if="${page + 1} <= ${lastPage}">+1</a>
-            <a class="link-button-simple-2" th:text="${page + 3}" th:href="@{/page/{num}(num=${page + 2})}" th:if="${page + 2} <= ${lastPage}">+2</a>
-            <a style="border-radius: 5px" class="link-button-simple" th:href="@{/page/{num}(num=${lastPage})}" th:if="${page} != ${lastPage}">последняя</a>
+            <a style="color: black; text-decoration: none" th:href="@{/page/0}" th:if="${page > 0}">первая</a>
+            <a style="color: black; text-decoration: none" th:text="${page - 1}" th:href="@{/page/{num}(num=${page - 2})}" th:if="${page > 1}">-2</a>
+            <a style="color: black; text-decoration: none" th:text="${page}" th:href="@{/page/{num}(num=${page - 1})}" th:if="${page > 0}">-1</a>
+            <a style="background: #2d3034; color: white; text-decoration: none" th:text="${page + 1}" th:href="@{/page/{num}(num=${page})}">текущая</a>
+            <a style="color: black; text-decoration: none" th:text="${page + 2}" th:href="@{/page/{num}(num=${page + 1})}" th:if="${page + 1} <= ${lastPage}">+1</a>
+            <a style="color: black; text-decoration: none" th:text="${page + 3}" th:href="@{/page/{num}(num=${page + 2})}" th:if="${page + 2} <= ${lastPage}">+2</a>
+            <a style="color: black; text-decoration: none" th:href="@{/page/{num}(num=${lastPage})}" th:if="${page} != ${lastPage}">последняя</a>
         </div>
     </div>
     <div class="col-20"></div>

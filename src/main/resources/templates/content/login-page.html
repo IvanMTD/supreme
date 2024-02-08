@@ -1,5 +1,5 @@
 <div class="row" style="padding: 6vh 0">
-    <div class="medium-6 outer" style="margin: auto">
+    <div class="medium-6 outer" style="margin: auto; padding: 10vh 0">
         <form th:method="POST" th:action="@{/auth/login}" class="log-in-form">
             <p style="color: red" th:if="${!param.error.isEmpty()}">Incorrect login or password</p>
             <h4 class="text-center zagolovok-form">Войти</h4>
