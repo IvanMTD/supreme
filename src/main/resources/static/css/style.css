@@ -26,7 +26,7 @@
 }
 
 .calendar-title {
-   font-family: 'Inter', Arial, sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 16px;
     font-weight: 400;
     color: #0c3d5d;
@@ -34,8 +34,9 @@
     padding: 0;
 
 }
+
 .calendar-gorod {
-   font-family: 'Inter', Arial, sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 17px;
     font-weight: 400;
     color: #0c3d5d;
@@ -43,14 +44,14 @@
     padding: 0;
 
 }
+
 .calendar-date {
-   font-family: 'Inter', Arial, sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     font-size: 14px;
     font-weight: 300;
     color: #0c3d5d;
     margin: 0;
-    padding: 0;
-
+    padding: 0 0 0 8px;
 }
 
 .cover {
@@ -173,10 +174,6 @@
 }
 
 
-
-
-
-
 @media screen and (max-width: 63.9375em) {
     .marketing-site-footer-bottom .marketing-site-footer-bottom-links {
         -webkit-justify-content: center;
@@ -219,92 +216,104 @@
 
 .card-flex-article {
 
-    .card-divider {
-        display: flex;
-        background: transparent;
+.card-divider {
+    display: flex;
+    background: transparent;
 
 
-        .avatar {
-            margin-right: 0.75rem;
-        }
-    }
+.avatar {
+    margin-right: 0.75rem;
+}
 
-    .avatar {
-        position: relative;
+}
 
-        img {
-            border-radius: 50%;
-        }
+.avatar {
+    position: relative;
 
-        &.with-add-icon .fa {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            /*color: $alert-color;*/
-        }
-    }
+img {
+    border-radius: 50%;
+}
 
-    .card-actions {
-        .fa:not(:last-of-type) {
-            margin-right: 1rem;
-        }
-    }
+&
+.with-add-icon .fa {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    /*color: $alert-color;*/
+}
 
-    .card-image {
-        position: relative;
-        width: 250px;
-        height: 200px;
-    }
-   .exmpl {
+}
+
+.card-actions {
+
+.fa:not(:last-of-type) {
+    margin-right: 1rem;
+}
+
+}
+
+.card-image {
+    position: relative;
+    width: 250px;
+    height: 200px;
+}
+
+.exmpl {
     /*object-fit: cover;*/
     justify-content: center;
     align-items: center;
-  }
-  .exmpl img {
+    padding-left: 8px;
+    padding-top: 8px;
+}
+
+.exmpl img {
     min-width: 100%;
     min-height: 100%;
-    border: 2px solid #8aa0ae;
-      object-fit: cover;
-  }
-    .card-tag {
-        position: absolute;
-        bottom: 1rem;
-        left: 1rem;
-        text-transform: uppercase;
-        font-weight: bold;
-        border-radius: 3%;
-    }
+    object-fit: cover;
+}
+
+.card-tag {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 3%;
+}
 
 
-        .artic {
-            min-height: 70px;
-            padding-top: 5px;
-        }
+.artic {
+    min-height: 100px;
+    padding-top: 5px;
+    padding-left: 8px;
+}
 
-        .article-details {
-            font-size: 0.75rem;
-            opacity: 0.5;
-            padding-bottom: 0.75rem;
-        }
+.article-details {
+    font-size: 0.75rem;
+    opacity: 0.5;
+    padding-bottom: 0.75rem;
+}
 
-        .article-summary {
-            font-family: 'IBM Plex Sans';
-        }
-    }
+.article-summary {
+    font-family: 'IBM Plex Sans';
+}
 
-    .user-info {
-        font-size: 0.75rem;
+}
 
-        .user-name {
-            font-weight: bold;
-            margin-bottom: 0;
-        }
-    }
+.user-info {
+    font-size: 0.75rem;
 
-    .notability {
-        font-size: 0.75rem;
-        opacity: 0.5;
-    }
+.user-name {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+}
+
+.notability {
+    font-size: 0.75rem;
+    opacity: 0.5;
+}
 
 }
 
@@ -340,16 +349,21 @@
     max-height: 38px;
 }
 
-.icon-niz{
+.icon-niz {
     width: 30px;
     margin-right: 7px;
 }
 
-.icon-blok{
+.icon-blok {
     padding-left: 1rem;
     padding-bottom: 1rem;
 }
 
-.gray-text{
+.gray-text {
     color: #8aa0ae;
+}
+
+.card-section {
+    padding: 0;
+    margin: 0;
 }

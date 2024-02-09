@@ -92,6 +92,10 @@
     margin: auto;
 }
 
+.flex-right {
+    margin: auto 1vh auto auto;
+}
+
 .my-navbar {
     list-style-type: none;
     margin: 0;

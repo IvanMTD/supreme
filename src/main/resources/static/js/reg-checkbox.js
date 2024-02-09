@@ -69,3 +69,50 @@ function setPublisher(){
         }
     }
 }
+function setUntested(){
+    let untestedPosts = [[${posts}]];
+    console.log(untestedPosts);
+    $("#currentPosts").html('');
+    for(let i=0; i<untestedPosts.length; i++){
+        $("#currentPosts").append(
+        '<div class="flex-element border target" id="cp' + i + '">\n' +
+        '         <div class="row-100-block text-center" style="background: darkgreen">\n' +
+        '             <p style="color: white">прошел первичную проверку</p>\n' +
+        '         </div>\n' +
+        '     <a class="link-decoration" href="/material/edit/post/' + untestedPosts[i].id + '">\n' +
+        '         <div class="row-100-block text-center">\n' +
+        '             <h4>' + untestedPosts[i].name + '</h4>\n' +
+        '         </div>\n' +
+        '         <div class="row-100-block">\n' +
+        '             <img class="image" src="/download/' + untestedPosts[i].imageId + '">\n' +
+        '         </div>\n' +
+        '         <div class="row-100-block flex-grow">\n' +
+        '             <p>' + untestedPosts[i].annotation + '</p>\n' +
+        '         </div>\n' +
+        '     </a>\n' +
+        ' </div>'
+        );
+    }
+}
+function setVerified(){
+    let verifiedPosts = [[${postsAllowed}]]
+    console.log(verifiedPosts)
+    $("#currentPosts").html('');
+    for(let i=0; i<verifiedPosts.length; i++){
+        $("#currentPosts").append(
+        '<div class="flex-element border target" id="cp' + i + '">\n' +
+        '     <a class="link-decoration" href="/material/edit/post/' + verifiedPosts[i].id + '">\n' +
+        '         <div class="row-100-block text-center">\n' +
+        '             <h4>' + verifiedPosts[i].name + '</h4>\n' +
+        '         </div>\n' +
+        '         <div class="row-100-block">\n' +
+        '             <img class="image" src="/download/' + verifiedPosts[i].imageId + '">\n' +
+        '         </div>\n' +
+        '         <div class="row-100-block flex-grow">\n' +
+        '             <p>' + verifiedPosts[i].annotation + '</p>\n' +
+        '         </div>\n' +
+        '     </a>\n' +
+        ' </div>'
+        );
+    }
+}

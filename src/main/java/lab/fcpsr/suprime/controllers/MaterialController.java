@@ -3,9 +3,12 @@ package lab.fcpsr.suprime.controllers;
 import jakarta.validation.Valid;
 import lab.fcpsr.suprime.controllers.base.SuperController;
 import lab.fcpsr.suprime.dto.PostDTO;
+import lab.fcpsr.suprime.dto.SliderDTO;
+import lab.fcpsr.suprime.dto.TagPostDTO;
 import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.models.MinioFile;
 import lab.fcpsr.suprime.models.Post;
+import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
@@ -17,8 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.rmi.ServerException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -26,6 +35,7 @@ import reactor.core.publisher.Mono;
 public class MaterialController extends SuperController {
 
     private final int itemOnPage = 6;
+    private final int itemOnEditorsPage = 20;
 
     public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
         super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
@@ -41,20 +51,66 @@ public class MaterialController extends SuperController {
     @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")
     public Mono<Rendering> materialPage(@AuthenticationPrincipal AppUser user, @PathVariable int num){
         Flux<Post> postFlux = userService.findById(user.getId()).flatMapMany(u -> postService.findPostsByUserRole(u, PageRequest.of(num,itemOnPage)));
-        Flux<Post> allowed = postService.findAllAllowed(PageRequest.of(num,itemOnPage));
         Mono<Integer> lastPage = userService.findById(user.getId()).flatMap(u -> postService.findPostsByUserRoleGetLastPage(u,itemOnPage));
-        Mono<Integer> lastPage2 = userService.findById(user.getId()).flatMap(u -> postService.findPostsByUserRoleGetLastPage(u,itemOnPage));
         return Mono.just(
                 Rendering.view("template")
                         .modelAttribute("index","material-page")
                         .modelAttribute("posts", postFlux)
-                        .modelAttribute("postsAllowed",allowed)
                         .modelAttribute("page",num)
                         .modelAttribute("lastPage",lastPage)
-                        .modelAttribute("lastPage2",lastPage2)
                         .build()
         );
     }
+
+    @GetMapping("/slider/config")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> sliderPage(@AuthenticationPrincipal AppUser user){
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","slider-page")
+                        .modelAttribute("slider", new SliderDTO())
+                        .build()
+        );
+    }
+
+    /*@GetMapping("/editors/page/{num}")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> editorsPage(@AuthenticationPrincipal AppUser user, @PathVariable int num){
+        Flux<TagPostDTO> allowed = postService.findAllAllowed(PageRequest.of(num,itemOnEditorsPage)).flatMap(post -> {
+            TagPostDTO tagPost = new TagPostDTO();
+            tagPost.setPost(post);
+            return sportTagService.findAll().collectList().flatMap(tagList -> {
+                for(SportTag tag : tagList){
+                    if(post.getSportTagIds().stream().anyMatch(tagId -> tagId == tag.getId())){
+                        tagPost.addTag(tag);
+                    }
+                }
+                return Mono.just(tagPost);
+            });
+        });
+        Mono<Integer> lastPage = postService.findAllAllowedLastPage(itemOnEditorsPage);
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","editors-page")
+                        .modelAttribute("posts", allowed)
+                        .modelAttribute("page",num)
+                        .modelAttribute("lastPage",lastPage)
+                        .build()
+        );
+    }
+
+    @PostMapping("/slider/set")
+    @PreAuthorize("@RoleService.isMainModerator(#user) || @RoleService.isAdmin(#user)")
+    public Mono<Rendering> setSliderPosts(@AuthenticationPrincipal AppUser user, ServerWebExchange exchange){
+        exchange.getFormData().flatMap(form -> {
+            List<String> list = form.get("postIds");
+            for (String id : list){
+                System.out.println(id);
+            }
+            return Mono.just(form);
+        }).subscribe();
+        return Mono.just(Rendering.redirectTo("/").build());
+    }*/
 
     @GetMapping("/search")
     @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user) || @RoleService.isModerator(#user) || @RoleService.isPublisher(#user)")

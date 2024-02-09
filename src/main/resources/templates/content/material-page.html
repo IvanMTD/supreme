@@ -35,55 +35,8 @@
     <div class="col-60">
         <div class="col-20"></div>
         <div class="col-60-inline-flex">
-            <button id="untested" class="input-button flex-center" onclick="setUntested()">не проверенные</button>
-            <button id="verified" class="input-button flex-center" onclick="setVerified()">проверенные</button>
-            <script th:inline="javascript">
-                function setUntested(){
-                    let untestedPosts = [[${posts}]]
-                    $("#currentPosts").html('');
-                    for(let i=0; i<untestedPosts.length; i++){
-                        $("#currentPosts").append(
-                            '<div class="flex-element border target" id="cp' + i + '">\n' +
-                            '         <div class="row-100-block text-center" style="background: darkgreen">\n' +
-                            '             <p style="color: white">прошел первичную проверку</p>\n' +
-                            '         </div>\n' +
-                            '     <a class="link-decoration" href="/material/edit/post/' + untestedPosts[i].id + '">\n' +
-                            '         <div class="row-100-block text-center">\n' +
-                            '             <h4>' + untestedPosts[i].name + '</h4>\n' +
-                            '         </div>\n' +
-                            '         <div class="row-100-block">\n' +
-                            '             <img class="image" src="/download/' + untestedPosts[i].imageId + '">\n' +
-                            '         </div>\n' +
-                            '         <div class="row-100-block flex-grow">\n' +
-                            '             <p>' + untestedPosts[i].annotation + '</p>\n' +
-                            '         </div>\n' +
-                            '     </a>\n' +
-                            ' </div>'
-                        );
-                    }
-                }
-                function setVerified(){
-                    let verifiedPosts = [[${postsAllowed}]]
-                    $("#currentPosts").html('');
-                    for(let i=0; i<verifiedPosts.length; i++){
-                        $("#currentPosts").append(
-                            '<div class="flex-element border target" id="cp' + i + '">\n' +
-                            '     <a class="link-decoration" href="/material/edit/post/' + verifiedPosts[i].id + '">\n' +
-                            '         <div class="row-100-block text-center">\n' +
-                            '             <h4>' + verifiedPosts[i].name + '</h4>\n' +
-                            '         </div>\n' +
-                            '         <div class="row-100-block">\n' +
-                            '             <img class="image" src="/download/' + verifiedPosts[i].imageId + '">\n' +
-                            '         </div>\n' +
-                            '         <div class="row-100-block flex-grow">\n' +
-                            '             <p>' + verifiedPosts[i].annotation + '</p>\n' +
-                            '         </div>\n' +
-                            '     </a>\n' +
-                            ' </div>'
-                        );
-                    }
-                }
-            </script>
+            <a class="link-button-simple flex-center" th:href="@{/material/page/0}">Редакция</a>
+            <a class="link-button-simple flex-center" th:href="@{/material/slider/config}">Слайдер</a>
         </div>
         <div class="col-20"></div>
     </div>
@@ -123,13 +76,13 @@
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
         <div style="display: block; margin: auto">
-            <a style="color: white; text-decoration: none" th:href="@{/page/0}" th:if="${page > 0}">первая</a>
-            <a style="color: white; text-decoration: none" th:text="${page - 1}" th:href="@{/page/{num}(num=${page - 2})}" th:if="${page > 1}">-2</a>
-            <a style="color: white; text-decoration: none" th:text="${page}" th:href="@{/page/{num}(num=${page - 1})}" th:if="${page > 0}">-1</a>
-            <a style="background: white; color: black; text-decoration: none" th:text="${page + 1}" th:href="@{/page/{num}(num=${page})}">текущая</a>
-            <a style="color: white; text-decoration: none" th:text="${page + 2}" th:href="@{/page/{num}(num=${page + 1})}" th:if="${page + 1} <= ${lastPage}">+1</a>
-            <a style="color: white; text-decoration: none" th:text="${page + 3}" th:href="@{/page/{num}(num=${page + 2})}" th:if="${page + 2} <= ${lastPage}">+2</a>
-            <a style="color: white; text-decoration: none" th:href="@{/page/{num}(num=${lastPage})}" th:if="${page} != ${lastPage}">последняя</a>
+            <a style="color: white; text-decoration: none" th:href="@{/material/page/0}" th:if="${page > 0}">первая</a>
+            <a style="color: white; text-decoration: none" th:text="${page - 1}" th:href="@{/material/page/{num}(num=${page - 2})}" th:if="${page > 1}">-2</a>
+            <a style="color: white; text-decoration: none" th:text="${page}" th:href="@{/material/page/{num}(num=${page - 1})}" th:if="${page > 0}">-1</a>
+            <a style="background: white; color: black; text-decoration: none" th:text="${page + 1}" th:href="@{/material/page/{num}(num=${page})}">текущая</a>
+            <a style="color: white; text-decoration: none" th:text="${page + 2}" th:href="@{/material/page/{num}(num=${page + 1})}" th:if="${page + 1} <= ${lastPage}">+1</a>
+            <a style="color: white; text-decoration: none" th:text="${page + 3}" th:href="@{/material/page/{num}(num=${page + 2})}" th:if="${page + 2} <= ${lastPage}">+2</a>
+            <a style="color: white; text-decoration: none" th:href="@{/material/page/{num}(num=${lastPage})}" th:if="${page} != ${lastPage}">последняя</a>
         </div>
     </div>
     <div class="col-20"></div>

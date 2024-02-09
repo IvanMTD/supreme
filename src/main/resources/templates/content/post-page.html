@@ -3,13 +3,13 @@
         <div th:if="${!bookmark}">
             <form th:method="GET" th:action="@{/bookmark}">
                 <input type="text" name="bookmark" th:value="${post.getId}" style="display: none">
-                <input type="submit" value="В закладки">
+                <input type="submit" class="input-button" value="Закладка">
             </form>
         </div>
         <div th:if="${bookmark}">
             <form th:method="GET" th:action="@{/bookmark/off}">
                 <input type="text" name="bookmark" th:value="${post.getId}" style="display: none">
-                <input type="submit" value="Убрать из закладок">
+                <input type="submit" class="input-button" value="Убрать">
             </form>
         </div>
     </div>

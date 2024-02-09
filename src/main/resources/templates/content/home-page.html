@@ -101,7 +101,7 @@
 <!-- ВСЕ СТАТЬИ -->
 <div class="row small-up-3 medium-up-4 large-up-5">
     <div class="column" th:each="post, stat : ${posts}">
-        <div class="card-flex-article card" style="border: none">
+        <div class="card-flex-article card" style="border: none; background: whitesmoke">
             <div class="card-image exmpl">
                 <a th:href="@{/read/post/{id}(id=${post.getPost().getId()})}">
                     <img th:src="'/download/' + ${post.getPost().getImageId()}">
