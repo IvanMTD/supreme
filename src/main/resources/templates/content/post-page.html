@@ -15,15 +15,16 @@
     </div>
     <div class="large-9 columns">
         <h4 class="zagolovok-tekstoviy-bloc" th:text="${post.getName()}"></h4>
-        <img class="image" th:src="'/download/' + ${post.getImageId()}">
+        <img class="image" th:src="'/download/' + ${post.getImageId()}" style="object-fit: cover; width: 100%">
         <div th:utext="${post.getContent()}"></div>
     </div>
     <div class="large-3 columns ">
+        <!-- ПОПУЛЯРНЫЕ СТАТЬИ -->
         <h2 class="zagolovok-tekstoviy-bloc">Популярные статьи</h2>
         <div class="media-object" th:each="p : ${posts}">
             <div class="media-object-section">
                 <a th:href="@{/read/post/{id}(id=${p.getId()})}" style="text-decoration: none">
-                    <img class="thumbnail img-anons" th:src="'/download/' + ${p.getImageId()}">
+                    <img class="thumbnail img-anons" th:src="'/download/' + ${p.getImageId()}" style="object-fit: cover">
                 </a>
             </div>
             <div class="media-object-section">

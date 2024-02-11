@@ -8,6 +8,7 @@ import lab.fcpsr.suprime.models.SportTag;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
+import lab.fcpsr.suprime.validations.SliderValidation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
@@ -26,7 +27,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -37,8 +43,8 @@ public class HomeController extends SuperController {
     private final int itemOnPage = 5;
     private final int popularPostCount = 2;
 
-    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, RoleService roleService, SearchService searchService) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, roleService, searchService);
+    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, SliderValidation sliderValidation, RoleService roleService, SearchService searchService, SliderService sliderService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, sliderValidation, roleService, searchService, sliderService);
     }
 
     @GetMapping("/")
@@ -52,9 +58,11 @@ public class HomeController extends SuperController {
                 Rendering.view("template")
                         .modelAttribute("index","home-page")
                         .modelAttribute("page", num)
+                        .modelAttribute("lastPage", postService.findAllAllowedLastPage(itemOnPage))
                         .modelAttribute("posts", getTaggedPosts(num,itemOnPage))
                         .modelAttribute("popular", getTaggedPosts(0,popularPostCount))
-                        .modelAttribute("lastPage", postService.findAllAllowedLastPage(itemOnPage))
+                        .modelAttribute("sliders", sliderService.getAll())
+                        .modelAttribute("statusSearch",false)
                         .build()
         );
     }
@@ -72,6 +80,35 @@ public class HomeController extends SuperController {
                 return Mono.just(cp);
             });
         });
+    }
+
+    @GetMapping("/search")
+    public Mono<Rendering> searchResult(@RequestParam(name = "search") String request){
+        return Mono.just(Rendering
+                .view("template")
+                .modelAttribute("index","home-page")
+                .modelAttribute("page",0)
+                .modelAttribute("lastPage", 0)
+                .modelAttribute("posts",getSearchedTaggedPosts(request))
+                .modelAttribute("popular", getTaggedPosts(0,popularPostCount))
+                .modelAttribute("sliders", sliderService.getAll())
+                .modelAttribute("statusSearch",true)
+                .build());
+    }
+
+    private Flux<TagPostDTO> getSearchedTaggedPosts(String request){
+        return searchService.searchPosts(request).flatMap(postId -> postService.findByIdAndAllowedTrue(postId).flatMap(post -> {
+            TagPostDTO cp = new TagPostDTO();
+            cp.setPost(post);
+            return sportTagService.findAll().collectList().flatMap(tags -> {
+                for(SportTag tag : tags){
+                    if(post.getSportTagIds().stream().anyMatch(tagId -> tagId == tag.getId())){
+                        cp.addTag(tag);
+                    }
+                }
+                return Mono.just(cp);
+            });
+        }));
     }
 
     @GetMapping("/bookmarks")
@@ -108,17 +145,6 @@ public class HomeController extends SuperController {
             u.getPostSaveList().remove(post.getId());
             return userService.save(u);
         })).flatMap(u -> Mono.just(Rendering.redirectTo("/read/post/" + postId).build()));
-    }
-
-    @GetMapping("/search")
-    public Mono<Rendering> searchResult(@RequestParam(name = "search") String request){
-        return Mono.just(Rendering
-                .view("template")
-                .modelAttribute("posts",searchService.searchPosts(request).flatMap(postService::findByIdAndAllowedTrue))
-                .modelAttribute("index","home-page")
-                .modelAttribute("page",0)
-                .modelAttribute("lastPage", 0)
-                .build());
     }
 
     @GetMapping("/read/post/{id}")

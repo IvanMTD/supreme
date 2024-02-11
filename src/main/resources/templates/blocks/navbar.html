@@ -2,6 +2,9 @@
     <div class="top-bar row" id="mainNavigation" style="background: white">
         <div class="top-bar-left">
             <ul class="menu  medium-horizontal" style="background: white">
+                <li>
+                    <a th:href="@{/}" style="text-decoration: none; color: black">Главная</a>
+                </li>
                 <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}">
                     <a th:href="@{/material/page/0}" style="text-decoration: none; color: black">Редакция</a>
                 </li>
@@ -13,13 +16,22 @@
         <div class="top-bar-right">
             <form id="logoutForm" method="post" th:action="@{/logout}"></form>
             <ul class="menu  medium-horizontal" style="background: white">
+                <li th:if="${roleAdmin}" class="float-right">
+                    <a class="whited" th:href="@{/admin}" style="text-decoration: none; color: black">Админ</a>
+                </li>
                 <li th:if="${baseAuth}" class="float-right">
                     <a th:href="@{/auth/profile}" style="text-decoration: none; color: black">Профиль</a>
                 </li>
                 <li>
-                    <a href="#" style="text-decoration: none; color: black">
+                    <a href="#" style="text-decoration: none; color: black" onclick="searchControl()">
                         <img alt="поиск" class="top-icon" src="/img/icon-serch.png">Поиск
                     </a>
+                    <script>
+                        function searchControl(){
+                            let search = document.getElementById('searchBar');
+                            search.hidden = !search.hidden;
+                        }
+                    </script>
                 </li>
                 <li th:if="${!baseAuth}">
                     <a th:href="@{/auth/login}" style="text-decoration: none; color: black">

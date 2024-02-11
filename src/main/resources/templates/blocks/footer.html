@@ -22,6 +22,9 @@
         </div>
         <div class="medium-9 columns">
             <ul class="menu gray-text">
+                <li>
+                    <a th:href="@{/}" style="text-decoration: none; color: white">Главная</a>
+                </li>
                 <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}">
                     <a th:href="@{/material/page/0}" style="text-decoration: none; color: white">Редакция</a>
                 </li>

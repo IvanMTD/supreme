@@ -1,13 +1,18 @@
 package lab.fcpsr.suprime.templates;
 
+import com.luciad.imageio.webp.WebPWriteParam;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.IOUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.imageio.*;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
+import java.awt.image.BufferedImage;
+import java.io.*;
 
+@Slf4j
 public class InputStreamCollector {
     ByteArrayOutputStream targetStream = new ByteArrayOutputStream();
     @SneakyThrows
@@ -15,6 +20,7 @@ public class InputStreamCollector {
         IOUtils.copy(input, targetStream);
         return this;
     }
+
     public InputStream getStream() {
         return new ByteArrayInputStream(targetStream.toByteArray());
     }
@@ -27,3 +33,20 @@ public class InputStreamCollector {
         }
     }
 }
+
+/*
+           minioService.download(fileInfo).flatMap(isr -> {
+                    InputStreamResource inputStreamResource = isr;
+                    try {
+                        String temp = "./src/main/resources/static/img/temp.webp";
+                        BufferedImage image = ImageIO.read(isr.getInputStream());
+                        ImageIO.write(image,"webp", new File(temp));
+                        File file = new File(temp);
+                        InputStream inputStream = new FileInputStream(file);
+                        inputStreamResource = new InputStreamResource(inputStream);
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                    return Mono.just(inputStreamResource);
+                })
+ */

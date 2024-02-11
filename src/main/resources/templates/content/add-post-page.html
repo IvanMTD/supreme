@@ -25,7 +25,7 @@
                 <div style="margin: 1vh" class="shadow border">
                     <div style="display: inline-block" th:each="st : ${sportTags}">
                         <div style="padding: 1vh">
-                            <img th:src="'/download/' + ${st.getImageId()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
+                            <!--<img th:src="'/download/' + ${st.getImageId()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>-->
                             <input type="checkbox" name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
                         </div>
                     </div>

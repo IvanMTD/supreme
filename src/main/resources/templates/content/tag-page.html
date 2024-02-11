@@ -1,8 +1,9 @@
-<div class="row-100">
+<div class="row-100" style="background: white">
     <div class="col-20"></div>
     <div class="col-60">
         <div style="display: inline-flex; width: 100%; padding: 10vh 0">
-            <form th:method="POST" th:action="@{/admin/tag}" th:object="${sportTag}" class="shadow border" style="margin: auto; padding: 2vh" enctype="multipart/form-data">
+            <!-- enctype="multipart/form-data" -->
+            <form th:method="POST" th:action="@{/admin/tag}" th:object="${sportTag}" style="margin: auto; padding: 2vh">
                 <h2>Добавить спортивный тег</h2>
                 <p>название</p>
                 <input placeholder="Sport tag name" type="text" th:field="*{name}">
@@ -18,13 +19,14 @@
                 </div>
 
                 <br>
-                <input type="file" accept="image/*" id="fileFake" disabled="disabled" style="display: none">
+                <!--<input type="file" accept="image/*" id="fileFake" disabled="disabled" style="display: none">
                 <input type="file" accept="image/*" id="file" name="file"><br>
                 <progress id="progressBar" hidden></progress>
                 <br>
-                <input class="input-button" id="inputButtonFake" type="submit" value="submit" hidden disabled="disabled">
-                <input class="input-button" id="inputButton" type="submit" value="submit" onclick="hiddenControl()"><br>
-                <script>
+                <input class="input-button" id="inputButtonFake" type="submit" value="submit" hidden disabled="disabled">-->
+                <input class="input-button" id="inputButton" type="submit" value="Сохранить"><br>
+                <!-- onclick="hiddenControl()" -->
+                <!--<script>
                     function hiddenControl(){
                         document.getElementById('progressBar').hidden=false
                         document.getElementById('inputButton').hidden=true
@@ -33,7 +35,7 @@
                         document.getElementById('fileFake').removeAttribute("style")
                         document.getElementById('file').setAttribute('style','display:none')
                     }
-                </script>
+                </script>-->
             </form>
         </div>
     </div>

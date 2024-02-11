@@ -1,6 +1,7 @@
 package lab.fcpsr.suprime.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,5 @@ public class SliderDTO {
     @NotBlank(message = "Укажите URL")
     @URL(message = "Не валидный URL")
     private String url;
-    @NotNull(message = "Подгрузите файл")
     private FilePart image;
 }

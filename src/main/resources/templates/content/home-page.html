@@ -1,10 +1,27 @@
 
+<div id="searchBar" class="row-100-block" style="background: white" hidden>
+    <div class="col-20"></div>
+    <div class="col-60" style="display: flex">
+        <div class="row-100-block">
+            <div class="col-100-inline-flex">
+                <div class="flex-center" style="width: 100%">
+                    <form th:method="GET" th:action="@{/search}" style="padding: 1vh; display: block; width: 100%">
+                        <input type="search" id="search" name="search" placeholder="Введите свой запрос здесь" style="display: inline-block; padding: 0.5vh; width: 100%">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-20"></div>
+</div>
+
+
 <div class="row otstup-verh">
     <!-- БЛОК "БЛИЖАЙШИЕ СОБЫТИЯ" -->
     <div class="large-3 columns">
         <p class="lead">Ближайшие события</p>
         <div class="media-object">
-            <div class="media-object-section">
+            <!--<div class="media-object-section">
                 <a class="th" href="">
                     <img class="thumbnail img-anons" src="/img/14.jpg">
                 </a>
@@ -17,10 +34,10 @@
                 <a href="#">
                     <h3 class="calendar-title">Чемпионат России по Радиоспорту УКВ имени С.П.Попова</h3>
                 </a>
-            </div>
+            </div>-->
         </div>
         <div class="media-object">
-            <div class="media-object-section">
+            <!--<div class="media-object-section">
                 <a class="th" href="#">
                     <img class="thumbnail img-anons" src="/img/14.jpg">
                 </a>
@@ -33,10 +50,10 @@
                 <a href="#">
                     <h3 class="calendar-title">Чемпионат России по Радиоспорту УКВ имени С. П, Попова</h3>
                 </a>
-            </div>
+            </div>-->
         </div>
     </div>
-    <!-- БЛОКЕ СЛАЙДЕР -->
+    <!-- БЛОК СЛАЙДЕР -->
     <div class="large-6 columns">
         <div class="responsive-blog-post">
             <div class="individual-post">
@@ -44,23 +61,21 @@
                     <div class="orbit-wrapper">
                         <div class="orbit-controls">
                             <button class="orbit-previous">
-                                <span class="show-for-sr">Previous Slide</span>&#9664;&#xFE0E;
+                                <span class="show-for-sr">Previous Slide</span>
                             </button>
                             <button class="orbit-next">
-                                <span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;
+                                <span class="show-for-sr">Next Slide</span>
                             </button>
                         </div>
-                        <ul class="orbit-container">
-                            <li class="is-active orbit-slide">
+                        <ul class="orbit-container" style="height: 350px">
+                            <li class="is-active orbit-slide" th:each="slider, stat : ${sliders}">
                                 <figure class="orbit-figure">
-                                    <img class="orbit-image" src="/img/11.jpg" alt="Space">
-                                    <figcaption class="orbit-caption">Space, the final frontier.</figcaption>
-                                </figure>
-                            </li>
-                            <li class="orbit-slide">
-                                <figure class="orbit-figure">
-                                    <img class="orbit-image" src="/img/9.jpg" alt="Space">
-                                    <figcaption class="orbit-caption">Lets Rocket!</figcaption>
+                                    <img class="orbit-image" th:src="'/download/' + ${slider.getImageId()}" alt="Space" style="object-fit: cover">
+                                    <figcaption class="orbit-caption">
+                                        <a th:href="${slider.getUrl()}" style="text-decoration: none; color: white">
+                                            <span th:text="${slider.getTitle()}"></span>
+                                        </a>
+                                    </figcaption>
                                 </figure>
                             </li>
                         </ul>
@@ -84,7 +99,7 @@
         <div class="media-object" th:each="taggedPost : ${popular}">
             <div class="media-object-section">
                 <a class="th" th:href="@{/read/post/{id}(id=${taggedPost.getPost().getId()})}">
-                    <img th:src="'/download/' + ${taggedPost.getPost().getImageId()}" class="thumbnail img-anons">
+                    <img th:src="'/download/' + ${taggedPost.getPost().getImageId()}" class="thumbnail img-anons" style="object-fit: cover">
                 </a>
             </div>
             <div class="media-object-section">
@@ -122,7 +137,7 @@
     </div>
 </div>
 <!-- ПЕРЕКЛЮЧАТЕЛЬ СТРАНИЦ -->
-<div class="row-100-block">
+<!--<div class="row-100-block">
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
         <div style="display: block; margin: auto">
@@ -136,7 +151,7 @@
         </div>
     </div>
     <div class="col-20"></div>
-</div>
+</div>-->
 
 <!--<div class="row otstup-verh">
     <div class="large-3 columns">

@@ -4,6 +4,7 @@ import lab.fcpsr.suprime.models.AppUser;
 import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
+import lab.fcpsr.suprime.validations.SliderValidation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +26,13 @@ public class SuperController {
     protected final AppUserValidation userValidation;
     protected final PostValidation postValidation;
 
+    protected final SliderValidation sliderValidation;
+
     protected final RoleService roleService;
 
     protected final SearchService searchService;
+
+    protected final SliderService sliderService;
 
     @ModelAttribute(name = "baseAuth")
     public boolean baseAuth(@AuthenticationPrincipal AppUser user){

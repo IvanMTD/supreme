@@ -13,18 +13,76 @@
 
 <div class="row-100-block" style="background: white; padding: 5.5vh 0">
     <div class="col-20"></div>
-    <div class="col-60">
-        <div class="row-100-block">
-            <form th:method="POST" th:action="@{/material/slider/save}">
+    <div class="col-60" style="padding: 20vh">
+        <div class="row-100-block" style="text-align: center">
+            <p><b>Можно иметь одновременно только 4 новости в слайдере</b></p>
+        </div>
+        <div class="row-100-block" th:each="slider, stat : ${sliders}">
+            <form th:method="GET" th:action="@{/material/slider/delete}">
+                <input type="number" id="sliderId" name="sliderId" th:value="${slider.getId()}" hidden>
+                <div class="row-100" th:if="${stat.index % 2 == 0}" style="background: whitesmoke">
+                    <div class="col-33" style="display: flex">
+                        <div class="text-center flex-center" style="width: 10%">
+                            <p class="flex-center" th:text="${stat.index + 1}"></p>
+                        </div>
+                        <div class="flex-center" style="width: 90%">
+                            <span th:text="${slider.getTitle()}"></span>
+                        </div>
+                    </div>
+                    <div class="col-33" style="display: flex">
+                        <span th:text="${slider.getUrl()}"></span>
+                    </div>
+                    <div class="col-33" style="display: flex">
+                        <div class="flex-right">
+                            <input type="submit" class="input-button" value="Удалить">
+                        </div>
+                    </div>
+                </div>
+                <div class="row-100" th:if="${stat.index % 2 != 0}">
+                    <div class="col-33" style="display: flex">
+                        <div class="text-center flex-center" style="width: 10%">
+                            <p class="flex-center" th:text="${stat.index + 1}"></p>
+                        </div>
+                        <div class="flex-center" style="width: 90%">
+                            <span th:text="${slider.getTitle()}"></span>
+                        </div>
+                    </div>
+                    <div class="col-33" style="display: flex">
+                        <span th:text="${slider.getUrl()}"></span>
+                    </div>
+                    <div class="col-33" style="display: flex">
+                        <div class="flex-right">
+                            <input type="submit" class="input-button" value="Удалить">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row-100-block" th:if="${sliders.size() < 4}">
+            <form th:method="POST" th:action="@{/material/slider/save}" th:object="${slider}" enctype="multipart/form-data">
                 <div class="row-100-block">
                     <div class="col-33" style="padding: 1vh">
-                        <input type="text" placeholder="Заголовок">
+                        <input type="text" placeholder="Заголовок" th:field="*{title}">
+                        <div th:if="${#fields.hasErrors('title')}" style="border: solid 1px red; background: pink">
+                            <p th:errors="*{title}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                        </div>
                     </div>
                     <div class="col-33" style="padding: 1vh">
-                        <input type="url" placeholder="Ссылка url">
+                        <input type="url" placeholder="Ссылка url" th:field="*{url}">
+                        <div th:if="${#fields.hasErrors('url')}" style="border: solid 1px red; background: pink">
+                            <p th:errors="*{url}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                        </div>
                     </div>
                     <div class="col-33" style="margin-top: 2vh">
-                        <input type="file" accept="image/*" id="image" style="margin: auto">
+                        <input type="file" accept="image/*" id="image" style="margin: auto" th:field="*{image}">
+                        <div th:if="${#fields.hasErrors('image')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
+                            <p th:errors="*{image}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-100">
+                    <div class="flex-center" style="margin-top: 1vh">
+                        <input type="submit" class="input-button" value="Сохранить">
                     </div>
                 </div>
             </form>

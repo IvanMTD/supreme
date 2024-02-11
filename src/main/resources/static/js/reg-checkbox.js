@@ -69,6 +69,7 @@ function setPublisher(){
         }
     }
 }
+
 function setUntested(){
     let untestedPosts = [[${posts}]];
     console.log(untestedPosts);

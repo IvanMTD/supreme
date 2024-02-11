@@ -7,7 +7,8 @@
             </div>
             <div class="row-100-block" th:if="${roleModerator}">
                 <div th:each="sportTag : ${sportTags}" style="display: inline-block">
-                    <img th:src="'/download/' + ${sportTag.getImageId()}" width="32" height="32">
+                    <!--<img th:src="'/download/' + ${sportTag.getImageId()}" width="32" height="32">-->
+                    <p th:text="${'Редактирует раздел: ' + sportTag.getName()}"></p>
                 </div>
             </div>
             <div class="row-100-block" th:if="${rolePublisher} and ${posts.size() != 0}">
