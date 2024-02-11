@@ -68,7 +68,7 @@
                     <div id="hidden-block" hidden class="shadow border">
                         <div style="display:block; width: 300px; padding: 1vh">
                             <div style="display: inline-block" th:each="st : ${sportTags}">
-                                <img th:src="'/download/' + ${st.getImageId()}" width="16" height="16">
+                                <!--<img th:src="'/download/' + ${st.getImageId()}" width="16" height="16">-->
                                 <input type="checkbox" th:name="sportTag" th:value="${st.getId()}"><span th:text="${st.getName()}"></span>
                             </div>
                         </div>

@@ -34,6 +34,8 @@ public class SuperController {
 
     protected final SliderService sliderService;
 
+    protected final EventService eventService;
+
     @ModelAttribute(name = "baseAuth")
     public boolean baseAuth(@AuthenticationPrincipal AppUser user){
         return user != null;

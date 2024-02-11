@@ -37,6 +37,11 @@
     padding: 1vh;
 }
 
+.col-25 {
+    width: 25%;
+    padding: 1vh;
+}
+
 .col-33 {
     width: 33.33%;
 }

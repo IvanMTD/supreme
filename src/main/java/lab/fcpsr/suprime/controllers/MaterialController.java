@@ -2,6 +2,7 @@ package lab.fcpsr.suprime.controllers;
 
 import jakarta.validation.Valid;
 import lab.fcpsr.suprime.controllers.base.SuperController;
+import lab.fcpsr.suprime.dto.EventDTO;
 import lab.fcpsr.suprime.dto.PostDTO;
 import lab.fcpsr.suprime.dto.SliderDTO;
 import lab.fcpsr.suprime.models.AppUser;
@@ -31,8 +32,8 @@ public class MaterialController extends SuperController {
     private final int itemOnPage = 6;
     private final int itemOnEditorsPage = 20;
 
-    public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, SliderValidation sliderValidation, RoleService roleService, SearchService searchService, SliderService sliderService) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, sliderValidation, roleService, searchService, sliderService);
+    public MaterialController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, SliderValidation sliderValidation, RoleService roleService, SearchService searchService, SliderService sliderService, EventService eventService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, sliderValidation, roleService, searchService, sliderService, eventService);
     }
 
 
@@ -82,7 +83,7 @@ public class MaterialController extends SuperController {
                             .build()
             );
         }
-        return minioService.uploadStream(sliderDTO.getImage()).flatMap(fileService::save).flatMap(file -> {
+        return minioService.uploadImage(sliderDTO.getImage()).flatMap(fileService::save).flatMap(file -> {
             Slider slider = new Slider();
             slider.setTitle(sliderDTO.getTitle());
             slider.setUrl(sliderDTO.getUrl());
@@ -100,6 +101,44 @@ public class MaterialController extends SuperController {
         return sliderService.delete(sliderId)
                 .flatMap(slider -> fileService.deleteById(slider.getImageId()))
                 .flatMap(file -> minioService.delete(file).then(Mono.just(Rendering.redirectTo("/material/slider/config").build())));
+    }
+
+    @GetMapping("/event/config")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> eventConfig(@AuthenticationPrincipal AppUser user){
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","event-page")
+                        .modelAttribute("event", new EventDTO())
+                        .modelAttribute("events", eventService.getAll())
+                        .build()
+        );
+    }
+
+    @PostMapping("/event/save")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> eventSave(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "event") @Valid EventDTO eventDTO, Errors errors){
+        if(errors.hasErrors()){
+            return Mono.just(
+                    Rendering.view("template")
+                            .modelAttribute("index","event-page")
+                            .modelAttribute("event", eventDTO)
+                            .build()
+            );
+        }
+        return eventService.saveDto(eventDTO).flatMap(event -> {
+            log.info("event save: " + event.toString());
+            return Mono.just(Rendering.redirectTo("/material/event/config").build());
+        });
+    }
+
+    @GetMapping("/event/delete")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> calendarDelete(@AuthenticationPrincipal AppUser user, @RequestParam(name = "eventId") int eventId){
+        return eventService.deleteEvent(eventId).flatMap(event -> {
+            log.info("delete event: " + event.toString());
+            return Mono.just(Rendering.redirectTo("/material/event/config").build());
+        });
     }
 
     /*@GetMapping("/editors/page/{num}")
@@ -166,18 +205,6 @@ public class MaterialController extends SuperController {
         );
     }
 
-    @GetMapping("/off/verified/{id}")
-    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
-    public Mono<Rendering> verifyOff(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id) {
-        return postService.verifyOff(id).flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
-    }
-
-    @GetMapping("/off/allowed/{id}")
-    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
-    public Mono<Rendering> allowOff(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id) {
-        return postService.allowOff(id).flatMap(post -> Mono.just(Rendering.redirectTo("/").build()));
-    }
-
     @PostMapping("/post")
     @PreAuthorize("@RoleService.isPublisher(#user)")
     public Mono<Rendering> addPost(@AuthenticationPrincipal AppUser user, @ModelAttribute(name = "post") @Valid PostDTO postDTO, Errors errors, @RequestPart(name = "sportTag", required = false) Flux<String> sportTags) {
@@ -200,15 +227,15 @@ public class MaterialController extends SuperController {
                         postDTO.addSportTagId(Integer.parseInt(sportTag));
                     }
 
-                    return minioService.uploadStream(postDTO.getFile())
-                            .flatMap(fileService::save)
-                            .flatMap(file -> {
-                                postDTO.setFileId(file.getId());
-                                return minioService.uploadStream(postDTO.getImage());
-                            })
+                    return minioService.uploadImage(postDTO.getImage())
                             .flatMap(fileService::save)
                             .flatMap(file -> {
                                 postDTO.setImageId(file.getId());
+                                return minioService.uploadStream(postDTO.getFile());
+                            })
+                            .flatMap(fileService::save)
+                            .flatMap(file -> {
+                                postDTO.setFileId(file.getId());
                                 return postService.save(postDTO);
                             })
                             .flatMap(post -> userService.setupPost(post)
@@ -221,6 +248,24 @@ public class MaterialController extends SuperController {
                                     })
                             );
                 });
+    }
+
+    @GetMapping("/off/verified/{id}")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> verifyOff(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id) {
+        return postService.verifyOff(id).flatMap(post -> Mono.just(Rendering.redirectTo("/material").build()));
+    }
+
+    @GetMapping("/off/allowed/{id}")
+    @PreAuthorize("@RoleService.isAdmin(#user) || @RoleService.isMainModerator(#user)")
+    public Mono<Rendering> allowOff(@AuthenticationPrincipal AppUser user, @PathVariable(name = "id") int id) {
+        return postService.allowOff(id).flatMap(post -> userService.getAllByIds(post.getUserSaveList()).flatMap(u -> {
+            u.getPostSaveList().removeIf(postId -> postId == post.getId());
+            return userService.save(u);
+        }).collectList().flatMap(uList -> {
+            post.getUserSaveList().removeIf(userId -> uList.stream().anyMatch(u -> u.getId() == userId));
+            return postService.save(post);
+        }).flatMap(p -> Mono.just(Rendering.redirectTo("/").build())));
     }
 
     @GetMapping("/edit/post/{id}")
@@ -262,7 +307,7 @@ public class MaterialController extends SuperController {
                         .flatMap(post -> fileService.findById(post.getImageId())
                                 .flatMap(file -> minioService.delete(file).then(Mono.just(file)))
                                 .flatMap(file -> fileService.deleteById(file.getId()))
-                                .flatMap(file -> minioService.uploadStream(postDTO.getImage()).flatMap(fileService::save)));
+                                .flatMap(file -> minioService.uploadImage(postDTO.getImage()).flatMap(fileService::save)));
             }
         }
         Mono<MinioFile> fileMono = null;

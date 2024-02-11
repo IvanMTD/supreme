@@ -86,9 +86,19 @@ public class PostService {
     public Flux<Post> findPostsByUserRole(AppUser user, Pageable pageable) {
         for(Role role : user.getRoles()){
             if(role.equals(Role.ADMIN)){
-                return postRepository.findAllByVerifiedIsFalse(pageable);
+                return postRepository.findAll().collectList().flatMapMany(list -> {
+                    int start = pageable.getPageNumber() * pageable.getPageSize();
+                    int end = start + pageable.getPageSize();
+                    List<Post> posts = new ArrayList<>();
+                    for(int i=start; i<end; i++){
+                        if(i < list.size()) {
+                            posts.add(list.get(i));
+                        }
+                    }
+                    return Flux.fromIterable(posts);
+                });
             }else if(role.equals(Role.MAIN_MODERATOR)){
-                return postRepository.findPostsByVerifiedTrueAndAllowedFalse(pageable);
+                return postRepository.findPostsByVerifiedTrueAndAllowedFalse(pageable).log();
             }else if(role.equals(Role.MODERATOR)){
                 List<Integer> sportTagIds = new ArrayList<>(user.getSportTagIds());
                 Integer[] ids = new Integer[sportTagIds.size()];
@@ -122,13 +132,16 @@ public class PostService {
     public Mono<Integer> findPostsByUserRoleGetLastPage(AppUser user, int itemOnPage) {
         for(Role role : user.getRoles()){
             if(role.equals(Role.ADMIN)){
-                return postRepository.findAllByVerifiedIsFalse()
+                return postRepository.findAll()
                         .collectList()
                         .flatMap(list -> Mono.just(getLastPage(list.size(),itemOnPage)));
             }else if(role.equals(Role.MAIN_MODERATOR)){
-                return postRepository.findAllByVerifiedIsFalse()
+                return postRepository.findPostsByVerifiedTrueAndAllowedFalse()
                         .collectList()
-                        .flatMap(list -> Mono.just(getLastPage(list.size(),itemOnPage)));
+                        .flatMap(list -> {
+                            log.info("size is " + list.size());
+                            return Mono.just(getLastPage(list.size(),itemOnPage));
+                        });
             }else if(role.equals(Role.MODERATOR)){
                 List<Integer> sportTagIds = new ArrayList<>(user.getSportTagIds());
                 Integer[] ids = new Integer[sportTagIds.size()];
@@ -152,7 +165,7 @@ public class PostService {
     }
 
     public Flux<Post> findAllAllowed(Pageable pageable){
-        return postRepository.findAllByAllowedTrueOrderByIdDesc(pageable);
+        return postRepository.findAllByAllowedTrueOrderByIdDesc(pageable).flatMapSequential(Mono::just);
     }
 
     public Mono<Integer> findAllVerifiedLastPage(int itemOnPage) {
@@ -193,7 +206,7 @@ public class PostService {
                 });
     }
 
-    public Mono<Object> allowOff(int id) {
+    public Mono<Post> allowOff(int id) {
         return postRepository.findById(id)
                 .flatMap(post -> {
                     post.setAllowed(false);

@@ -1,6 +1,7 @@
 package lab.fcpsr.suprime.services;
 
 import io.minio.*;
+import io.minio.errors.*;
 import lab.fcpsr.suprime.models.MinioFile;
 import lab.fcpsr.suprime.templates.InputStreamCollector;
 import lab.fcpsr.suprime.templates.MinioResponse;
@@ -15,7 +16,13 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import java.io.InputStream;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 @Slf4j
@@ -46,7 +53,7 @@ public class MinioService {
                         char ch = (char) Math.round(65 + (Math.random() * 25.0f));
                         randomWord = randomWord + ch;
                     }
-                    String uid = "uid-" + randomWord + "-." + extension;
+                    String uid = "uid-" + randomWord + "." + extension;
                     try {
                         String type = Objects.requireNonNull(file.headers().getContentType()).toString();
                         PutObjectArgs args = PutObjectArgs.builder()
@@ -72,6 +79,61 @@ public class MinioService {
                 })
                 .log();
     }
+    public Mono<MinioResponse> uploadImage(FilePart image){
+        String directory = "./src/main/resources/static/img/";
+        return image.transferTo(Path.of(directory + "temp")).then(
+                Mono.just(new File(directory + "temp")).flatMap(file -> {
+                    if(file.exists()){
+                        String extension = "webp";
+                        String randomWord = "";
+                        for(int i=0; i<10; i++){
+                            char ch = (char) Math.round(65 + (Math.random() * 25.0f));
+                            randomWord = randomWord + ch;
+                        }
+                        String uid = "uid-" + randomWord + "." + extension;
+                        log.info("try save " + uid);
+                        try {
+                            String temp = directory + "temp.webp";
+                            InputStream fileInputStream = new FileInputStream(file);
+                            BufferedImage bufferedImage = ImageIO.read(fileInputStream);
+                            log.info(bufferedImage.toString());
+                            if(ImageIO.write(bufferedImage, "webp", new File(temp))) {
+                                File webpImage = new File(temp);
+                                InputStream webpImageInputStream = new FileInputStream(webpImage);
+                                String type = "image/webp";
+                                PutObjectArgs args = PutObjectArgs.builder()
+                                        .bucket(bucket)
+                                        .object("/" + type + "/" + uid)
+                                        .contentType(type)
+                                        .stream(webpImageInputStream, -1, 10485760)
+                                        .build();
+                                ObjectWriteResponse response = minioClient.putObject(args);
+                                MinioResponse minioResponse = new MinioResponse();
+                                minioResponse.setResponse(response);
+                                minioResponse.setOriginalFileName(image.filename());
+                                minioResponse.setUid(uid);
+                                minioResponse.setType(type);
+                                minioResponse.setFileSize(CustomFileUtil.getMegaBytes(fileInputStream.available()));
+                                fileInputStream.close();
+                                webpImageInputStream.close();
+                                cleanup();
+                                return Mono.just(minioResponse);
+                            }else{
+                                cleanup();
+                                return uploadStream(image);
+                            }
+                        } catch (ServerException | InsufficientDataException | ErrorResponseException |
+                                 NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException |
+                                 XmlParserException | InternalException | IOException e) {
+                            return Mono.error(new RuntimeException(e));
+                        }
+                    }else{
+                        log.info("file in " + directory + "temp not exist");
+                    }
+                    return Mono.empty();
+                })
+        );
+    }
 
     public Mono<InputStreamResource> download(MinioFile fileInfo){
         return Mono.fromCallable(() -> {
@@ -89,5 +151,18 @@ public class MinioService {
                         .build()
         );
         return Mono.empty();
+    }
+
+    @SneakyThrows
+    private void cleanup(){
+        String directory = "./src/main/resources/static/img/";
+        File f1 = new File(directory + "temp");
+        File f2 = new File(directory + "temp.webp");
+        if(f1.exists()){
+            Files.delete(f1.toPath());
+        }
+        if(f2.exists()){
+            Files.delete(f2.toPath());
+        }
     }
 }

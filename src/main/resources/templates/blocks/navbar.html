@@ -5,11 +5,11 @@
                 <li>
                     <a th:href="@{/}" style="text-decoration: none; color: black">Главная</a>
                 </li>
-                <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}">
-                    <a th:href="@{/material/page/0}" style="text-decoration: none; color: black">Редакция</a>
-                </li>
                 <li th:if="${baseAuth}">
                     <a th:href="@{/bookmarks}" style="text-decoration: none; color: black">Мои закладки</a>
+                </li>
+                <li th:if="${roleAdmin} or ${roleMainModerator} or ${roleModerator} or ${rolePublisher}">
+                    <a th:href="@{/material/page/0}" style="text-decoration: none; color: black">Редакция</a>
                 </li>
             </ul>
         </div>

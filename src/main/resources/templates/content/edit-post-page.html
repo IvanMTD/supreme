@@ -26,7 +26,7 @@
                     <p style="color: red; padding: 1vh">Замена вида спорта только через удаление поста</p>
                     <div style="display: inline-block" th:each="st : ${sportTags}">
                         <div style="padding: 1vh">
-                            <img th:src="'/download/' + ${st.getImageId()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>
+                            <!--<img th:src="'/download/' + ${st.getImageId()}" width="32px" height="32px" style="margin-left: auto; margin-right: auto; display: block"><br>-->
                             <span th:text="${st.getName()}"></span>
                         </div>
                     </div>

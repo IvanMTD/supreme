@@ -9,15 +9,12 @@ import lab.fcpsr.suprime.services.*;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
 import lab.fcpsr.suprime.validations.SliderValidation;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,14 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.result.view.Rendering;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -43,9 +34,10 @@ public class HomeController extends SuperController {
     private final int itemOnPage = 5;
     private final int popularPostCount = 2;
 
-    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, SliderValidation sliderValidation, RoleService roleService, SearchService searchService, SliderService sliderService) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, sliderValidation, roleService, searchService, sliderService);
+    public HomeController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, SliderValidation sliderValidation, RoleService roleService, SearchService searchService, SliderService sliderService, EventService eventService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, sliderValidation, roleService, searchService, sliderService, eventService);
     }
+
 
     @GetMapping("/")
     public Mono<Rendering> homePage(){
@@ -62,6 +54,7 @@ public class HomeController extends SuperController {
                         .modelAttribute("posts", getTaggedPosts(num,itemOnPage))
                         .modelAttribute("popular", getTaggedPosts(0,popularPostCount))
                         .modelAttribute("sliders", sliderService.getAll())
+                        .modelAttribute("events",eventService.getAllActual(PageRequest.of(0,4)))
                         .modelAttribute("statusSearch",false)
                         .build()
         );
@@ -165,7 +158,7 @@ public class HomeController extends SuperController {
                 .defaultIfEmpty(Rendering.redirectTo("/").build());
     }
 
-    @SneakyThrows
+    /*@SneakyThrows
     @PostMapping("/upload")
     public Mono<Rendering> upload(@RequestPart("file") FilePart file){
         log.info("incoming file " + file.filename());
@@ -175,7 +168,7 @@ public class HomeController extends SuperController {
                         .doOnNext(mf -> log.info("file saved in data_db witch id " + mf.getId()))
                         .map(mf -> Rendering.redirectTo("/").build())
                 );
-    }
+    }*/
 
     @ResponseBody
     @GetMapping("/download/{id}")
@@ -186,16 +179,16 @@ public class HomeController extends SuperController {
                 .body(minioService.download(fileInfo)));
     }
 
-    @ResponseBody
+    /*@ResponseBody
     @GetMapping("/download/tag/{id}")
     public Mono<ResponseEntity<Mono<InputStreamResource>>> downloadTag(@PathVariable(name = "id") int id){
         return sportTagService.findById(id).flatMap(sportTag -> fileService.findById(sportTag.getImageId())).map(fileInfo -> ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileInfo.getUid())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
                 .body(minioService.download(fileInfo)));
-    }
+    }*/
 
-    @ResponseStatus(HttpStatus.OK)
+    /*@ResponseStatus(HttpStatus.OK)
     @GetMapping("/delete/{id}")
     public Mono<Rendering> delete(@PathVariable(name = "id") int id){
         return fileService.deleteById(id)
@@ -204,7 +197,7 @@ public class HomeController extends SuperController {
                     minioService.delete(fileInfo).subscribe();
                     return Rendering.redirectTo("/").build();
                 });
-    }
+    }*/
 
     @ResponseBody
     @GetMapping("/src/main/resources/static/img/{fileName}")

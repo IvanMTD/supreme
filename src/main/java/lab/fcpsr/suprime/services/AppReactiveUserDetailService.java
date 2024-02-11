@@ -9,7 +9,11 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.result.view.Rendering;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +56,9 @@ public class AppReactiveUserDetailService implements ReactiveUserDetailsService 
 
     public Mono<AppUser> findById(int id) {
         return userRepository.findById(id);
+    }
+
+    public Flux<AppUser> getAllByIds(Set<Integer> userSaveList) {
+        return userRepository.findAllByIdIn(userSaveList);
     }
 }

@@ -13,10 +13,11 @@
     </div>
     <div class="col-20"></div>
 </div>
-<div class="row-100-block" style="background: white">
+
+<div class="row-100-block" th:if="${rolePublisher}" style="background: white">
     <div class="col-20"></div>
     <div class="col-60" style="display: flex">
-        <div class="row-100" th:if="${rolePublisher}">
+        <div class="row-100">
             <div class="col-100-inline-flex">
                 <div class="flex-center" style="width: 100%; margin-top: 12px" th:if="${rolePublisher}">
                     <form th:method="GET" th:action="@{/material/post}" class="text-center">
@@ -35,6 +36,7 @@
         <div class="col-20"></div>
         <div class="col-60-inline-flex">
             <a class="link-button-simple flex-center" th:href="@{/material/page/0}">Редакция</a>
+            <a class="link-button-simple flex-center" th:href="@{/material/event/config}">Календарь событий</a>
             <a class="link-button-simple flex-center" th:href="@{/material/slider/config}">Слайдер</a>
         </div>
         <div class="col-20"></div>

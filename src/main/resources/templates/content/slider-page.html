@@ -1,9 +1,10 @@
-<div class="row-100-block" th:if="${roleMainModerator} or ${roleAdmin}" style="background: white; margin-top: 2vh">
+<div class="row-100-block" th:if="${roleMainModerator} or ${roleAdmin}" style="background: white; padding-top: 1vh">
     <div class="col-20"></div>
     <div class="col-60">
         <div class="col-20"></div>
         <div class="col-60-inline-flex">
             <a class="link-button-simple flex-center" th:href="@{/material/page/0}">Редакция</a>
+            <a class="link-button-simple flex-center" th:href="@{/material/event/config}">Календарь событий</a>
             <a class="link-button-simple flex-center" th:href="@{/material/slider/config}">Слайдер</a>
         </div>
         <div class="col-20"></div>

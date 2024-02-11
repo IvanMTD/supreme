@@ -1,16 +1,19 @@
 <div class="row otstup-verh">
-    <div th:if="${baseAuth}">
-        <div th:if="${!bookmark}">
+    <div class="row-100-block" th:if="${baseAuth}">
+        <div th:if="${!bookmark}" style="display: inline-block">
             <form th:method="GET" th:action="@{/bookmark}">
                 <input type="text" name="bookmark" th:value="${post.getId}" style="display: none">
                 <input type="submit" class="input-button" value="Закладка">
             </form>
         </div>
-        <div th:if="${bookmark}">
+        <div th:if="${bookmark}" style="display: inline-block">
             <form th:method="GET" th:action="@{/bookmark/off}">
                 <input type="text" name="bookmark" th:value="${post.getId}" style="display: none">
                 <input type="submit" class="input-button" value="Убрать">
             </form>
+        </div>
+        <div th:if="${roleMainModerator}" style="display: inline-block">
+            <a th:href="@{/material/off/allowed/{id}(id=${post.getId()})}" class="link-button-simple">Снять статью</a>
         </div>
     </div>
     <div class="large-9 columns">

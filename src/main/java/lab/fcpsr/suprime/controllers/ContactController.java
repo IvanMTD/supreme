@@ -16,17 +16,16 @@ import reactor.core.publisher.Mono;
 @Controller
 @RequestMapping("/contact")
 public class ContactController extends SuperController {
-
-    public ContactController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, SliderValidation sliderValidation, RoleService roleService, SearchService searchService, SliderService sliderService) {
-        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, sliderValidation, roleService, searchService, sliderService);
+    public ContactController(AppReactiveUserDetailService userService, MinioService minioService, MinioFileService fileService, SportTagService sportTagService, PostService postService, AppUserValidation userValidation, PostValidation postValidation, SliderValidation sliderValidation, RoleService roleService, SearchService searchService, SliderService sliderService, EventService eventService) {
+        super(userService, minioService, fileService, sportTagService, postService, userValidation, postValidation, sliderValidation, roleService, searchService, sliderService, eventService);
     }
 
-    @GetMapping
+    /*@GetMapping
     public Mono<Rendering> contactPage(){
         return Mono.just(Rendering
                 .view("template")
                 .modelAttribute("index","contact-page")
                 .build()
         );
-    }
+    }*/
 }

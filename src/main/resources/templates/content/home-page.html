@@ -20,37 +20,21 @@
     <!-- БЛОК "БЛИЖАЙШИЕ СОБЫТИЯ" -->
     <div class="large-3 columns">
         <p class="lead">Ближайшие события</p>
-        <div class="media-object">
-            <!--<div class="media-object-section">
-                <a class="th" href="">
-                    <img class="thumbnail img-anons" src="/img/14.jpg">
+        <div class="media-object" th:each="event, stat : ${events}">
+            <div class="media-object-section" th:if="${stat.index % 2 == 0}" style="background: whitesmoke">
+                <p class="calendar-gorod" th:text="${event.getTitle()}"></p>
+                <p class="calendar-date" th:text="${event.getEventDate()}"></p>
+                <a th:href="${event.getEventUrl()}">
+                    <h3 class="calendar-title" th:text="${event.getDescription()}"></h3>
                 </a>
             </div>
-            <div class="media-object-section">
-                <a href="#">
-                    <p class="calendar-gorod">Москва</p>
-                    <p class="calendar-date">14.10.2024-14.10.2024</p>
-                </a>
-                <a href="#">
-                    <h3 class="calendar-title">Чемпионат России по Радиоспорту УКВ имени С.П.Попова</h3>
-                </a>
-            </div>-->
-        </div>
-        <div class="media-object">
-            <!--<div class="media-object-section">
-                <a class="th" href="#">
-                    <img class="thumbnail img-anons" src="/img/14.jpg">
+            <div class="media-object-section" th:if="${stat.index % 2 != 0}">
+                <p class="calendar-gorod" th:text="${event.getTitle()}"></p>
+                <p class="calendar-date" th:text="${event.getEventDate()}"></p>
+                <a th:href="${event.getEventUrl()}">
+                    <h3 class="calendar-title" th:text="${event.getDescription()}"></h3>
                 </a>
             </div>
-            <div class="media-object-section">
-                <a href="#">
-                    <p class="calendar-gorod">Москва</p>
-                    <p class="calendar-date">14.10.2024-14.10.2024</p>
-                </a>
-                <a href="#">
-                    <h3 class="calendar-title">Чемпионат России по Радиоспорту УКВ имени С. П, Попова</h3>
-                </a>
-            </div>-->
         </div>
     </div>
     <!-- БЛОК СЛАЙДЕР -->
