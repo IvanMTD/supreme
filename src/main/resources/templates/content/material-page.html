@@ -44,8 +44,10 @@
     <div class="col-20"></div>
 </div>
 
-<div th:if="${posts.size() == 0}" class="row-100-block" style="padding: 35vh 0; background: white"></div>
-<div th:if="${posts.size() != 0}" class="row-100-block" style="background: white; padding: 5.5vh 0">
+<div th:if="${posts.size() == 0}" class="row-100-block text-center" style="padding: 30vh 0; background: white">
+    <p>Тут пока не с чем работать</p>
+</div>
+<div th:if="${posts.size() != 0}" class="row-100-block" style="background: white">
     <div class="col-20"></div>
     <div class="col-60">
         <div class="flex-container" id="currentPosts">

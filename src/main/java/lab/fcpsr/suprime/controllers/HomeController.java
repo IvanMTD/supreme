@@ -41,10 +41,22 @@ public class HomeController extends SuperController {
 
     @GetMapping("/")
     public Mono<Rendering> homePage(){
-        return Mono.just(Rendering.redirectTo("/page/0").build());
+        //return Mono.just(Rendering.redirectTo("/page/0").build());
+        return Mono.just(
+                Rendering.view("template")
+                        .modelAttribute("index","home-page")
+                        .modelAttribute("page", 0)
+                        .modelAttribute("lastPage", postService.findAllAllowedLastPage(itemOnPage))
+                        .modelAttribute("posts", getTaggedPosts(0,itemOnPage))
+                        .modelAttribute("popular", getTaggedPosts(0,popularPostCount))
+                        .modelAttribute("sliders", sliderService.getAll())
+                        .modelAttribute("events",eventService.getAllActual(PageRequest.of(0,4)))
+                        .modelAttribute("statusSearch",false)
+                        .build()
+        );
     }
 
-    @GetMapping("/page/{num}")
+    /*@GetMapping("/page/{num}")
     public Mono<Rendering> pages(@PathVariable int num){
         return Mono.just(
                 Rendering.view("template")
@@ -58,7 +70,7 @@ public class HomeController extends SuperController {
                         .modelAttribute("statusSearch",false)
                         .build()
         );
-    }
+    }*/
 
     private Flux<TagPostDTO> getTaggedPosts(int page, int count){
         return postService.findAllAllowed(PageRequest.of(page,count)).flatMap(post -> {
