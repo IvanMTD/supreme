@@ -8,7 +8,10 @@ COPY --from=0 /app/supreme /app
 RUN mvn clean package -DskipTests
 
 FROM bellsoft/liberica-openjdk-alpine
-EXPOSE 8080 8080
+VOLUME /tmp
+VOLUME /src/main/resources/static/img
+EXPOSE 80 8080
+EXPOSE 443 8443
 WORKDIR /app
 COPY --from=1 /app/target/supreme-1.0.0.jar /app
 CMD ["java","-jar","supreme-1.0.0.jar"]
