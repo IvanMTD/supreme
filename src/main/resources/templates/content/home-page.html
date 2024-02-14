@@ -22,17 +22,17 @@
         <p class="lead">Ближайшие события</p>
         <div class="media-object" th:each="event, stat : ${events}">
             <div class="media-object-section" th:if="${stat.index % 2 == 0}" style="background: whitesmoke">
-                <p class="calendar-gorod" th:text="${event.getTitle()}"></p>
-                <p class="calendar-date" th:text="${event.getEventDate()}"></p>
-                <a th:href="${event.getEventUrl()}">
-                    <h3 class="calendar-title" th:text="${event.getDescription()}"></h3>
+                <p class="calendar-gorod" th:text="${event.getCity()}"></p>
+                <p class="calendar-date" th:text="${event.getStartDate()}"></p>
+                <a th:href="@{/event/card/{id}(id=${event.getId()})}">
+                    <h3 class="calendar-title" th:text="${event.getContent()}"></h3>
                 </a>
             </div>
             <div class="media-object-section" th:if="${stat.index % 2 != 0}">
-                <p class="calendar-gorod" th:text="${event.getTitle()}"></p>
-                <p class="calendar-date" th:text="${event.getEventDate()}"></p>
-                <a th:href="${event.getEventUrl()}">
-                    <h3 class="calendar-title" th:text="${event.getDescription()}"></h3>
+                <p class="calendar-gorod" th:text="${event.getCity()}"></p>
+                <p class="calendar-date" th:text="${event.getStartDate()}"></p>
+                <a th:href="@{/event/card/{id}(id=${event.getId()})}">
+                    <h3 class="calendar-title" th:text="${event.getContent()}"></h3>
                 </a>
             </div>
         </div>

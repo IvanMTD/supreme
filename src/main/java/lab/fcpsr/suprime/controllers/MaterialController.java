@@ -10,6 +10,7 @@ import lab.fcpsr.suprime.models.MinioFile;
 import lab.fcpsr.suprime.models.Post;
 import lab.fcpsr.suprime.models.Slider;
 import lab.fcpsr.suprime.services.*;
+import lab.fcpsr.suprime.templates.Status;
 import lab.fcpsr.suprime.validations.AppUserValidation;
 import lab.fcpsr.suprime.validations.PostValidation;
 import lab.fcpsr.suprime.validations.SliderValidation;
@@ -111,6 +112,7 @@ public class MaterialController extends SuperController {
                         .modelAttribute("index","event-page")
                         .modelAttribute("event", new EventDTO())
                         .modelAttribute("events", eventService.getAll())
+                        .modelAttribute("statusList", Status.values())
                         .build()
         );
     }
@@ -123,6 +125,8 @@ public class MaterialController extends SuperController {
                     Rendering.view("template")
                             .modelAttribute("index","event-page")
                             .modelAttribute("event", eventDTO)
+                            .modelAttribute("events", eventService.getAll())
+                            .modelAttribute("statusList", Status.values())
                             .build()
             );
         }

@@ -19,17 +19,29 @@
             <hr>
             <div class="row-100-block text-center">
                 <b>
-                    <div class="col-25" style="padding: 1vh">
+                    <div class="col-12">
+                        <p>ЕКП</p>
+                    </div>
+                    <div class="col-12">
+                        <p>Субъект</p>
+                    </div>
+                    <div class="col-12">
                         <p>Город</p>
                     </div>
-                    <div class="col-25" style="padding: 1vh">
-                        <p>Короткое описание</p>
+                    <div class="col-12">
+                        <p>Локация</p>
                     </div>
-                    <div class="col-25" style="padding: 1vh">
-                        <p>URL события</p>
+                    <div class="col-12">
+                        <p>Начало</p>
                     </div>
-                    <div class="col-25" style="padding: 1vh">
-                        <p>Дата события</p>
+                    <div class="col-12">
+                        <p>Конец</p>
+                    </div>
+                    <div class="col-12">
+                        <p>Описание</p>
+                    </div>
+                    <div class="col-12">
+                        <p>Статус</p>
                     </div>
                 </b>
             </div>
@@ -38,75 +50,128 @@
                 <form th:method="GET" th:action="@{/material/event/delete}">
                     <input type="number" id="eventId" name="eventId" th:value="${event.getId()}" hidden>
                     <div class="row-100" th:if="${stat.index % 2 == 0}" style="background: whitesmoke">
-                        <div class="col-25" style="display: flex">
+                        <div class="col-12" style="display: flex">
                             <div class="text-center flex-center" style="width: 10%">
                                 <p class="flex-center" th:text="${stat.index + 1}"></p>
                             </div>
                             <div class="flex-center" style="width: 90%">
-                                <span th:text="${event.getTitle()}"></span>
+                                <span th:text="${event.getEkp()}"></span>
                             </div>
                         </div>
-                        <div class="col-25" style="display: flex">
-                            <span th:text="${event.getDescription()}"></span>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getSubject()}"></span>
                         </div>
-                        <div class="col-25" style="display: flex">
-                            <span th:text="${event.getEventDate()}"></span>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getCity()}"></span>
                         </div>
-                        <div class="col-25" style="display: flex">
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getLocation()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getStartDate()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getEndDate()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getContent()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getStatus().getTitle()}"></span>
+                        </div>
+                        <!--<div class="col-12" style="display: flex">
                             <div class="flex-right">
                                 <input type="submit" class="input-button" value="Удалить">
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="row-100" th:if="${stat.index % 2 != 0}">
-                        <div class="col-25" style="display: flex">
+                        <div class="col-12" style="display: flex">
                             <div class="text-center flex-center" style="width: 10%">
                                 <p class="flex-center" th:text="${stat.index + 1}"></p>
                             </div>
                             <div class="flex-center" style="width: 90%">
-                                <span th:text="${event.getTitle()}"></span>
+                                <span th:text="${event.getEkp()}"></span>
                             </div>
                         </div>
-                        <div class="col-25" style="display: flex">
-                            <span th:text="${event.getDescription()}"></span>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getSubject()}"></span>
                         </div>
-                        <div class="col-25" style="display: flex">
-                            <span th:text="${event.getEventDate()}"></span>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getCity()}"></span>
                         </div>
-                        <div class="col-25" style="display: flex">
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getLocation()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getStartDate()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getEndDate()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getContent()}"></span>
+                        </div>
+                        <div class="col-12" style="display: flex">
+                            <span th:text="${event.getStatus().getTitle()}"></span>
+                        </div>
+                        <!--<div class="col-12" style="display: flex">
                             <div class="flex-right">
                                 <input type="submit" class="input-button" value="Удалить">
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </form>
             </div>
             <hr>
             <form th:method="POST" th:action="@{/material/event/save}" th:object="${event}">
                 <div class="row-100-block">
-                    <div class="col-25" style="padding: 1vh">
-                        <input type="text" placeholder="Заголовок" th:field="*{title}">
-                        <div th:if="${#fields.hasErrors('title')}" style="border: solid 1px red; background: pink">
-                            <p th:errors="*{title}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    <div class="col-12" style="padding: 1vh">
+                        <input type="number" th:field="*{ekp}">
+                        <div th:if="${#fields.hasErrors('ekp')}" style="border: solid 1px red; background: pink">
+                            <p th:errors="*{ekp}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                         </div>
                     </div>
-                    <div class="col-25" style="padding: 1vh">
-                        <input type="text" placeholder="Короткое описание" th:field="*{description}">
-                        <div th:if="${#fields.hasErrors('description')}" style="border: solid 1px red; background: pink">
-                            <p th:errors="*{description}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    <div class="col-12" style="padding: 1vh">
+                        <input type="text" placeholder="Субъект" th:field="*{subject}">
+                        <div th:if="${#fields.hasErrors('subject')}" style="border: solid 1px red; background: pink">
+                            <p th:errors="*{subject}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                         </div>
                     </div>
-                    <div class="col-25" style="padding: 1vh">
-                        <input type="url" placeholder="url события" th:field="*{eventUrl}">
-                        <div th:if="${#fields.hasErrors('eventUrl')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
-                            <p th:errors="*{eventUrl}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    <div class="col-12" style="padding: 1vh">
+                        <input type="text" placeholder="Город" th:field="*{city}">
+                        <div th:if="${#fields.hasErrors('city')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
+                            <p th:errors="*{city}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                         </div>
                     </div>
-                    <div class="col-25" style="padding: 1vh">
-                        <input type="date" th:field="*{eventDate}">
-                        <div th:if="${#fields.hasErrors('eventDate')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
-                            <p th:errors="*{eventDate}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                    <div class="col-12" style="padding: 1vh">
+                        <input type="text"  placeholder="Место проведение" th:field="*{location}">
+                        <div th:if="${#fields.hasErrors('location')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
+                            <p th:errors="*{location}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
                         </div>
+                    </div>
+                    <div class="col-12" style="padding: 1vh">
+                        <input type="date" th:field="*{startDate}">
+                        <div th:if="${#fields.hasErrors('startDate')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
+                            <p th:errors="*{startDate}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                        </div>
+                    </div>
+                    <div class="col-12" style="padding: 1vh">
+                        <input type="date" th:field="*{endDate}">
+                        <div th:if="${#fields.hasErrors('endDate')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
+                            <p th:errors="*{endDate}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                        </div>
+                    </div>
+                    <div class="col-12" style="padding: 1vh">
+                        <input type="text" placeholder="Короткое описание" th:field="*{content}">
+                        <div th:if="${#fields.hasErrors('content')}" style="border: solid 1px red; background: pink; margin-top: 1vh">
+                            <p th:errors="*{content}" style="color: red; font-size: small; text-align: left; vertical-align: middle; margin: auto; padding: 5px"></p>
+                        </div>
+                    </div>
+                    <div class="col-12" style="padding: 1vh">
+                        <select th:field="*{status}">
+                            <option th:each="st : ${statusList}" th:text="${st.getTitle()}" th:value="${st}"></option>
+                        </select>
                     </div>
                 </div>
                 <div class="row-100" style="margin-bottom: 2vh">

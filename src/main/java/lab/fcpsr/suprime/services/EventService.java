@@ -32,6 +32,10 @@ public class EventService {
     }
 
     public Flux<Event> getAllActual(Pageable pageable) {
-        return eventRepository.findAllByEventDateAfter(LocalDate.now(), pageable);
+        return eventRepository.findAllByEndDateAfter(LocalDate.now(),pageable);
+    }
+
+    public Mono<Event> getEventById(int id) {
+        return eventRepository.findById(id);
     }
 }

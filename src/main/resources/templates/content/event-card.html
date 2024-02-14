@@ -1,0 +1,17 @@
+<div class="row-100-block" style="background: white; padding: 2vh 0">
+    <div class="col-20"></div>
+    <div class="col-60">
+        <hr>
+        <p th:text="'ЕКП - ' + ${event.getEkp()}"></p>
+        <p th:text="${event.getContent()}"></p>
+        <hr>
+        <p th:text="'Субъект ' + ${event.getSubject()}"></p>
+        <p th:text="'Город ' + ${event.getCity()}"></p>
+        <p th:text="'Локация ' + ${event.getLocation()}"></p>
+        <p th:text="'Дата начала ' + ${event.getStartDate()}"></p>
+        <p th:text="'Дата завершения ' + ${event.getEndDate()}"></p>
+        <p th:text="'Статус ' + ${event.getStatus().getTitle()}"></p>
+        <hr>
+    </div>
+    <div class="col-20"></div>
+</div>

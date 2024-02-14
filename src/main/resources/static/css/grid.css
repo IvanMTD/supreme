@@ -32,6 +32,11 @@
     float: left;
 }
 
+.col-12 {
+    width: 12.5%;
+    padding: 1vh;
+}
+
 .col-20 {
     width: 20%;
     padding: 1vh;

@@ -8,5 +8,5 @@ import reactor.core.publisher.Flux;
 import java.time.LocalDate;
 
 public interface EventRepository extends ReactiveCrudRepository<Event,Integer> {
-    Flux<Event> findAllByEventDateAfter(LocalDate date, Pageable pageable);
+    Flux<Event> findAllByEndDateAfter(LocalDate date, Pageable pageable);
 }
