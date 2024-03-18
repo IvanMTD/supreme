@@ -14,6 +14,5 @@ VOLUME /keystore
 EXPOSE 443 8443
 WORKDIR /app
 COPY --from=1 /app/target/supreme-1.0.0.jar /app
-COPY /home/project2/keystore.p12 /keystore/keystore.p12
 CMD ["java","-jar","supreme-1.0.0.jar"]
 #CMD ["java","-Xms64m","-Xmx900m","-jar","supreme-1.0.0.jar"]
